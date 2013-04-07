@@ -126,28 +126,28 @@ int Client::send(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
 	msg.append(Client::sessionKey);
 	msg.push_back(STX);
     if(NULL!=p1){
-        msg.push_back(*p1);
-        tmp.push_back(*p1);
+        msg.append(p1);
+        tmp.append(p1);
     }
     if(NULL!=p2){
         msg.push_back(TAB);
-        msg.push_back(*p2);
-        tmp.push_back(*p1);
+        msg.append(p2);
+        tmp.append(p2);
     }
     if(NULL!=p3){
         msg.push_back(TAB);
-        msg.push_back(*p3);
-        tmp.push_back(*p1);
+        msg.append(p3);
+        tmp.append(p3);
     }
     if(NULL!=p4){
         msg.push_back(TAB);
-        msg.push_back(*p4);
-        tmp.push_back(*p1);
+        msg.append(p4);
+        tmp.append(p4);
     }
     if(NULL!=p5){
         msg.push_back(TAB);
-        msg.push_back(*p5);
-        tmp.push_back(*p1);
+        msg.append(p5);
+        tmp.append(p5);
     }
 	
 	msg.push_back(ETX);

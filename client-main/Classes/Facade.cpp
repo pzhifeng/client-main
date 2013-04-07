@@ -7,7 +7,7 @@
 char* Facade::version="v1.0.0";
 
 int Facade::mockSend(int head){
-    CommandRegister* commands=CommandRegister::GetInstance();
+    CommandsRegister* commands=CommandsRegister::GetInstance();
     Command* c=commands->get(head);
     c->success(NULL);
 }

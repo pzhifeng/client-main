@@ -17,7 +17,6 @@ public:
     static int mockSend(int head);
     
     static int send(int head);
-    static int send(int head);
     static int send(int head,char* p1);
     static int send(int head,char* p1,char* p2);
     static int send(int head,char* p1,char* p2,char* p3);
