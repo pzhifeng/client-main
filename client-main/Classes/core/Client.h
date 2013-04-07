@@ -2,7 +2,6 @@
 #define __client_main__Client__
 
 #include <pthread.h>
-#include <vector.h>
 #include "cocos2d.h"
 #include "../utils/odsocket.h"
 

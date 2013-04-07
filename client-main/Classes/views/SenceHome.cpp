@@ -41,12 +41,12 @@ bool SceneHome::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-
+	/*
     CCLabelTTF* pLabel = CCLabelTTF::create("另一个窗体", "Thonburi", 34);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);
-    
+    */
         
     return true;
 }

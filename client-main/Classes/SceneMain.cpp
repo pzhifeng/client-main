@@ -1,5 +1,4 @@
 #include "SceneMain.h"
-#include "SimpleAudioEngine.h"
 
 #include "core/Command.h"
 #include "Facade.h"
@@ -7,7 +6,6 @@
 #include "views/SenceHome.h"
 
 using namespace cocos2d;
-using namespace CocosDenshion;
 
 CCScene* SceneMain::scene()
 {

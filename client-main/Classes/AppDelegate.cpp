@@ -4,7 +4,7 @@
 #include "SceneMain.h"
 #include "core/Client.h"
 #include "Facade.h"
-#include "CommandCheck.h"
+#include "commands/CommandCheck.h"
 
 USING_NS_CC;
 
@@ -37,7 +37,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->runWithScene(pScene);
     
     Client* client=Client::GetInstance();
-    bool b=client->connet((char*)"127.0.0.1", 61114);
+    bool b=client->connet((char*)"192.168.1.57", 61114);
     if(b){
         client->setConfig("18602122551", "PASSPORT");
         Facade::send(CommandCheck::Head,Facade::version);
