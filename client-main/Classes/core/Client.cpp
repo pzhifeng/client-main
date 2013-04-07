@@ -89,6 +89,10 @@ bool Client::connet(char* ip,int port){
     return b;
 };
 
+void Client::setConfig(std::string _uid,std::string _sessionKey){
+    this->uid=_uid;
+    this->sessionKey=_sessionKey;
+}
 
 
 int Client::send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5){
@@ -174,7 +178,7 @@ void Client::doCommand(){
         string msg=query.front();
 
         if(reader.parse(msg, value)){
-            int uid=value["u"].asInt();
+            //int uid=value["u"].asInt();
             int code=value["r"].asInt();
             std::string head=value["h"].asString();
             CommandsRegister* commands=CommandsRegister::GetInstance();

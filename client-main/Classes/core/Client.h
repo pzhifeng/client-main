@@ -26,7 +26,7 @@ public:
     static Client* GetInstance();
     
 	bool connet(char* ip,int port);
-    void setConfig(std::string uid,std::string sessionKey);
+    void setConfig(std::string _uid,std::string _sessionKey);
     
     int send(const char *head);
     int send(const char *head,char* p1);

@@ -3,11 +3,15 @@
 
 #include "core/Command.h"
 #include "core/VoObject.h"
+#include "VoConfig.h"
 
 using namespace std;
 
 class Facade
 {
+public:
+    static VoEmail Email;
+    static VoBall Ball;
 public:
     
     static int send(const char *head);
