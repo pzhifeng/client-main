@@ -1,7 +1,7 @@
 #include "Facade.h"
 #include "core/Client.h"
 #include "core/CommandsRegister.h"
-#include "commands/CommandServer.h"
+#include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
 char* Facade::version="v1.0.0";
@@ -10,6 +10,7 @@ int Facade::mockSend(int head){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     Command* c=commands->get(head);
     c->success(NULL);
+    return 1;
 }
 
 int Facade::send(int head){
@@ -49,6 +50,7 @@ Command* Facade::get(int head){
 
 void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
+    commands->put(CommandCheck::Head,new CommandCheck());
     commands->put(CommandServer::Head,new CommandServer());
     commands->put(CommandCareer::Head,new CommandCareer());
         

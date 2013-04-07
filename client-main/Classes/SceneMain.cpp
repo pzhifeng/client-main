@@ -2,7 +2,7 @@
 
 #include "core/Command.h"
 #include "Facade.h"
-#include "commands/CommandCheck.h"
+#include "commands/CommandSystem.h"
 #include "views/SenceHome.h"
 
 using namespace cocos2d;
@@ -76,10 +76,8 @@ void initSocket(){
 
 void SceneMain::start(CCObject* pSender)
 {
-    //Command* c=Facade::get(CommandServer::Head);
-    //c->success(NULL);
-    Facade::version="v1.0.0";
-    Facade::send(CommandCheck::Head,Facade::version);
+    //Facade::send(CommandCheck::Head,Facade::version);
+    Facade::mockSend(CommandServer::Head);
 }
 
 
