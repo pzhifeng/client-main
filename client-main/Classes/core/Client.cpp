@@ -50,7 +50,8 @@ void * revice(void* arg){
 			int index=msg.find(0x0005,i);//从i处开始查找字符0x0005,返回首次出现的下标
 			if(index==-1)
 				break;
-			string commandMsg=msg.substr(i,index-i);//从i处截取（index-i)个长度
+			int subLen=index-i;
+			string commandMsg=msg.substr(i,subLen);//从i处截取（index-i)个长度
 			CCLOG("RECIVE|%s",commandMsg.c_str());
 			//begin do command
 			if(reader.parse(msg, value)){
@@ -73,7 +74,7 @@ void * revice(void* arg){
 			}
 			//end
 			//指针向下移动
-			i+=(index-i);
+			i+=subLen;
 			i++;
 		}
 		//截取未处理，下次接收组包
