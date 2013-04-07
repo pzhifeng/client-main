@@ -36,54 +36,50 @@ Client* Client::GetInstance(){
 void * revice(void* arg){
     Client *_this=(Client*)arg;
 	char buff[BLOCK_SIZE];
-	char joinBuff[2*BLOCK_SIZE];
 	string msg="";
+	Json::Reader reader;
+	Json::Value value;
 	while (true)
 	{
 		memset(buff,0,BLOCK_SIZE);
-		memset(joinBuff,0,2*BLOCK_SIZE);
-        
-		int msgLen=strlen(msg.c_str());
-		memcpy(joinBuff,msg.c_str(),msgLen);
-		msg="";
-        
         int ret=_this->odSocket.Recv(buff,BLOCK_SIZE,0);
 		if(ret<=0)
 			continue;
-        
-		memcpy(joinBuff+msgLen,buff,ret);
-		for(int i=0;i<(msgLen+ret);i++){
-			if(joinBuff[i]==0x0005){
-				CCLOG("RECIVE|%s",msg.c_str());
-          
-                Json::Reader reader;
-                Json::Value value;
-                if(reader.parse(msg, value)){
-                    //long uid=value["u"].asUInt();
-                    int code=value["r"].asInt();
-                    int head=value["h"].asInt();
-                    CommandsRegister* commands=CommandsRegister::GetInstance();
-                    Command *command=commands->get(head);
-                    if(command!=NULL){
-                        std::string m=value["m"].toStyledString();
-                        VoObject* vo=command->parse(m.c_str());
-                        if(code==0){
-                            command->success(vo);
-                        }else{
-                            command->fail(code,vo);
-                            CCLOG("FAIL|%d  %s",code,m.c_str());
-                        }
-                        delete vo;
-                    }
-                }
-				
-				msg="";
-				continue;
+		msg.append(buff);//组包
+		int i=0;
+		int len=strlen(msg.c_str());
+		for(;i<len;){
+			int index=msg.find(0x0005,i);//从i处开始查找字符0x0005,返回首次出现的下标
+			if(index==-1)
+				break;
+			string commandMsg=msg.substr(i,index-i);//从i处截取（index-i)个长度
+			CCLOG("RECIVE|%s",commandMsg.c_str());
+			//begin do command
+			if(reader.parse(msg, value)){
+				//long uid=value["u"].asUInt();
+				int code=value["r"].asInt();
+				int head=value["h"].asInt();
+				CommandsRegister* commands=CommandsRegister::GetInstance();
+				Command *command=commands->get(head);
+				if(command!=NULL){
+					std::string m=value["m"].toStyledString();
+					VoObject* vo=command->parse(m.c_str());
+					if(code==0){
+						command->success(vo);
+					}else{
+						command->fail(code,vo);
+						CCLOG("FAIL|%d  %s",code,m.c_str());
+					}
+					delete vo;
+				}
 			}
-			msg.push_back(joinBuff[i]);
+			//end
+			//指针向下移动
+			i+=(index-i);
+			i++;
 		}
-        
-        
+		//截取未处理，下次接收组包
+		msg=msg.substr(i,len-i);
 	}
 	return ((void*)NULL);
 }
