@@ -14,7 +14,9 @@ public:
     static VoEmail Email;
     static VoBall Ball;
 public:
+    static int mockSend(int head);
     
+    static int send(int head);
     static int send(int head);
     static int send(int head,char* p1);
     static int send(int head,char* p1,char* p2);
