@@ -6,7 +6,7 @@
 class CommandServer :public Command
 {
 public:
-    static std::string Head;
+    static int Head;
 public:
 	CommandServer(void);
 	~CommandServer(void);

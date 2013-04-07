@@ -10,13 +10,13 @@ private:
     ~CommandsRegister(void);
     
     static CommandsRegister* instance;
-    std::map<std::string,Command*> commands;
+    std::map<int,Command*> commands;
     
 public:
 	
     static CommandsRegister* GetInstance();
-    Command* get(std::string head);
-    void put(std::string ,Command*);
+    Command* get(int head);
+    void put(int ,Command*);
 };
 
 

@@ -3,7 +3,7 @@
 
 #include "core/Command.h"
 #include "Facade.h"
-#include "commands/CommandServer.h"
+#include "commands/CommandCheck.h"
 #include "views/SenceHome.h"
 
 using namespace cocos2d;
@@ -80,7 +80,8 @@ void SceneMain::start(CCObject* pSender)
 {
     //Command* c=Facade::get(CommandServer::Head);
     //c->success(NULL);
-    
+    Facade::version="v1.0.0";
+    Facade::send(CommandCheck::Head,Facade::version);
 }
 
 

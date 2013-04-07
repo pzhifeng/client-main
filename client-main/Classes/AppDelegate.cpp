@@ -4,6 +4,7 @@
 #include "SceneMain.h"
 #include "core/Client.h"
 #include "Facade.h"
+#include "CommandCheck.h"
 
 USING_NS_CC;
 
@@ -36,12 +37,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->runWithScene(pScene);
     
     Client* client=Client::GetInstance();
-    bool b=client->connet("127.0.0.1", 61114);
+    bool b=client->connet((char*)"127.0.0.1", 61114);
     if(b){
         client->setConfig("18602122551", "PASSPORT");
-        CCScheduler *scheduler = CCDirector::sharedDirector()->getScheduler();
-        scheduler->scheduleSelector(SEL_SCHEDULE(&AppDelegate::doCommand),(CCObject*)pScene,0.01f,false);
-        Facade::send("99102");
+        Facade::send(CommandCheck::Head,Facade::version);
     }
     
 
@@ -66,8 +65,4 @@ void AppDelegate::applicationWillEnterForeground()
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
-void AppDelegate::doCommand(float dt){
-    Client* client=Client::GetInstance();
-	client->doCommand();
-}
 

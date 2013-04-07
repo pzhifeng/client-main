@@ -49,22 +49,40 @@ void * revice(void* arg){
         
         int ret=_this->odSocket.Recv(buff,BLOCK_SIZE,0);
 		if(ret<=0)
-			break;
+			continue;
         
 		memcpy(joinBuff+msgLen,buff,ret);
 		for(int i=0;i<(msgLen+ret);i++){
 			if(joinBuff[i]==0x0005){
-				pthread_mutex_lock(&_this->mutex);
-                
-                CCLOG("RECIVE|%s",msg.c_str());
-                
-				_this->query.push_back(msg);
+				CCLOG("RECIVE|%s",msg.c_str());
+          
+                Json::Reader reader;
+                Json::Value value;
+                if(reader.parse(msg, value)){
+                    //long uid=value["u"].asUInt();
+                    int code=value["r"].asInt();
+                    int head=value["h"].asInt();
+                    CommandsRegister* commands=CommandsRegister::GetInstance();
+                    Command *command=commands->get(head);
+                    if(command!=NULL){
+                        std::string m=value["m"].toStyledString();
+                        VoObject* vo=command->parse(m.c_str());
+                        if(code==0){
+                            command->success(vo);
+                        }else{
+                            command->fail(code,vo);
+                            CCLOG("FAIL|%d  %s",code,m.c_str());
+                        }
+                        delete vo;
+                    }
+                }
+				
 				msg="";
-				pthread_mutex_unlock(&_this->mutex);
 				continue;
 			}
 			msg.push_back(joinBuff[i]);
 		}
+        
         
 	}
 	return ((void*)NULL);
@@ -95,14 +113,17 @@ void Client::setConfig(std::string _uid,std::string _sessionKey){
 }
 
 
-int Client::send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5){
+int Client::send(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
     
 	std::string key="5dcd73d391c90e8769618d42a916ea1b";
 	
     std::string msg;
 	std::string tmp;
     
-	msg.append(head);
+    stringstream stream;
+    stream<<head;
+    std::string strHead=stream.str();
+	msg.append(strHead);
 	msg.push_back(SOH);
 	msg.append(Client::uid);
 	msg.push_back(TAB);
@@ -136,7 +157,8 @@ int Client::send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5){
 	msg.push_back(ETX);
     
 	std::string chekKey;
-	chekKey.append(head);
+    
+	chekKey.append(strHead);
 	chekKey.append(uid);
 	chekKey.append(tmp);
 	chekKey.append(key);
@@ -148,53 +170,23 @@ int Client::send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5){
 	return odSocket.Send(msg.c_str(),strlen(msg.c_str())+2,1);
 }
 
-int Client::send(const char *head){
+int Client::send(int head){
     return Client::send(head,NULL,NULL,NULL,NULL,NULL);
 };
 
-int Client::send(const char *head,char* p1){
+int Client::send(int head,char* p1){
     return Client::send(head,p1,NULL,NULL,NULL,NULL);
 };
 
-int Client::send(const char *head,char* p1,char* p2){
+int Client::send(int head,char* p1,char* p2){
     return Client::send(head,p1,p2,NULL,NULL,NULL);
 };
 
-int Client::send(const char *head,char* p1,char* p2,char* p3){
+int Client::send(int head,char* p1,char* p2,char* p3){
     return Client::send(head,p1,p2,p3,NULL,NULL);
 };
 
-int Client::send(const char *head,char* p1,char* p2,char* p3,char* p4){
+int Client::send(int head,char* p1,char* p2,char* p3,char* p4){
     return Client::send(head,p1,p2,p3,p4,NULL);
 };
 
-void Client::doCommand(){
-	pthread_mutex_lock(&mutex);
-
-	if(query.size()>0){
-		Json::Reader reader;
-		Json::Value value;
-
-        string msg=query.front();
-
-        if(reader.parse(msg, value)){
-            //int uid=value["u"].asInt();
-            int code=value["r"].asInt();
-            std::string head=value["h"].asString();
-            CommandsRegister* commands=CommandsRegister::GetInstance();
-            Command *command=commands->get(head);
-            if(command!=NULL){
-                std::string m=value["m"].toStyledString();
-                VoObject* vo=command->parse(m.c_str());
-                if(code==0){
-                    command->success(vo);
-                }else{
-                    command->fail(code,vo);
-                }
-                delete vo;
-            }
-        }
-        query.erase(query.begin());
-	}
-	pthread_mutex_unlock(&mutex);
-}

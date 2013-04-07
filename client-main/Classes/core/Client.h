@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 #include "../utils/odsocket.h"
 
+using namespace std;
 
 class Client
 {
@@ -28,14 +29,12 @@ public:
 	bool connet(char* ip,int port);
     void setConfig(std::string _uid,std::string _sessionKey);
     
-    int send(const char *head);
-    int send(const char *head,char* p1);
-    int send(const char *head,char* p1,char* p2);
-    int send(const char *head,char* p1,char* p2,char* p3);
-    int send(const char *head,char* p1,char* p2,char* p3,char* p4);
-    int send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5);
-
-    void doCommand();
+    int send(int head);
+    int send(int head,char* p1);
+    int send(int head,char* p1,char* p2);
+    int send(int head,char* p1,char* p2,char* p3);
+    int send(int head,char* p1,char* p2,char* p3,char* p4);
+    int send(int head,char* p1,char* p2,char* p3,char* p4,char* p5);
 };
 
 

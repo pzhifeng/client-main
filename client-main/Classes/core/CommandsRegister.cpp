@@ -17,11 +17,11 @@ CommandsRegister* CommandsRegister::GetInstance(){
     return instance;
 }
 
-void CommandsRegister::put(std::string head,Command* c){
+void CommandsRegister::put(int head,Command* c){
     commands[head]=c;
 }
 
-Command* CommandsRegister::get(std::string head){
+Command* CommandsRegister::get(int head){
     return commands[head];
 }
 

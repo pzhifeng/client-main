@@ -6,12 +6,10 @@
 
 using namespace cocos2d;
 
-std::string CommandCareer::Head="10200";
+int CommandCareer::Head=10200;
 
 CommandCareer::CommandCareer(void)
 {
-    //CommandHead::CAREER="10200";
-    //CommandCareer::Head="10200";
 }
 
 

@@ -4,38 +4,39 @@
 #include "commands/CommandServer.h"
 #include "commands/CommandCareer.h"
 
+char* Facade::version="v1.0.0";
 
-int Facade::send(const char *head){
+int Facade::send(int head){
     Client* client=Client::GetInstance();
     return client->send(head);
 };
-int Facade::send(const char *head,char* p1){
+int Facade::send(int head,char* p1){
     Client* client=Client::GetInstance();
     return client->send(head,p1);
 
 };
-int Facade::send(const char *head,char* p1,char* p2){
+int Facade::send(int head,char* p1,char* p2){
     Client* client=Client::GetInstance();
     return client->send(head,p1,p2);
 
 };
-int Facade::send(const char *head,char* p1,char* p2,char* p3){
+int Facade::send(int head,char* p1,char* p2,char* p3){
     Client* client=Client::GetInstance();
     return client->send(head,p1,p2,p3);
 
 };
-int Facade::send(const char *head,char* p1,char* p2,char* p3,char* p4){
+int Facade::send(int head,char* p1,char* p2,char* p3,char* p4){
     Client* client=Client::GetInstance();
     return client->send(head,p1,p2,p3,p4);
 
 };
-int Facade::send(const char *head,char* p1,char* p2,char* p3,char* p4,char* p5){
+int Facade::send(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
     Client* client=Client::GetInstance();
     return client->send(head,p1,p2,p3,p4,p5);
 
 };
 
-Command* Facade::get(std::string head){
+Command* Facade::get(int head){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     return commands->get(head);
 }

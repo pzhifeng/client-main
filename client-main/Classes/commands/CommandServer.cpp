@@ -6,7 +6,7 @@
 
 using namespace cocos2d;
 
-std::string CommandServer::Head="99102";
+int CommandServer::Head=99102;
 
 CommandServer::CommandServer(void)
 {

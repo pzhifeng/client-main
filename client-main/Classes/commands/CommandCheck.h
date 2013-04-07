@@ -1,15 +1,15 @@
-#ifndef __client_main__CommandCareer__
-#define __client_main__CommandCareer__
+#ifndef __client_main__CommandCheck__
+#define __client_main__CommandCheck__
 
 #include "../core/Command.h"
 #include "../core/VoObject.h"
-class CommandCareer :public Command
+class CommandCheck :public Command
 {
 public:
     static int Head;
 public:
-	CommandCareer(void);
-	~CommandCareer(void);
+	CommandCheck(void);
+	~CommandCheck(void);
     
     void success(VoObject* vo);
     void fail(int code,VoObject* vo);
