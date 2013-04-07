@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'client-main' target in the 'client-main' project
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+#endif
