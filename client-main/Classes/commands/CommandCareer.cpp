@@ -8,15 +8,6 @@ using namespace cocos2d;
 
 int CommandCareer::Head=10200;
 
-CommandCareer::CommandCareer(void)
-{
-}
-
-
-CommandCareer::~CommandCareer(void)
-{
-}
-
 void CommandCareer::success(VoObject* vo){
     VoServer* voServer=(VoServer*)vo;
 	CCScene *pScene = SceneHome::scene();

@@ -4,7 +4,7 @@
 #include "SceneMain.h"
 #include "core/Client.h"
 #include "Facade.h"
-#include "commands/CommandCheck.h"
+#include "commands/CommandSystem.h"
 
 USING_NS_CC;
 

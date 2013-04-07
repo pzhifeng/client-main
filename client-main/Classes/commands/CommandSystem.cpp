@@ -1,21 +1,34 @@
-#include "CommandServer.h"
+#include "CommandSystem.h"
 #include "cocos2d.h"
 #include "../views/SenceHome.h"
 #include "../utils/jsoncpp/include/json.h"
-#include "core/VoObject.h"
+#include "VoObject.h"
 
 using namespace cocos2d;
 
+
+
+int CommandCheck::Head=99100;
+
+void CommandCheck::success(VoObject* vo){
+	//CCScene *pScene = SceneMain::scene();
+	//CCDirector::sharedDirector()->runWithScene(pScene);
+}
+
+void CommandCheck::fail(int code,VoObject* vo){
+	if(code==1){
+        
+    }else if(code==2){
+        
+    }
+}
+
+VoObject* CommandCheck::parse(const char *data){
+    return NULL;
+}
+
+
 int CommandServer::Head=99102;
-
-CommandServer::CommandServer(void)
-{
-}
-
-
-CommandServer::~CommandServer(void)
-{
-}
 
 void CommandServer::success(VoObject* vo){
     VoServer* voServer=(VoServer*)vo;
@@ -38,8 +51,9 @@ VoObject* CommandServer::parse(const char *data){
             
         }
     }
-    
-    
     return voServer;
 }
+
+
+
 

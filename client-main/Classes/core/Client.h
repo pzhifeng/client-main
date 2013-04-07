@@ -19,8 +19,6 @@ private:
     std::string sessionKey;
     
 public:
-    pthread_mutex_t mutex;
-    vector<std::string> query;
     ODSocket odSocket;
     
     static Client* GetInstance();

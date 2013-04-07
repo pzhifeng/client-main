@@ -22,8 +22,6 @@ Client::Client(void){
 Client::~Client(void){
     odSocket.Close();
 	odSocket.Clean();
-	pthread_mutex_destroy(&mutex);
-	query.clear();
 };
 
 Client* Client::GetInstance(){
@@ -87,8 +85,6 @@ void * revice(void* arg){
 bool Client::connet(char* ip,int port){
     odSocket.Init();
 	odSocket.Create(AF_INET,SOCK_STREAM,0);
-    
-	pthread_mutex_init(&mutex,NULL);
     
     bool b= odSocket.Connect(ip,port);
     
