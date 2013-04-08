@@ -4,18 +4,23 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
+bool Facade::isMock=true;
+char* Facade::ip="127.0.0.1";
+int Facade::port=61114;
 char* Facade::version="v1.0.0";
 
-int Facade::mockSend(int head){
-    CommandsRegister* commands=CommandsRegister::GetInstance();
-    Command* c=commands->get(head);
-    c->success(NULL);
-    return 1;
-}
 
 int Facade::send(int head){
-    Client* client=Client::GetInstance();
-    return client->send(head);
+    if(Facade::isMock){
+        CommandsRegister* commands=CommandsRegister::GetInstance();
+        Command* c=commands->get(head);
+        c->success(NULL);
+        return 1;
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head);
+    }
+    
 };
 int Facade::send(int head,char* p1){
     Client* client=Client::GetInstance();

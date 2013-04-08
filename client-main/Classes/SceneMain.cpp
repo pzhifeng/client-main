@@ -1,9 +1,11 @@
 #include "SceneMain.h"
 
 #include "core/Command.h"
+#include "core/Client.h"
 #include "Facade.h"
 #include "commands/CommandSystem.h"
 #include "views/SenceHome.h"
+
 
 using namespace cocos2d;
 
@@ -63,21 +65,29 @@ bool SceneMain::init()
     pFontMenu->setPosition( ccp(size.width/2,size.height -80) );
     this->addChild(pFontMenu);
     
-    //init system commands
-    Facade::registerCommands();
+    initGame();
     
     return true;
 }
 
-void initSocket(){
+void SceneMain::initGame(){
+    //init system commands
+    Facade::registerCommands();
     
-
+    if(!Facade::isMock){
+        Client* client=Client::GetInstance();
+        bool b=client->connet(Facade::ip, Facade::port);
+        if(b){
+            client->setConfig("18602122551", "PASSPORT");
+            Facade::send(CommandCheck::Head,Facade::version);
+        }
+    }
 }
 
 void SceneMain::start(CCObject* pSender)
 {
     //Facade::send(CommandCheck::Head,Facade::version);
-    Facade::mockSend(CommandServer::Head);
+    Facade::send(CommandServer::Head);
 }
 
 

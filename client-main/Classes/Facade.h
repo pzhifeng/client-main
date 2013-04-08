@@ -10,12 +10,14 @@ using namespace std;
 class Facade
 {
 public:
+    static bool isMock;
+    static char* ip;
+    static int port;
     static char* version;
+    
     static VoEmail Email;
     static VoBall Ball;
 public:
-    static int mockSend(int head);
-    
     static int send(int head);
     static int send(int head,char* p1);
     static int send(int head,char* p1,char* p2);

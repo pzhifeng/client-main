@@ -2,9 +2,7 @@
 
 #include "cocos2d.h"
 #include "SceneMain.h"
-#include "core/Client.h"
-#include "Facade.h"
-#include "commands/CommandSystem.h"
+
 
 USING_NS_CC;
 
@@ -35,14 +33,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // run
     pDirector->runWithScene(pScene);
-    
-    Client* client=Client::GetInstance();
-    bool b=client->connet((char*)"192.168.1.57", 61114);
-    if(b){
-        client->setConfig("18602122551", "PASSPORT");
-        Facade::send(CommandCheck::Head,Facade::version);
-    }
-    
 
     return true;
 }
