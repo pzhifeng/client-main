@@ -4,14 +4,14 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
-bool Facade::isMock=true;
-char* Facade::ip="127.0.0.1";
-int Facade::port=61114;
-char* Facade::version="v1.0.0";
+bool Facade::IsMock=true;
+char* Facade::Ip="127.0.0.1";
+int Facade::Port=61114;
+char* Facade::Version="v1.0.0";
 
 
 int Facade::send(int head){
-    if(Facade::isMock){
+    if(Facade::IsMock){
         CommandsRegister* commands=CommandsRegister::GetInstance();
         Command* c=commands->get(head);
         c->success(NULL);

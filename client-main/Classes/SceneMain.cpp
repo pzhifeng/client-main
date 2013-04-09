@@ -74,12 +74,12 @@ void SceneMain::initGame(){
     //init system commands
     Facade::registerCommands();
     
-    if(!Facade::isMock){
+    if(!Facade::IsMock){
         Client* client=Client::GetInstance();
-        bool b=client->connet(Facade::ip, Facade::port);
+        bool b=client->connet(Facade::Ip, Facade::Port);
         if(b){
             client->setConfig("18602122551", "PASSPORT");
-            Facade::send(CommandCheck::Head,Facade::version);
+            Facade::send(CommandCheck::Head,Facade::Version);
         }
     }
 }
