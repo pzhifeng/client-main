@@ -8,6 +8,8 @@ CommandsRegister::CommandsRegister(void){
 
 CommandsRegister::~CommandsRegister(void){
     this->commands.~map();
+	delete instance;
+	instance=NULL;
 }
 
 CommandsRegister* CommandsRegister::GetInstance(){

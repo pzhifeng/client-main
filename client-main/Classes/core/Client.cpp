@@ -22,6 +22,8 @@ Client::Client(void){
 Client::~Client(void){
     odSocket.Close();
 	odSocket.Clean();
+	delete instance;
+	instance=NULL;
 };
 
 Client* Client::GetInstance(){
@@ -43,18 +45,16 @@ void * revice(void* arg){
         int ret=_this->odSocket.Recv(buff,BLOCK_SIZE,0);
 		if(ret<=0)
 			continue;
-		msg.append(buff);//组包
-		int i=0;
-		int len=strlen(msg.c_str());
-		for(;i<len;){
-			int index=msg.find(0x0005,i);//从i处开始查找字符0x0005,返回首次出现的下标
-			if(index==-1)
-				break;
-			int subLen=index-i;
-			string commandMsg=msg.substr(i,subLen);//从i处截取（index-i)个长度
-			CCLOG("RECIVE|%s",commandMsg.c_str());
+		msg.append(buff);
+		if(buff[ret-1]!=0x0005)
+			continue;
+		vector<string> msgList;
+		_this->split(msg,0x0005,msgList);
+		CCLOG("msgList-size===%d",msgList.size());
+		for(int i=0;i<msgList.size();i++){
+			CCLOG("msg===%s",msgList[i].c_str());
 			//begin do command
-			if(reader.parse(msg, value)){
+			if(reader.parse(msgList[i], value)){
 				//long uid=value["u"].asUInt();
 				int code=value["r"].asInt();
 				int head=value["h"].asInt();
@@ -73,12 +73,9 @@ void * revice(void* arg){
 				}
 			}
 			//end
-			//指针向下移动
-			i+=subLen;
-			i++;
 		}
-		//截取未处理，下次接收组包
-		msg=msg.substr(i,len-i);
+		msgList.clear();
+		msg.clear();
 	}
 	return ((void*)NULL);
 }
@@ -183,3 +180,11 @@ int Client::send(int head,char* p1,char* p2,char* p3,char* p4){
     return Client::send(head,p1,p2,p3,p4,NULL);
 };
 
+std::vector<std::string>& Client::split(const std::string &s, char delim, std::vector<std::string> &elems) {
+	std::stringstream ss(s);
+	std::string item;
+	while(std::getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+	return elems;
+}

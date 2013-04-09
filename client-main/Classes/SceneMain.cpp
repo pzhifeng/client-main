@@ -5,10 +5,9 @@
 #include "Facade.h"
 #include "commands/CommandSystem.h"
 #include "views/SenceHome.h"
-#include "utils/pugixml/pugixml.hpp"
+
 
 using namespace cocos2d;
-using namespace pugi;
 
 CCScene* SceneMain::scene()
 {
@@ -67,32 +66,14 @@ bool SceneMain::init()
     this->addChild(pFontMenu);
     
     initGame();
-	/************************************************************************/
-	/* 测试xml文件读取                                                                     */
-	/************************************************************************/
-	const char* pFileName="config.xml";
-	std::string strPath = CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(pFileName);
-	unsigned long nSize = 0;
-	unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(strPath.c_str(), "rb", &nSize);
-	xml_document *doc = new xml_document();
-	xml_parse_result result = doc->load_buffer(pBuffer,nSize);
-	
-	xml_node tools = doc->child("Profile").child("Tools");  
-	//[code_traverse_base_basic  
-	for (pugi::xml_node tool = tools.first_child(); tool; tool = tool.next_sibling())  
-	{  
-		for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())  
-		{  
-			CCLog("name===%s===value===%s",attr.name(),attr.value());
-		}  
-	}  
+    
     return true;
 }
 
 void SceneMain::initGame(){
     //init system commands
     Facade::registerCommands();
-    
+    Facade::isMock=false;
     if(!Facade::isMock){
         Client* client=Client::GetInstance();
         bool b=client->connet(Facade::ip, Facade::port);
