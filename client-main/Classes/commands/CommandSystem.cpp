@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 #include "../views/SenceHome.h"
 #include "../utils/jsoncpp/include/json.h"
-#include "core/VoObject.h"
+#include "VoObject.h"
 
 using namespace cocos2d;
 
