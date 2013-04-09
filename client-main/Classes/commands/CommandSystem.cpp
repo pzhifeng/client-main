@@ -3,10 +3,12 @@
 #include "../views/SenceHome.h"
 #include "../utils/jsoncpp/include/json.h"
 #include "core/VoObject.h"
+#include <HttpRequest.h>
+#include <HttpClient.h>
+#include "Facade.h"
 
 using namespace cocos2d;
-
-
+using namespace extension;
 
 int CommandCheck::Head=99100;
 
@@ -17,7 +19,16 @@ void CommandCheck::success(VoObject* vo){
 
 void CommandCheck::fail(int code,VoObject* vo){
 	if(code==1){
-        
+        //需要更新配置文件,下载最新配置文件，进入游戏
+		myHttpRequest=new HttpRequest();
+		myHttpRequest->doGet();
+		while(true){
+			if(myHttpRequest->m_isCompleted)
+				break;
+			Sleep(100);
+		}
+		//CCLOG("m_responseData===%s",myHttpRequest->m_responseData.c_str());
+		myHttpRequest->release();
     }else if(code==2){
         
     }
@@ -26,7 +37,6 @@ void CommandCheck::fail(int code,VoObject* vo){
 VoObject* CommandCheck::parse(const char *data){
     return NULL;
 }
-
 
 int CommandServer::Head=99102;
 
