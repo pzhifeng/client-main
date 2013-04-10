@@ -2,6 +2,8 @@
 #define __client_main__CommandsRegister__
 
 #include "Command.h"
+#include <string>
+using namespace std;
 
 class CommandsRegister
 {
@@ -10,7 +12,7 @@ private:
     ~CommandsRegister(void);
     
     static CommandsRegister* instance;
-    std::map<int,Command*> commands;
+    map<int,Command*> commands;
     
 public:
 	

@@ -7,9 +7,18 @@ CommandsRegister::CommandsRegister(void){
 }
 
 CommandsRegister::~CommandsRegister(void){
+	// Õ∑≈command
+	for (map<int,Command *>::iterator i=commands.begin(); i!=commands.end(); /*i++*/)
+	{
+		int key=i->first;
+		delete commands[key];
+		commands.erase(i++);
+	}
     this->commands.~map();
-	delete instance;
-	instance=NULL;
+	if(instance!=NULL){
+		delete instance;
+		instance=NULL;
+	}	
 }
 
 CommandsRegister* CommandsRegister::GetInstance(){

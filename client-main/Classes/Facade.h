@@ -15,8 +15,8 @@ public:
     static int port;
     static char* version;
     
-    static VoEmail Email;
-    static VoBall Ball;
+	static map<int,VoEmail> emails;
+    static map<int,VoBall> balls;
 public:
     static int send(int head);
     static int send(int head,char* p1);

@@ -8,7 +8,7 @@ bool Facade::isMock=true;
 char* Facade::ip="192.168.1.57";
 int Facade::port=61114;
 char* Facade::version="v1.0.0";
-
+map<int,VoEmail> Facade::emails;
 
 int Facade::send(int head){
     if(Facade::isMock){
@@ -57,7 +57,6 @@ void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     commands->put(CommandCheck::Head,new CommandCheck());
     commands->put(CommandServer::Head,new CommandServer());
-    commands->put(CommandCareer::Head,new CommandCareer());
-        
+    commands->put(CommandCareer::Head,new CommandCareer());     
 }
 

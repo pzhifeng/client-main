@@ -16,14 +16,15 @@ Client* Client::instance=NULL;
 
 
 Client::Client(void){
-    
 };
 
 Client::~Client(void){
     odSocket.Close();
 	odSocket.Clean();
-	delete instance;
-	instance=NULL;
+	if(instance!=NULL){
+		delete instance;
+		instance=NULL;
+	}
 };
 
 Client* Client::GetInstance(){
