@@ -8,9 +8,10 @@ bool Facade::IsMock=true;
 char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="v1.0.0";
-map<int,VoEmail> Facade::emails;
-VoHome* Facade::home=new VoHome();
-map<void*,void*> Facade::homeVoUi;
+
+map<int,VoEmail> Facade::Emails;
+VoHome* Facade::Home=new VoHome();
+
 
 int Facade::send(int head){
     if(Facade::IsMock){
@@ -63,5 +64,5 @@ void Facade::registerCommands(){
 }
 void Facade::release(){
 	delete Facade::home;
-	Facade::home=NULL;
+	Facade::Home=NULL;
 }

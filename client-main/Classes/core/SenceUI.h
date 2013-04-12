@@ -1,14 +1,22 @@
-//
-//  SenceUI.h
-//  client-main
-//
-//  Created by PAN ZHIFENG on 13-4-12.
-//
-//
-
 #ifndef __client_main__SenceUI__
 #define __client_main__SenceUI__
 
-#include <iostream>
+#include "cocos2d.h"
+#include "VoObject.h"
 
-#endif /* defined(__client_main__SenceUI__) */
+class SceneUI : : public cocos2d::CCLayer
+{
+private:
+    map<void*,void*> components;
+    VoObject* vo;
+    
+public:
+
+    //刷新面板数据
+    void refresh();
+    
+    //添加一个组件
+    CCLabelTTF* addLable(const char *string, const char *fontName, float fontSize,void* key);
+}
+
+#endif

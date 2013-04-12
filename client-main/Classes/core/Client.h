@@ -35,7 +35,7 @@ public:
     int send(int head,char* p1,char* p2,char* p3,char* p4,char* p5);
 
 	std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems);
-	void updataVoToUi(int head,VoObject* vo);
+	
 };
 
 

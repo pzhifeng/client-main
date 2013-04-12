@@ -1,5 +1,5 @@
-#ifndef __client_main__CommandsInit__
-#define __client_main__CommandsInit__
+#ifndef __client_main__Facade__
+#define __client_main__Facade__
 
 #include "core/Command.h"
 #include "core/VoObject.h"
@@ -15,11 +15,10 @@ public:
     static int Port;
     static char* Version;
     
-	static map<int,VoEmail> emails;
-    static map<int,VoBall> balls;
+	static map<int,VoEmail> Emails;
+    static map<int,VoBall> Balls;
 
-	static VoHome *home;
-	static map<void*,void*> homeVoUi;
+
 public:
     static int send(int head);
     static int send(int head,char* p1);

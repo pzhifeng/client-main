@@ -7,8 +7,7 @@ CommandsRegister::CommandsRegister(void){
 }
 
 CommandsRegister::~CommandsRegister(void){
-	// Õ∑≈command
-	for (map<int,Command *>::iterator i=commands.begin(); i!=commands.end(); /*i++*/)
+	for (map<int,Command *>::iterator i=commands.begin(); i!=commands.end();)
 	{
 		int key=i->first;
 		delete commands[key];

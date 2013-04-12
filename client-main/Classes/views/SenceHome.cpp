@@ -1,11 +1,3 @@
-//
-//  SenceHome.cpp
-//  client-main
-//
-//  Created by PAN ZHIFENG on 13-4-6.
-//
-//
-
 #include "SenceHome.h"
 #include "../SceneMain.h"
 #include "Facade.h"
@@ -42,19 +34,10 @@ bool SceneHome::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-	Facade::home->name="123444";
-    CCLabelTTF* pLabel = CCLabelTTF::create("123", "Thonburi", 34);
+    CCLabelTTF* pLabel = addLable("", "Thonburi", 34,&vo->name);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);
-
-	Facade::homeVoUi[&Facade::home->name]=pLabel;//”≥…‰voµΩui
-	//map<void*,void*> map1;
-	//void *str=&home.name;
-	//map1[str]=pLabel;
-
-	//CCLabelTTF* pLabel2=(CCLabelTTF*)map1[str];
-	//pLabel2->setString("444");
 
     return true;
 }

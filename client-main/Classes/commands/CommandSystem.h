@@ -14,7 +14,7 @@ public:
     static int Head;
 	HttpRequest *myHttpRequest;
 public:
-    void success(VoObject* vo);
+    SceneUI success(VoObject* vo);
     void fail(int code,VoObject* vo);
     VoObject* parse(const char *data);
 };
@@ -24,7 +24,7 @@ class CommandServer :public Command
 public:
     static int Head;
 public:
-    void success(VoObject* vo);
+    SceneUI success(VoObject* vo);
     void fail(int code,VoObject* vo);
     VoObject* parse(const char *data);
 };
