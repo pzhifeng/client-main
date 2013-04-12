@@ -2,7 +2,7 @@
 #define __client_main__Facade__
 
 #include "core/Command.h"
-#include "core/VoObject.h"
+#include "VoObject.h"
 #include "VoConfig.h"
 
 using namespace std;

@@ -2,21 +2,28 @@
 #define __client_main__SenceUI__
 
 #include "cocos2d.h"
-#include "VoObject.h"
+#include "Command.h"
 
-class SceneUI : : public cocos2d::CCLayer
+
+class SceneUI :public cocos2d::CCScene
 {
 private:
-    map<void*,void*> components;
-    VoObject* vo;
+    
+    static std::map<void*,void*> components;
     
 public:
-
+    
+    //VoObject* vo;
+    
     //刷新面板数据
     void refresh();
+
     
+    static SceneUI* create();
+    
+        
     //添加一个组件
-    CCLabelTTF* addLable(const char *string, const char *fontName, float fontSize,void* key);
-}
+    static cocos2d::CCLabelTTF* addLable(const char *string, const char *fontName, float fontSize,void* key);
+};
 
 #endif

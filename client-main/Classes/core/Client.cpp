@@ -4,7 +4,6 @@
 #include "CommandsRegister.h"
 #include "../utils/jsoncpp/include/json.h"
 #include "Facade.h"
-#include "commands/CommandSystem.h"
 
 #define SOH  1
 #define STX  2
@@ -67,9 +66,9 @@ void * revice(void* arg){
 					std::string m=value["m"].toStyledString();
 					VoObject* vo=command->parse(m.c_str());
 					if(code==0){
-						SenceUI* senceUI=command->success(vo);
-                        senceUI->vo=vo;
-						senceUI->refresh();
+						SceneUI* sceneUI=command->success(vo);
+                        sceneUI->vo=vo;
+						sceneUI->refresh();
 					}else{
 						command->fail(code,vo);
 						CCLOG("FAIL|%d  %s",code,m.c_str());

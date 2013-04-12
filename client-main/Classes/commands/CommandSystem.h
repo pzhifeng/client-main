@@ -4,7 +4,7 @@
 #include "../core/Command.h"
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "utils/HttpRequest.h"
+#include "../utils/HttpRequest.h"
 
 using namespace cocos2d;
 
@@ -14,7 +14,7 @@ public:
     static int Head;
 	HttpRequest *myHttpRequest;
 public:
-    SceneUI success(VoObject* vo);
+    SceneUI* success(VoObject* vo);
     void fail(int code,VoObject* vo);
     VoObject* parse(const char *data);
 };
@@ -24,7 +24,7 @@ class CommandServer :public Command
 public:
     static int Head;
 public:
-    SceneUI success(VoObject* vo);
+    SceneUI* success(VoObject* vo);
     void fail(int code,VoObject* vo);
     VoObject* parse(const char *data);
 };

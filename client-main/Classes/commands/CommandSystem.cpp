@@ -2,14 +2,14 @@
 #include "cocos2d.h"
 #include "../views/SenceHome.h"
 #include "../utils/jsoncpp/include/json.h"
-#include "core/VoObject.h"
+#include "VoObject.h"
 
 using namespace cocos2d;
 using namespace extension;
 
 int CommandCheck::Head=99100;
 
-SceneUI CommandCheck::success(VoObject* vo){
+SceneUI* CommandCheck::success(VoObject* vo){
 	//CCScene *pScene = SceneMain::scene();
 	//CCDirector::sharedDirector()->runWithScene(pScene);
     return NULL;
@@ -44,7 +44,7 @@ VoObject* CommandCheck::parse(const char *data){
 
 int CommandServer::Head=99102;
 
-SceneUI CommandServer::success(VoObject* vo){
+SceneUI* CommandServer::success(VoObject* vo){
 	CCScene *pScene = SceneHome::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
     return pScene;

@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include "cocos2d.h"
 #include "../utils/odsocket.h"
-#include "core/VoObject.h"
+#include "VoObject.h"
 
 using namespace std;
 

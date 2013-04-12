@@ -5,17 +5,15 @@
 #include "../VoObject.h"
 #include "../core/SenceUI.h"
 
-class SceneHome : public SceneUI
+class SceneHome : public cocos2d::CCLayer
 {
-private:
-    VoHome* vo;
     
 public:
-    
+    VoHome* vo;
     
     virtual bool init();
     
-    static cocos2d::CCScene* scene();
+    static SceneUI* scene();
 
     void back(CCObject* pSender);
 

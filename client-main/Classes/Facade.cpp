@@ -5,12 +5,11 @@
 #include "commands/CommandCareer.h"
 
 bool Facade::IsMock=true;
-char* Facade::Ip="192.168.1.78";
+char* Facade::Ip="127.0.0.1";
 int Facade::Port=61114;
 char* Facade::Version="v1.0.0";
 
 map<int,VoEmail> Facade::Emails;
-VoHome* Facade::Home=new VoHome();
 
 
 int Facade::send(int head){

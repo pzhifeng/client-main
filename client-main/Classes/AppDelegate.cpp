@@ -80,7 +80,7 @@ void AppDelegate::initGame(){
 	const char * fileName= "config.txt";
 	string jsonStr=FileUtil::read(fileName);
 	//½âÎöjson
-	Facade::emails=ConfigUtil::parseEmail(jsonStr.c_str());
-	CCLOG("id==%d",Facade::emails[1].id);
-	CCLOG("content==%s",Facade::emails[1].content.c_str());
+	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
+	CCLOG("id==%d",Facade::Emails[1].id);
+	CCLOG("content==%s",Facade::Emails[1].content.c_str());
 }

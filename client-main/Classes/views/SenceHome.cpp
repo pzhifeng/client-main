@@ -3,9 +3,9 @@
 #include "Facade.h"
 using namespace cocos2d;
 
-CCScene* SceneHome::scene()
+SceneUI* SceneHome::scene()
 {
-    CCScene *scene = CCScene::create();
+    SceneUI *scene = SceneUI::create();
 
     SceneHome *layer = SceneHome::create();
 

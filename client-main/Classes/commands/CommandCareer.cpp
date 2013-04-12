@@ -8,7 +8,7 @@ using namespace cocos2d;
 
 int CommandCareer::Head=10200;
 
-SceneUI CommandCareer::success(VoObject* vo){
+SceneUI* CommandCareer::success(VoObject* vo){
     VoServer* voServer=(VoServer*)vo;
 	CCScene *pScene = SceneHome::scene();
 
