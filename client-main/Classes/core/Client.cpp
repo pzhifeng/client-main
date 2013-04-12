@@ -3,6 +3,8 @@
 #include "Command.h"
 #include "CommandsRegister.h"
 #include "../utils/jsoncpp/include/json.h"
+#include "Facade.h"
+#include "commands/CommandSystem.h"
 
 #define SOH  1
 #define STX  2
@@ -66,6 +68,7 @@ void * revice(void* arg){
 					VoObject* vo=command->parse(m.c_str());
 					if(code==0){
 						command->success(vo);
+						_this->updataVoToUi(head,vo);
 					}else{
 						command->fail(code,vo);
 						CCLOG("FAIL|%d  %s",code,m.c_str());
@@ -188,4 +191,17 @@ std::vector<std::string>& Client::split(const std::string &s, char delim, std::v
 		elems.push_back(item);
 	}
 	return elems;
+}
+void Client::updataVoToUi(int head,VoObject* vo){
+	if(head==CommandServer::Head){
+		VoHome* tmpHome=(VoHome*)vo;
+		Facade::home->name=tmpHome->name;
+	}
+	for (map<void*,void *>::iterator i=Facade::homeVoUi.begin(); i!=Facade::homeVoUi.end(); /*i++*/)
+	{
+		void* key=i->first;
+		CCLabelTTF* pLabel=(CCLabelTTF*)Facade::homeVoUi[key];
+		pLabel->setString(Facade::home->name.c_str());
+		i++;
+	}
 }

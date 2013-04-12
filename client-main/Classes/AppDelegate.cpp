@@ -17,6 +17,7 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
+	Facade::release();
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
@@ -64,7 +65,7 @@ void AppDelegate::applicationWillEnterForeground()
 void AppDelegate::initGame(){
 	//init system commands
 	Facade::registerCommands();
-	//Facade::isMock=false;
+	Facade::IsMock=false;
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);

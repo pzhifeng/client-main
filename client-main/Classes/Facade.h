@@ -17,6 +17,9 @@ public:
     
 	static map<int,VoEmail> emails;
     static map<int,VoBall> balls;
+
+	static VoHome *home;
+	static map<void*,void*> homeVoUi;
 public:
     static int send(int head);
     static int send(int head,char* p1);
@@ -30,6 +33,7 @@ public:
     
     static void registerCommands();
 
+	static void release();
 };
 
 #endif 

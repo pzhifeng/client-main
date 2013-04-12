@@ -45,8 +45,6 @@ int CommandServer::Head=99102;
 void CommandServer::success(VoObject* vo){
 	CCScene *pScene = SceneHome::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
-    SceneHome* home=(SceneHome*) pScene;
-    home->voHome=(VoHome*)vo;
 }
 
 void CommandServer::fail(int code,VoObject* vo){

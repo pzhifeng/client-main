@@ -5,10 +5,12 @@
 #include "commands/CommandCareer.h"
 
 bool Facade::IsMock=true;
-char* Facade::Ip="192.168.1.57";
+char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="v1.0.0";
 map<int,VoEmail> Facade::emails;
+VoHome* Facade::home=new VoHome();
+map<void*,void*> Facade::homeVoUi;
 
 int Facade::send(int head){
     if(Facade::IsMock){
@@ -59,4 +61,7 @@ void Facade::registerCommands(){
     commands->put(CommandServer::Head,new CommandServer());
     commands->put(CommandCareer::Head,new CommandCareer());     
 }
-
+void Facade::release(){
+	delete Facade::home;
+	Facade::home=NULL;
+}
