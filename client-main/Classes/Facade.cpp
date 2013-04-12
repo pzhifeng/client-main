@@ -62,6 +62,5 @@ void Facade::registerCommands(){
     commands->put(CommandCareer::Head,new CommandCareer());     
 }
 void Facade::release(){
-	delete Facade::home;
-	Facade::Home=NULL;
+	
 }

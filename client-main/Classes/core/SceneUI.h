@@ -1,25 +1,24 @@
-#ifndef __client_main__SenceUI__
-#define __client_main__SenceUI__
+#ifndef __client_main__SceneUI__
+#define __client_main__SceneUI__
 
 #include "cocos2d.h"
-#include "Command.h"
 
 
 class SceneUI :public cocos2d::CCScene
 {
 private:
     
-    static std::map<void*,void*> components;
+    //static std::map<void*,void*> components;
     
 public:
     
-    //VoObject* vo;
+    void* vo;
     
     //刷新面板数据
-    void refresh();
+    static void refresh();
 
     
-    static SceneUI* create();
+    static SceneUI* create(void);
     
         
     //添加一个组件

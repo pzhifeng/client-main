@@ -68,7 +68,7 @@ void * revice(void* arg){
 					if(code==0){
 						SceneUI* sceneUI=command->success(vo);
                         sceneUI->vo=vo;
-						sceneUI->refresh();
+						//sceneUI->refresh();
 					}else{
 						command->fail(code,vo);
 						CCLOG("FAIL|%d  %s",code,m.c_str());

@@ -34,7 +34,7 @@ bool SceneHome::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-    CCLabelTTF* pLabel = addLable("", "Thonburi", 34,&vo->name);
+    CCLabelTTF* pLabel = SceneUI::addLable("", "Thonburi", 34,&vo->name);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);

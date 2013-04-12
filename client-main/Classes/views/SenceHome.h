@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "../VoObject.h"
-#include "../core/SenceUI.h"
+#include "../core/SceneUI.h"
 
 class SceneHome : public cocos2d::CCLayer
 {

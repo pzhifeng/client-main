@@ -45,7 +45,7 @@ VoObject* CommandCheck::parse(const char *data){
 int CommandServer::Head=99102;
 
 SceneUI* CommandServer::success(VoObject* vo){
-	CCScene *pScene = SceneHome::scene();
+	SceneUI *pScene = SceneHome::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
     return pScene;
 }

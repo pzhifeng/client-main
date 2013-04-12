@@ -2,7 +2,7 @@
 #define client_main_Command_h
 
 #include "cocos2d.h"
-#include "SenceUI.h"
+#include "SceneUI.h"
 
 
 struct VoObject{
