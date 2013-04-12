@@ -5,16 +5,21 @@
 #ifndef client_main_VoObject_h
 #define client_main_VoObject_h
 
+using namespace std;
+
 #include "Command.h"
 
 
 struct VoServer:VoObject{
     int id;
-    std::string name;
-    std::string domain;
-    std::string tag;
+    string name;
+    string domain;
+    string tag;
 };
 
+struct VoHome:VoObject {
+    string name; 
+};
 
 #endif
 

@@ -43,9 +43,10 @@ VoObject* CommandCheck::parse(const char *data){
 int CommandServer::Head=99102;
 
 void CommandServer::success(VoObject* vo){
-    VoServer* voServer=(VoServer*)vo;
 	CCScene *pScene = SceneHome::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
+    SceneHome* home=(SceneHome*) pScene;
+    home->voHome=(VoHome*)vo;
 }
 
 void CommandServer::fail(int code,VoObject* vo){
@@ -53,17 +54,9 @@ void CommandServer::fail(int code,VoObject* vo){
 }
 
 VoObject* CommandServer::parse(const char *data){
-    VoServer* voServer=new VoServer();
-    if(sizeof(data)>0){
-        Json::Reader reader;
-		Json::Value value;
-        if(reader.parse(data, value)){
-            //voServer->name=value["domain"].asString();
-            //voServer->id=value["id"].asInt();
-            
-        }
-    }
-    return voServer;
+    VoHome* vo=new VoHome();
+    vo->name="Hello OOO";
+    return vo;
 }
 
 

@@ -41,13 +41,21 @@ bool SceneHome::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-	/*
-    CCLabelTTF* pLabel = CCLabelTTF::create("另一个窗体", "Thonburi", 34);
+
+	VoHome home;
+	home.name="123444";
+    CCLabelTTF* pLabel = CCLabelTTF::create(home.name.c_str(), "Thonburi", 34);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);
-    */
-        
+
+	map<void*,void*> map1;
+	void *str=&home.name;
+	map1[str]=pLabel;
+
+	CCLabelTTF* pLabel2=(CCLabelTTF*)map1[str];
+	pLabel2->setString("444");
+	
     return true;
 }
 

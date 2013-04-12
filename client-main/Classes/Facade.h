@@ -10,10 +10,10 @@ using namespace std;
 class Facade
 {
 public:
-    static bool isMock;
-    static char* ip;
-    static int port;
-    static char* version;
+    static bool IsMock;
+    static char* Ip;
+    static int Port;
+    static char* Version;
     
 	static map<int,VoEmail> emails;
     static map<int,VoBall> balls;
