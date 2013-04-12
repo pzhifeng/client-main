@@ -1,16 +1,6 @@
-#include "JsonUtil.h"
-#include "utils/jsoncpp/include/json.h"
+#include "VoConfig.h"
 
-JsonUtil::JsonUtil(void)
-{
-}
-
-
-JsonUtil::~JsonUtil(void)
-{
-}
-
-map<int,VoEmail> JsonUtil::parseEmail(const char *jsonStr){
+map<int,VoEmail> ConfigUtil::parseEmail(const char *jsonStr){
 	//jsonStr="{\"v\":\"1.0\",\"email\":{\"1\":{\"content\":\"123\",\"id\":1},\"2\":{\"content\":\"456\",\"id\":2}}}";
 	map<int,VoEmail> emails;
 	Json::Reader reader;

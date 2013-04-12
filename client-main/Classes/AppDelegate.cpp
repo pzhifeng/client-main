@@ -6,7 +6,7 @@
 #include "Facade.h"
 #include "commands/CommandSystem.h"
 #include "utils/FileUtil.h"
-#include "utils/JsonUtil.h"
+#include "VoConfig.h"
 
 USING_NS_CC;
 
@@ -73,12 +73,13 @@ void AppDelegate::initGame(){
 			Facade::send(CommandCheck::Head,Facade::Version);
 		}
 	}
+	
 	//≥ı ºªØ≈‰÷√
 	//∂¡»°≈‰÷√json
 	const char * fileName= "config.txt";
 	string jsonStr=FileUtil::read(fileName);
 	//Ω‚Œˆjson
-	Facade::emails=JsonUtil::parseEmail(jsonStr.c_str());
+	Facade::emails=ConfigUtil::parseEmail(jsonStr.c_str());
 	CCLOG("id==%d",Facade::emails[1].id);
 	CCLOG("content==%s",Facade::emails[1].content.c_str());
 }
