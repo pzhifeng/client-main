@@ -32,6 +32,9 @@ public:
     @param  the pointer of the application instance
     */
     virtual void applicationWillEnterForeground();
+
+private:
+	void initGame();
 };
 
 #endif // _APP_DELEGATE_H_

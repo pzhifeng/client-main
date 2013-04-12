@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _HTTP_REQUEST_H_
+#define _HTTP_REQUEST_H_
+
 #include <HttpRequest.h>
 #include <HttpClient.h>
 
@@ -20,4 +22,5 @@ public:
 	void onHttpRequestCompleted(CCNode *sender,void *data);
 	//void doResponse(CommandCheck *pTarget,char *data);
 };
+#endif 
 

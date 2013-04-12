@@ -1,12 +1,6 @@
 #include "SceneMain.h"
-
-#include "core/Command.h"
-#include "core/Client.h"
 #include "Facade.h"
 #include "commands/CommandSystem.h"
-#include "views/SenceHome.h"
-#include "utils/FileUtil.h"
-#include "utils/JsonUtil.h"
 
 using namespace cocos2d;
 
@@ -66,31 +60,10 @@ bool SceneMain::init()
     pFontMenu->setPosition( ccp(size.width/2,size.height -80) );
     this->addChild(pFontMenu);
     
-    initGame();
-    
-	//初始化配置
-	//读取配置json
-	const char * fileName= "config.txt";
-	string jsonStr=FileUtil::read(fileName);
-	//解析json
-	Facade::emails=JsonUtil::parseEmail(jsonStr.c_str());
-	CCLOG("id==%d",Facade::emails[1].id);
-	CCLOG("content==%s",Facade::emails[1].content.c_str());
     return true;
 }
 
-void SceneMain::initGame(){
-    //init system commands
-    Facade::registerCommands();
-    if(!Facade::IsMock){
-        Client* client=Client::GetInstance();
-        bool b=client->connet(Facade::Ip, Facade::Port);
-        if(b){
-            client->setConfig("18602122551", "PASSPORT");
-            Facade::send(CommandCheck::Head,Facade::Version);
-        }
-    }
-}
+
 
 void SceneMain::start(CCObject* pSender)
 {

@@ -55,7 +55,7 @@ bool SceneHome::init()
 
 	CCLabelTTF* pLabel2=(CCLabelTTF*)map1[str];
 	pLabel2->setString("444");
-	
+
     return true;
 }
 

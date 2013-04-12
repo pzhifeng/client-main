@@ -2,7 +2,11 @@
 
 #include "cocos2d.h"
 #include "SceneMain.h"
-
+#include "core/Client.h"
+#include "Facade.h"
+#include "commands/CommandSystem.h"
+#include "utils/FileUtil.h"
+#include "utils/JsonUtil.h"
 
 USING_NS_CC;
 
@@ -33,6 +37,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     // run
     pDirector->runWithScene(pScene);
 
+	initGame();
+
     return true;
 }
 
@@ -55,3 +61,24 @@ void AppDelegate::applicationWillEnterForeground()
 }
 
 
+void AppDelegate::initGame(){
+	//init system commands
+	Facade::registerCommands();
+	//Facade::isMock=false;
+	if(!Facade::IsMock){
+		Client* client=Client::GetInstance();
+		bool b=client->connet(Facade::Ip, Facade::Port);
+		if(b){
+			client->setConfig("18602122551", "PASSPORT");
+			Facade::send(CommandCheck::Head,Facade::Version);
+		}
+	}
+	//初始化配置
+	//读取配置json
+	const char * fileName= "config.txt";
+	string jsonStr=FileUtil::read(fileName);
+	//解析json
+	Facade::emails=JsonUtil::parseEmail(jsonStr.c_str());
+	CCLOG("id==%d",Facade::emails[1].id);
+	CCLOG("content==%s",Facade::emails[1].content.c_str());
+}
