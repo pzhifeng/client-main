@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#include "Command.h"
+#include "core/Command.h"
 
 
 struct VoServer:VoObject{
@@ -18,7 +18,7 @@ struct VoServer:VoObject{
 };
 
 struct VoHome:VoObject {
-    string name; 
+    char * name; 
 };
 
 #endif

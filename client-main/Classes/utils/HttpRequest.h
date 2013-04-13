@@ -1,7 +1,6 @@
 #ifndef _HTTP_REQUEST_H_
 #define _HTTP_REQUEST_H_
 
-#include "HttpRequest.h"
 #include "HttpClient.h"
 
 using namespace cocos2d;

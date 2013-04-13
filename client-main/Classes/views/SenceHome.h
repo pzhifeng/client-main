@@ -3,17 +3,17 @@
 
 #include "cocos2d.h"
 #include "../VoObject.h"
-#include "../core/SceneUI.h"
+#include "../core/LayerUI.h"
 
-class SceneHome : public cocos2d::CCLayer
+class SceneHome : public LayerUI
 {
     
 public:
+    static LayerUI* scene(VoHome* vo);
+    
     VoHome* vo;
     
-    virtual bool init();
-    
-    static SceneUI* scene();
+    void initLayer();
 
     void back(CCObject* pSender);
 

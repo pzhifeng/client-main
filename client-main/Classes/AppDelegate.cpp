@@ -65,7 +65,6 @@ void AppDelegate::applicationWillEnterForeground()
 void AppDelegate::initGame(){
 	//init system commands
 	Facade::registerCommands();
-	Facade::IsMock=false;
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);
@@ -77,10 +76,10 @@ void AppDelegate::initGame(){
 	
 	//≥ı ºªØ≈‰÷√
 	//∂¡»°≈‰÷√json
-	const char * fileName= "config.txt";
-	string jsonStr=FileUtil::read(fileName);
+//	const char * fileName= "config.txt";
+//	string jsonStr=FileUtil::read(fileName);
 	//Ω‚Œˆjson
-	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
-	CCLOG("id==%d",Facade::Emails[1].id);
-	CCLOG("content==%s",Facade::Emails[1].content.c_str());
+//	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
+//	CCLOG("id==%d",Facade::Emails[1].id);
+//	CCLOG("content==%s",Facade::Emails[1].content.c_str());
 }

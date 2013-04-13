@@ -1,4 +1,6 @@
 #include "Facade.h"
+#include "VoObject.h"
+#include "core/LayerUI.h"
 #include "core/Client.h"
 #include "core/CommandsRegister.h"
 #include "commands/CommandSystem.h"
@@ -16,7 +18,10 @@ int Facade::send(int head){
     if(Facade::IsMock){
         CommandsRegister* commands=CommandsRegister::GetInstance();
         Command* c=commands->get(head);
-        c->success(NULL);
+		VoObject* vo=c->parse(NULL);
+		LayerUI* LayerUI=c->success(vo);
+        LayerUI->vo=vo;
+		LayerUI->refresh();
         return 1;
     }else{
         Client* client=Client::GetInstance();

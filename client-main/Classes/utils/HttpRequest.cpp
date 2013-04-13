@@ -1,4 +1,6 @@
 #include "HttpRequest.h"
+#pragma comment(lib, "libcurl_imp")
+#pragma comment(lib, "libExtensions")
 using namespace std;
 HttpRequest::HttpRequest(void)
 {

@@ -7,11 +7,11 @@ CommandsRegister::CommandsRegister(void){
 }
 
 CommandsRegister::~CommandsRegister(void){
-	for (map<int,Command *>::iterator i=commands.begin(); i!=commands.end();)
+	for (map<int,Command *>::iterator it=commands.begin(); it!=commands.end();)
 	{
-		int key=i->first;
+		int key=it->first;
 		delete commands[key];
-		commands.erase(i++);
+		commands.erase(it++);
 	}
     this->commands.~map();
 	if(instance!=NULL){

@@ -20,4 +20,4 @@ public:
     CREATE_FUNC(SceneMain);
 };
 
-#endif // __MAIN_SCENE_H__
+#endif 

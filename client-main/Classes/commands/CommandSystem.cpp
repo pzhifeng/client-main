@@ -9,7 +9,7 @@ using namespace extension;
 
 int CommandCheck::Head=99100;
 
-SceneUI* CommandCheck::success(VoObject* vo){
+LayerUI* CommandCheck::success(VoObject* vo){
 	//CCScene *pScene = SceneMain::scene();
 	//CCDirector::sharedDirector()->runWithScene(pScene);
     return NULL;
@@ -44,10 +44,10 @@ VoObject* CommandCheck::parse(const char *data){
 
 int CommandServer::Head=99102;
 
-SceneUI* CommandServer::success(VoObject* vo){
-	SceneUI *pScene = SceneHome::scene();
-	CCDirector::sharedDirector()->replaceScene(pScene);
-    return pScene;
+LayerUI* CommandServer::success(VoObject* vo){
+	LayerUI *layer = SceneHome::scene((VoHome*)vo);
+	
+    return layer;
 }
 
 void CommandServer::fail(int code,VoObject* vo){

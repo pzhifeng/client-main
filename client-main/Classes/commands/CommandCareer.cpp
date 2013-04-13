@@ -8,13 +8,11 @@ using namespace cocos2d;
 
 int CommandCareer::Head=10200;
 
-SceneUI* CommandCareer::success(VoObject* vo){
+LayerUI* CommandCareer::success(VoObject* vo){
     VoServer* voServer=(VoServer*)vo;
-	SceneUI *pScene = SceneHome::scene();
-
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	
     
-    return  pScene;
+    return  NULL;
 }
 
 void CommandCareer::fail(int code,VoObject* vo){

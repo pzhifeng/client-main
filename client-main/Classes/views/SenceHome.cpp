@@ -3,22 +3,29 @@
 #include "Facade.h"
 using namespace cocos2d;
 
-SceneUI* SceneHome::scene()
+LayerUI* SceneHome::scene(VoHome* vo)
 {
-    SceneUI *scene = SceneUI::create();
+    
+    CCScene *scene = CCScene::create();
 
     SceneHome *layer = SceneHome::create();
+    
+    layer->vo=vo;
+    
+    layer->initLayer();
 
     scene->addChild(layer);
     
-    return scene;
+    CCDirector::sharedDirector()->replaceScene(scene);
+    
+    return layer;
 }
 
-bool SceneHome::init()
+void SceneHome:: initLayer()
 {
     if ( !CCLayer::init() )
     {
-        return false;
+        return;
     }
     
 
@@ -34,12 +41,11 @@ bool SceneHome::init()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-    CCLabelTTF* pLabel = SceneUI::addLable("", "Thonburi", 34,&vo->name);
+    CCLabelTTF* pLabel = addLable("", "Thonburi", 34,&vo->name);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);
 
-    return true;
 }
 
 void SceneHome::back(CCObject* pSender)

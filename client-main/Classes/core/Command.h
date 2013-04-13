@@ -2,8 +2,7 @@
 #define client_main_Command_h
 
 #include "cocos2d.h"
-#include "SceneUI.h"
-
+#include "LayerUI.h"
 
 struct VoObject{
     
@@ -16,7 +15,7 @@ public:
 	Command(void){};
 	~Command(void){};
     
-	virtual SceneUI* success(VoObject* vo)= 0;
+	virtual LayerUI* success(VoObject* vo)= 0;
 	virtual void fail(int code,VoObject* vo)= 0;
     virtual VoObject* parse(const char *data)=0;
 };

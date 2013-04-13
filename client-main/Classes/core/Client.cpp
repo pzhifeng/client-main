@@ -66,9 +66,8 @@ void * revice(void* arg){
 					std::string m=value["m"].toStyledString();
 					VoObject* vo=command->parse(m.c_str());
 					if(code==0){
-						SceneUI* sceneUI=command->success(vo);
-                        sceneUI->vo=vo;
-						//sceneUI->refresh();
+						LayerUI* LayerUI=command->success(vo);
+						LayerUI->refresh();
 					}else{
 						command->fail(code,vo);
 						CCLOG("FAIL|%d  %s",code,m.c_str());
