@@ -18,7 +18,8 @@ struct VoServer:VoObject{
 };
 
 struct VoHome:VoObject {
-    char * name; 
+    char * name;
+    char * title;
 };
 
 #endif

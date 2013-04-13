@@ -9,13 +9,12 @@ class CommandsRegister
 {
 private:
     CommandsRegister(void);
-    ~CommandsRegister(void);
     
     static CommandsRegister* instance;
     map<int,Command*> commands;
     
 public:
-	
+	~CommandsRegister(void);
     static CommandsRegister* GetInstance();
     Command* get(int head);
     void put(int ,Command*);

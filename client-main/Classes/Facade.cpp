@@ -60,12 +60,14 @@ Command* Facade::get(int head){
     return commands->get(head);
 }
 
+void Facade::release(){
+	CommandsRegister* commands=CommandsRegister::GetInstance();
+    delete commands;
+}
+
 void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     commands->put(CommandCheck::Head,new CommandCheck());
     commands->put(CommandServer::Head,new CommandServer());
     commands->put(CommandCareer::Head,new CommandCareer());     
-}
-void Facade::release(){
-	
 }

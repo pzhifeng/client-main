@@ -41,10 +41,15 @@ void SceneHome:: initLayer()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
     
-    CCLabelTTF* pLabel = addLable("", "Thonburi", 34,&vo->name);
+    CCLabelTTF* pLabel = addLable("", "Thonburi", 34,vo->name);
     CCSize size = CCDirector::sharedDirector()->getWinSize();
     pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
     this->addChild(pLabel, 1);
+    
+    CCLabelTTF* pLabel2 = addLable("", "Thonburi", 34,vo->title);
+    pLabel2->cocos2d::CCNode::setPosition(200, 200);
+    this->addChild(pLabel2, 1);
+
 
 }
 

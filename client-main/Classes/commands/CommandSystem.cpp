@@ -17,7 +17,7 @@ LayerUI* CommandCheck::success(VoObject* vo){
 
 void CommandCheck::fail(int code,VoObject* vo){
 	if(code==1){
-        //需要更新配置文件,下载最新配置文件，进入游戏
+        //鈥撁嬧�溾劉鈭徛糕�撀増鈥懊封垰艗茠潞藳,艙卢鈥樏库棅脫鈥撀増鈥懊封垰艗茠潞藳拢篓惟炉禄脦鈥澟捙撯垜
 		/*
 		myHttpRequest=new HttpRequest();
 		myHttpRequest->doGet();
@@ -57,6 +57,7 @@ void CommandServer::fail(int code,VoObject* vo){
 VoObject* CommandServer::parse(const char *data){
     VoHome* vo=new VoHome();
     vo->name="Hello OOO";
+    vo->title="浣犲ソ";
     return vo;
 }
 
