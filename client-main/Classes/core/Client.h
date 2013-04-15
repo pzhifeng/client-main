@@ -23,6 +23,8 @@ public:
     
     ODSocket odSocket;
     
+    vector<string> queue;
+    
     static Client* GetInstance();
     
 	bool connet(char* ip,int port);

@@ -12,8 +12,6 @@ private:
     
 public:
     
-    ~LayerUI(void);
-    
 	void* vo;
     
     //刷新面板数据

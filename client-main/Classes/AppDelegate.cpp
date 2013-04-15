@@ -22,66 +22,57 @@ AppDelegate::~AppDelegate()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
-    // turn on display FPS
     pDirector->setDisplayStats(true);
-
-    // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
 
-    // create a scene. it's an autorelease object
     CCScene *pScene = SceneMain::scene();
-
-    // run
     pDirector->runWithScene(pScene);
 
-	initGame();
+	initGame(pScene);
 
     return true;
 }
 
-// This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->pause();
-
-    // if you use SimpleAudioEngine, it must be paused
     // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
-// this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->resume();
-    
-    // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
 
-void AppDelegate::initGame(){
+void AppDelegate::initGame(CCScene *pScene){
 	//init system commands
 	Facade::registerCommands();
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);
 		if(b){
-			client->setConfig("18602122551", "PASSPORT");
+            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(AppDelegate::excuteCommand), pScene, 0.1, false);
+            client->setConfig("18602122551", "PASSPORT");
 			Facade::send(CommandCheck::Head,Facade::Version);
-            CCScheduler* scheduler=CCDirector::sharedDirector()->getScheduler();
-            scheduler->scheduleSelector(<#SEL_SCHEDULE pfnSelector#>, <#cocos2d::CCObject *pTarget#>, <#float fInterval#>, <#bool bPaused#>, <#unsigned int repeat#>, <#float delay#>)
 		}
 	}
 	
-	//³õÊ¼»¯ÅäÖÃ
-	//¶ÁÈ¡ÅäÖÃjson
+	//â‰¥Ä±Â ÂºÂªÃ˜â‰ˆâ€°Ã·âˆš
+	//âˆ‚Â¡Â»Â°â‰ˆâ€°Ã·âˆšjson
 //	const char * fileName= "config.txt";
 //	string jsonStr=FileUtil::read(fileName);
-	//½âÎöjson
+	//Î©â€šÅ’Ë†json
 //	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
 //	CCLOG("id==%d",Facade::Emails[1].id);
 //	CCLOG("content==%s",Facade::Emails[1].content.c_str());
+}
+
+void AppDelegate::excuteCommand(){
+    Client* client=Client::GetInstance();
+    client->excuteCommand();
 }
