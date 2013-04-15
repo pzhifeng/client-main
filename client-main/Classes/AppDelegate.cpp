@@ -71,6 +71,8 @@ void AppDelegate::initGame(){
 		if(b){
 			client->setConfig("18602122551", "PASSPORT");
 			Facade::send(CommandCheck::Head,Facade::Version);
+            CCScheduler* scheduler=CCDirector::sharedDirector()->getScheduler();
+            scheduler->scheduleSelector(<#SEL_SCHEDULE pfnSelector#>, <#cocos2d::CCObject *pTarget#>, <#float fInterval#>, <#bool bPaused#>, <#unsigned int repeat#>, <#float delay#>)
 		}
 	}
 	

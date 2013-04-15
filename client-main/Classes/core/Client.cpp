@@ -72,7 +72,7 @@ void * revice(void* arg){
 						command->fail(code,vo);
 						CCLOG("FAIL|%d  %s",code,m.c_str());
 					}
-					delete vo;
+                    delete vo;
 				}
 			}
 			//end
@@ -190,4 +190,8 @@ std::vector<std::string>& Client::split(const std::string &s, char delim, std::v
 		elems.push_back(item);
 	}
 	return elems;
+}
+
+void Client::excuteCommand(){
+    
 }

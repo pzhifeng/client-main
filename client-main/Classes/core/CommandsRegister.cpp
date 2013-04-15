@@ -28,6 +28,10 @@ CommandsRegister* CommandsRegister::GetInstance(){
 }
 
 void CommandsRegister::put(int head,Command* c){
+    Command* tmp=commands[head];
+    if(NULL!=tmp){
+        CCLOG("INIT|repeat command head: %d ",head);
+    }
     commands[head]=c;
 }
 

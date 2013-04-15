@@ -6,7 +6,7 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
-bool Facade::IsMock=true;
+bool Facade::IsMock=false;
 char* Facade::Ip="127.0.0.1";
 int Facade::Port=61114;
 char* Facade::Version="v1.0.0";
@@ -20,8 +20,8 @@ int Facade::send(int head){
         Command* c=commands->get(head);
 		VoObject* vo=c->parse(NULL);
 		LayerUI* LayerUI=c->success(vo);
-        LayerUI->vo=vo;
 		LayerUI->refresh();
+        delete vo;
         return 1;
     }else{
         Client* client=Client::GetInstance();

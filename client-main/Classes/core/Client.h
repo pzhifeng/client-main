@@ -12,7 +12,6 @@ class Client
 {
 private:
     Client(void);
-	~Client(void);
     
     static Client *instance;
     
@@ -20,6 +19,8 @@ private:
     std::string sessionKey;
     
 public:
+    ~Client(void);
+    
     ODSocket odSocket;
     
     static Client* GetInstance();
@@ -36,6 +37,7 @@ public:
 
 	std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems);
 	
+    void excuteCommand();
 };
 
 

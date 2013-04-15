@@ -11,6 +11,9 @@ private:
     static std::map<void *,void*> components;
     
 public:
+    
+    ~LayerUI(void);
+    
 	void* vo;
     
     //刷新面板数据
