@@ -21,8 +21,8 @@ public:
     virtual void applicationWillEnterForeground();
 
 private:
-	void initGame(cocos2d::CCScene *pScene);
-    void excuteCommand();
+	void initGame();
+    void excuteCommand(float df);
 };
 
 #endif 
