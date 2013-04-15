@@ -6,13 +6,13 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
-bool Facade::IsMock=false;
-char* Facade::Ip="127.0.0.1";
+bool Facade::IsMock=true;
+char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
-char* Facade::Version="v1.0.0";
+char* Facade::Version="1.0";
 
 map<int,VoEmail> Facade::Emails;
-
+map<string,VoLang> Facade::Langs;
 
 int Facade::send(int head){
     if(Facade::IsMock){
@@ -20,8 +20,8 @@ int Facade::send(int head){
         Command* c=commands->get(head);
 		VoObject* vo=c->parse(NULL);
 		LayerUI* LayerUI=c->success(vo);
+        LayerUI->vo=vo;
 		LayerUI->refresh();
-        delete vo;
         return 1;
     }else{
         Client* client=Client::GetInstance();

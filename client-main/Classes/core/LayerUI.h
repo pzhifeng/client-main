@@ -11,7 +11,6 @@ private:
     static std::map<void *,void*> components;
     
 public:
-    
 	void* vo;
     
     //刷新面板数据

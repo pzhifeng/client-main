@@ -2,7 +2,6 @@
 
 std::map<void *,void*> LayerUI::components;
 
-
 LayerUI* LayerUI::create(void){
     LayerUI *pRet = new LayerUI();
     if (pRet && pRet->init())
@@ -21,8 +20,9 @@ void LayerUI::refresh(){
     for (std::map<void *,void*>::iterator it=components.begin(); it!=components.end();++it)
 	{
 		void* key=it->first;
+        
 		cocos2d::CCLabelTTF* pLabel=(cocos2d::CCLabelTTF*)components[key];
-        //CCLOG("GET VALUE: %p:%s", pLabel,(char *)key);
+        //CCLOG("VALUE: %s", *key);
         pLabel->setString((char *)key);
 	}
 }
@@ -31,6 +31,5 @@ void LayerUI::refresh(){
 cocos2d::CCLabelTTF* LayerUI::addLable(const char *title, const char *fontName, float fontSize,void* key){
     cocos2d::CCLabelTTF* pLabel = cocos2d::CCLabelTTF::create(title, fontName, fontSize);
     components[key]=pLabel;
-    //CCLOG("SET VALUE: %p:%s", pLabel,*key);
     return pLabel;
 }

@@ -17,7 +17,7 @@ void HttpRequest::doGet()
 	m_isCompleted=false;
 	m_responseData="";
 	CCHttpRequest* request = new CCHttpRequest();
-	request->setUrl("www.baidu.com");
+	request->setUrl("http://127.0.0.1:8080/springmvc/index.jsp");
 	request->setRequestType(CCHttpRequest::kHttpGet);
 	request->setResponseCallback(this, callfuncND_selector(HttpRequest::onHttpRequestCompleted));
 	CCHttpClient::getInstance()->send(request); 
@@ -63,7 +63,7 @@ void HttpRequest::onHttpRequestCompleted(CCNode *sender,void *data)
 		//CCLog("%c", (*buffer)[i]);//这里打印从服务器返回的数据  
 		m_responseData.push_back((*buffer)[i]);
 	}  
-	//CCLog("m_responseData:%s",m_responseData.c_str());
+	CCLog("m_responseData:%s",m_responseData.c_str());
 	printf("\n");  
 
 } 

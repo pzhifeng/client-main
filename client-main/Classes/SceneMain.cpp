@@ -50,13 +50,13 @@ bool SceneMain::init()
     //add menu
     CCMenuItemFont::setFontName("Marker Felt");
     CCMenuItemFont::setFontSize(22);
-    CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create("首页",this,menu_selector(SceneMain::start));
-    CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create("人物",this,menu_selector(SceneMain::start));
+    CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create(Facade::Langs["首页"].value.c_str(),this,menu_selector(SceneMain::start));
+    CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create(Facade::Langs["人物"].value.c_str(),this,menu_selector(SceneMain::start));
     pFontMenuItem2->setPositionY(-50);
-    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create("装备",this,menu_selector(SceneMain::start));
+    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create(Facade::Langs["装备"].value.c_str(),this,menu_selector(SceneMain::start));
     pFontMenuItem3->setPositionY(-100);
 
-    CCMenu* pFontMenu = CCMenu::create(pFontMenuItem1,pFontMenuItem2,pFontMenuItem3,NULL);
+    CCMenu* pFontMenu = CCMenu::create(pFontMenuItem1,pFontMenuItem2,pFontMenuItem3,NULL); 
     pFontMenu->setPosition( ccp(size.width/2,size.height -80) );
     this->addChild(pFontMenu);
     

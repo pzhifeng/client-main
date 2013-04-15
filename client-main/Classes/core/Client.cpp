@@ -4,7 +4,6 @@
 #include "CommandsRegister.h"
 #include "../utils/jsoncpp/include/json.h"
 #include "Facade.h"
-#include "cocos2d.h"
 
 #define SOH  1
 #define STX  2
@@ -12,19 +11,18 @@
 #define EOT  4
 #define ENQ  5
 #define TAB  9
-#define BLOCK_SIZE 4096
+#define BLOCK_SIZE 1024
 
 Client* Client::instance=NULL;
+extern std::vector<std::string> split(const std::string s, char delim);
 
 
 Client::Client(void){
-    
 };
 
 Client::~Client(void){
     odSocket.Close();
 	odSocket.Clean();
-    queue.clear();
 	if(instance!=NULL){
 		delete instance;
 		instance=NULL;
@@ -42,6 +40,8 @@ void * revice(void* arg){
     Client *_this=(Client*)arg;
 	char buff[BLOCK_SIZE];
 	string msg="";
+	Json::Reader reader;
+	Json::Value value;
 	while (true)
 	{
 		memset(buff,0,BLOCK_SIZE);
@@ -51,51 +51,38 @@ void * revice(void* arg){
 		msg.append(buff);
 		if(buff[ret-1]!=0x0005)
 			continue;
-		vector<string> tmp;
-		_this->split(msg,0x0005,tmp);
-		
-		for(int i=0;i<tmp.size();i++){
-            _this->queue.push_back(tmp[i]);
+		vector<string> msgList=split(msg,0x0005);
+		//CCLOG("msgList-size===%d",msgList.size());
+		for(int i=0;i<msgList.size();i++){
+			//CCLOG("msg===%s",msgList[i].c_str());
+			//begin do command
+			if(reader.parse(msgList[i], value)){
+				//long uid=value["u"].asUInt();
+				int code=value["r"].asInt();
+				int head=value["h"].asInt();
+				CommandsRegister* commands=CommandsRegister::GetInstance();
+				Command *command=commands->get(head);
+				if(command!=NULL){
+					std::string m=value["m"].toStyledString();
+					VoObject* vo=command->parse(m.c_str());
+					CCLOG("head===%d===code===%d",head,code);
+					if(code==0){
+						LayerUI* LayerUI=command->success(vo);
+						LayerUI->refresh();
+					}else{
+						command->fail(code,vo);
+						CCLOG("FAIL|%d  %s",code,m.c_str());
+					}
+					delete vo;
+				}
+			}
+			//end
 		}
-        CCLOG("RECIVE|%d|%d|%s",_this->queue.size(),tmp.size(),msg.c_str());
-		tmp.clear();
+		msgList.clear();
 		msg.clear();
 	}
 	return ((void*)NULL);
 }
-
-
-void Client::excuteCommand(){
-    if(queue.size()>0){
-        string msg=queue.front();
-        
-        Json::Reader reader;
-        Json::Value value;
-        if(reader.parse(msg, value)){
-            //long uid=value["u"].asUInt();
-            int code=value["r"].asInt();
-            int head=value["h"].asInt();
-            CommandsRegister* commands=CommandsRegister::GetInstance();
-            Command *command=commands->get(head);
-            if(command!=NULL){
-                std::string m=value["m"].toStyledString();
-                VoObject* vo=command->parse(m.c_str());
-                if(code==0){
-                    LayerUI* LayerUI=command->success(vo);
-                    LayerUI->refresh();
-                }else{
-                    command->fail(code,vo);
-                    CCLOG("FAIL|%d  %s",code,m.c_str());
-                }
-                delete vo;
-            }
-        }
-        
-        queue.erase(queue.begin());
-    }
-    
-}
-
 
 bool Client::connet(char* ip,int port){
     odSocket.Init();
@@ -196,13 +183,4 @@ int Client::send(int head,char* p1,char* p2,char* p3){
 int Client::send(int head,char* p1,char* p2,char* p3,char* p4){
     return Client::send(head,p1,p2,p3,p4,NULL);
 };
-
-std::vector<std::string>& Client::split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while(std::getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-	return elems;
-}
 
