@@ -45,6 +45,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 	//得到key最大的，因此我这里是横屏，所以以高度为基准，为了确保缩放后宽度能全屏，所以选取宽高比最大的为设计方案  
 	CCSize designResolutionSize = iter->second;  
 
+	//设置设计方案
+	//kResolutionNoBorder：超出屏幕的部分会被裁剪，两侧没有黑边，铺满屏幕，按图片原始比例显示，图片不变形。
+	//kResolutionShowAll：整个游戏界面是可见的，会按原始比例进行缩放，图片不变形，但两侧可能会留有黑边，不铺满屏幕。
+	//kResolutionExactFit：整个游戏界面是可见的，图片可能会进行拉伸或者压缩处理，铺满屏幕，图片会变形。
 	//pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionNoBorder);  
 	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);  
 	//pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionExactFit);  
