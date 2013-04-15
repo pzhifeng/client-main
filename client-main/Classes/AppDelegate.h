@@ -21,8 +21,9 @@ public:
     virtual void applicationWillEnterForeground();
 
 private:
-	void initGame(cocos2d::CCScene *pScene);
-    void excuteCommand();
+    cocos2d::CCPoint* ccPoint;
+	void initGame();
+    void excuteCommand(float dt);
 };
 
 #endif 

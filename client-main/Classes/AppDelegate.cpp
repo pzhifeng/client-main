@@ -12,11 +12,12 @@ USING_NS_CC;
 
 AppDelegate::AppDelegate()
 {
-
 }
 
 AppDelegate::~AppDelegate()
 {
+    CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand),ccPoint);
+    delete ccPoint;
 	Facade::release();
 }
 
@@ -31,7 +32,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCScene *pScene = SceneMain::scene();
     pDirector->runWithScene(pScene);
 
-	initGame(pScene);
+	initGame();
 
     return true;
 }
@@ -48,15 +49,15 @@ void AppDelegate::applicationWillEnterForeground()
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
-
-void AppDelegate::initGame(CCScene *pScene){
+void AppDelegate::initGame(){
+    ccPoint=new CCPoint();
 	//init system commands
 	Facade::registerCommands();
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);
 		if(b){
-            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(AppDelegate::excuteCommand), pScene, 0.1, false);
+            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand), ccPoint, 0.01f, false);
             client->setConfig("18602122551", "PASSPORT");
 			Facade::send(CommandCheck::Head,Facade::Version);
 		}
@@ -72,7 +73,7 @@ void AppDelegate::initGame(CCScene *pScene){
 //	CCLOG("content==%s",Facade::Emails[1].content.c_str());
 }
 
-void AppDelegate::excuteCommand(){
+void AppDelegate::excuteCommand(float dt){
     Client* client=Client::GetInstance();
     client->excuteCommand();
 }

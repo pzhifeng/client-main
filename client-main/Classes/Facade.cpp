@@ -9,7 +9,7 @@
 bool Facade::IsMock=false;
 char* Facade::Ip="127.0.0.1";
 int Facade::Port=61114;
-char* Facade::Version="v1.0.0";
+char* Facade::Version="1.0";
 
 map<int,VoEmail> Facade::Emails;
 
