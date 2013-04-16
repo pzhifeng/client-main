@@ -27,8 +27,6 @@ struct VoEmail{
 
 struct VoLang{
 	string value;
-	int x;
-	int y;
 };
 
 class ConfigUtil

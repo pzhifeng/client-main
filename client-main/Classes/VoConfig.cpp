@@ -37,18 +37,10 @@ map<string,VoLang> ConfigUtil::parseLang(const char *langFileName){
 	while((fgets(TmpBuf, maxLen,fp))!= NULL )
 	{
 		CCLOG("TmpBuf===%s",TmpBuf);
-		//首页=首页:|x|y
-		vector<string> langList=split(TmpBuf,':');
-		vector<string> titleList=split(langList[0].c_str(),'=');
-		vector<string> posList=split(langList[1].c_str(),'|');
-		CCLOG("titleList===0===%s",titleList[0].c_str());
-		CCLOG("titleList===1===%s",titleList[1].c_str());
-		CCLOG("posList===x:%s===y:%s",posList[1].c_str(),posList[2].c_str());
-
+		//首页=首页
+		vector<string> titleList=split(TmpBuf,'=');
 		VoLang lang;
 		lang.value=titleList[1];
-		lang.x=(atoi(posList[1].c_str()));
-		lang.y=(atoi(posList[2].c_str()));
 		langs[titleList[0]]=lang;
 	}
 	free(TmpBuf);
