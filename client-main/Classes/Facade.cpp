@@ -6,7 +6,7 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
-bool Facade::IsMock=false;
+bool Facade::IsMock=true;
 char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="1.0";
@@ -69,5 +69,6 @@ void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     commands->put(CommandCheck::Head,new CommandCheck());
     commands->put(CommandServer::Head,new CommandServer());
-    commands->put(CommandCareer::Head,new CommandCareer());     
+    commands->put(CommandCareer::Head,new CommandCareer());
+    commands->put(CommandTest::Head,new CommandTest());
 }

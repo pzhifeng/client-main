@@ -1,6 +1,7 @@
 #include "CommandSystem.h"
 #include "cocos2d.h"
-#include "../views/SenceHome.h"
+#include "../views/SceneHome.h"
+#include "../views/SceneTest.h"
 #include "../utils/jsoncpp/include/json.h"
 #include "VoObject.h"
 
@@ -58,6 +59,24 @@ VoObject* CommandServer::parse(const char *data){
     VoHome* vo=new VoHome();
     vo->name="Hello OOO";
     vo->title="你好";
+    return vo;
+}
+
+int CommandTest::Head=99103;
+
+LayerUI* CommandTest::success(VoObject* vo){
+	LayerUI *layer = SceneTest::scene((VoTest*)vo);
+    return layer;
+}
+
+void CommandTest::fail(int code,VoObject* vo){
+	
+}
+
+VoObject* CommandTest::parse(const char *data){
+    VoTest* vo=new VoTest();
+    vo->name="Hello TEST";
+    vo->title="你好TEST";
     return vo;
 }
 

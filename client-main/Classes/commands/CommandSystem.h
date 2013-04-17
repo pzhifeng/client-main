@@ -29,6 +29,16 @@ public:
     VoObject* parse(const char *data);
 };
 
+class CommandTest :public Command
+{
+public:
+    static int Head;
+public:
+    LayerUI* success(VoObject* vo);
+    void fail(int code,VoObject* vo);
+    VoObject* parse(const char *data);
+};
+
 
 
 #endif

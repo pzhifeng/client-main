@@ -1,4 +1,4 @@
-#include "SenceHome.h"
+#include "SceneHome.h"
 #include "../SceneMain.h"
 #include "Facade.h"
 using namespace cocos2d;

@@ -53,7 +53,7 @@ bool SceneMain::init()
     CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create("首页",this,menu_selector(SceneMain::start));
     CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create("人物",this,menu_selector(SceneMain::start));
     pFontMenuItem2->setPositionY(-50);
-    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create("装备",this,menu_selector(SceneMain::start));
+    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create("装备",this,menu_selector(SceneMain::test));
     pFontMenuItem3->setPositionY(-100);
 
     CCMenu* pFontMenu = CCMenu::create(pFontMenuItem1,pFontMenuItem2,pFontMenuItem3,NULL);
@@ -67,8 +67,12 @@ bool SceneMain::init()
 
 void SceneMain::start(CCObject* pSender)
 {
-    //Facade::send(CommandCheck::Head,Facade::version);
     Facade::send(CommandServer::Head);
+}
+
+void SceneMain::test(CCObject* pSender)
+{
+    Facade::send(CommandTest::Head);
 }
 
 

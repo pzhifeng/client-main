@@ -1,7 +1,5 @@
 #include "LayerUI.h"
 
-std::map<void *,void*> LayerUI::components;
-
 
 LayerUI* LayerUI::create(void){
     LayerUI *pRet = new LayerUI();
@@ -22,7 +20,7 @@ void LayerUI::refresh(){
 	{
 		void* key=it->first;
 		cocos2d::CCLabelTTF* pLabel=(cocos2d::CCLabelTTF*)components[key];
-        //CCLOG("GET VALUE: %p:%s", pLabel,(char *)key);
+        //CCLOG("GET VALUE: %p:%s", pLabel,*key);
         pLabel->setString((char *)key);
 	}
 }

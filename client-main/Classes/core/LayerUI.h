@@ -8,7 +8,7 @@ class LayerUI :public cocos2d::CCLayer
 {
 private:
     
-    static std::map<void *,void*> components;
+    std::map<void *,void*> components;
     
 public:
     

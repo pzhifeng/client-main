@@ -22,6 +22,11 @@ struct VoHome:VoObject {
     char * title;
 };
 
+struct VoTest:VoObject {
+    char * name;
+    char * title;
+};
+
 #endif
 
 

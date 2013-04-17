@@ -15,6 +15,8 @@ public:
     
     void start(CCObject* pSender);
     
+    void test(CCObject* pSender);
+    
     void exit(CCObject* pSender);
 
     CREATE_FUNC(SceneMain);
