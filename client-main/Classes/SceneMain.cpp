@@ -53,11 +53,11 @@ bool SceneMain::init()
 	addChild(title);
 	*/
 	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
-	buttonPlay->setPosition(ccp(_center.x - 220, _bottom + 140));
+	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
 	addChild(buttonPlay);
 
 	CCSprite* buttonMore = CCSprite::create("buttonMore.png");
-	buttonMore->setPosition(ccp(_center.x + 220, _bottom + 140));
+	buttonMore->setPosition(ccp(_center.x + 180, _bottom + 140));
 	addChild(buttonMore);
     
     //add menu
