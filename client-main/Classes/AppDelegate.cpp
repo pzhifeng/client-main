@@ -9,6 +9,7 @@
 #include "VoConfig.h"
 #include "core/SmartRes.h"
 
+
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
@@ -45,6 +46,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	// run
 	pDirector->runWithScene(pScene);
+
 
     return true;
 }
@@ -93,7 +95,6 @@ void AppDelegate::initGame(){
 	const char *langFileName="lang/zh_CN.properties";
 	Facade::Langs=ConfigUtil::parseLang(langFileName);
 }
-
 
 std::vector<std::string> split(const std::string s, char delim) {
 	std::vector<std::string> result;
