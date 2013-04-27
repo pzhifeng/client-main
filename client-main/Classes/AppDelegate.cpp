@@ -9,26 +9,26 @@
 #include "VoConfig.h"
 #include "core/SmartRes.h"
 
-
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
 {
-
 }
 
 AppDelegate::~AppDelegate()
 {
 	//Facade::release();
 	SmartRes::sharedRes()->release();
+
+    CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand),ccPoint);
+    delete ccPoint;
+
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
-	CCEGLView *pEGLView = CCEGLView::sharedOpenGLView();  
-    pDirector->setOpenGLView(pEGLView);
+    pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
 	//2013-04-15 liuzhuang
 	CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
@@ -42,52 +42,47 @@ bool AppDelegate::applicationDidFinishLaunching()
 	initGame();
 
     // create a scene. it's an autorelease object
+    pDirector->setDisplayStats(true);
+    pDirector->setAnimationInterval(1.0 / 60);
+
     CCScene *pScene = SceneMain::scene();
-
-	// run
-	pDirector->runWithScene(pScene);
-
+    pDirector->runWithScene(pScene);
 
     return true;
 }
 
-// This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->pause();
-
-    // if you use SimpleAudioEngine, it must be paused
     // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
-// this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->resume();
-    
-    // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
-
 void AppDelegate::initGame(){
+    ccPoint=new CCPoint();
 	//init system commands
 	Facade::registerCommands();
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);
 		if(b){
-			client->setConfig("18602122551", "PASSPORT");
+            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand), ccPoint, 0.01f, false);
+            client->setConfig("18602122551", "PASSPORT");
 			Facade::send(CommandCheck::Head,Facade::Version);
 		}
 	}
 	
-	//³õÊ¼»¯ÅäÖÃ
-	//¶ÁÈ¡ÅäÖÃjson
-//	const char * configFileName= "config.txt";
-//	string configStr=FileUtil::read(configFileName);
-	//½âÎöjson
-//	Facade::Emails=ConfigUtil::parseEmail(configStr.c_str());
+	//â‰¥Ä±Â ÂºÂªÃ˜â‰ˆâ€°Ã·âˆš
+	//âˆ‚Â¡Â»Â°â‰ˆâ€°Ã·âˆšjson
+//	const char * fileName= "config.txt";
+//	string jsonStr=FileUtil::read(fileName);
+	//Î©â€šÅ’Ë†json
+//	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
 //	CCLOG("id==%d",Facade::Emails[1].id);
 //	CCLOG("content==%s",Facade::Emails[1].content.c_str());
 
@@ -96,33 +91,7 @@ void AppDelegate::initGame(){
 	Facade::Langs=ConfigUtil::parseLang(langFileName);
 }
 
-std::vector<std::string> split(const std::string s, char delim) {
-	std::vector<std::string> result;
-	std::stringstream ss(s);
-	std::string item;
-	while(std::getline(ss, item, delim)) {
-		result.push_back(item);
-	}
-	return result;
+void AppDelegate::excuteCommand(float dt){
+    Client* client=Client::GetInstance();
+    client->excuteCommand();
 }
-/*
-std::vector<std::string> split(std::string str,std::string pattern)
-{
-	std::string::size_type pos;
-	std::vector<std::string> result;
-	str+=pattern;//À©Õ¹×Ö·û´®ÒÔ·½±ã²Ù×÷
-	int size=str.size();
- 
-	for(int i=0; i<size; i++)
-	{
-		pos=str.find(pattern,i);
-		if(pos<size)
-		{
-			std::string s=str.substr(i,pos-i);
-			result.push_back(s);
-			i=pos+pattern.size()-1;
-		}
-	}
-	return result;
-}
-*/
