@@ -38,9 +38,10 @@ public:
     virtual void applicationWillEnterForeground();
 
 private:
-    cocos2d::CCPoint* ccPoint;
+	cocos2d::CCObject *pObj;
 	void initGame();
 	void excuteCommand(float dt);
 };
 
 #endif // _APP_DELEGATE_H_
+

@@ -18,7 +18,7 @@ LayerUI* CommandCheck::success(VoObject* vo){
 void CommandCheck::fail(int code,VoObject* vo){
 	if(code==1){
 		/*
-		myHttpRequest=new HttpRequest();
+		myHttpRequest=new MyHttpRequest();
 		myHttpRequest->doGet();
 		while(true){
 			if(myHttpRequest->m_isCompleted)
@@ -58,7 +58,7 @@ void CommandServer::fail(int code,VoObject* vo){
 VoObject* CommandServer::parse(const char *data){
     VoHome* vo=new VoHome();
     vo->name="Hello OOO";
-    vo->title="你好";
+    vo->title="你好111";
     return vo;
 }
 
