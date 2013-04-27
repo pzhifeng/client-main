@@ -172,7 +172,32 @@ int ODSocket::Send(const char* buf, int len, int flags)
 
 int ODSocket::Recv(char* buf, int len, int flags)  
 {   
- return (recv(m_sock, buf, len, flags));  
+	/*
+	int err;
+	fd_set	fdset;
+	struct timeval timeout;
+
+	FD_ZERO( &fdset);
+	FD_SET(m_sock, &fdset);
+	//	ÂÖÑ¯¼ä¸ô60Ãë
+	timeout.tv_sec = 60;
+	timeout.tv_usec= 0;
+
+	err = select( 
+		m_sock+1,
+		&fdset,
+		NULL,
+		NULL,
+		&timeout);
+	//	³ö´í
+	if( err<=0)
+	{
+		return SOCKET_ERROR;
+	}
+	else
+	{*/
+		return (recv(m_sock, buf, len, flags));  
+	//}  
 }   
 
 int ODSocket::Close()  

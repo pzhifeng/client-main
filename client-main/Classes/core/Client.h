@@ -1,4 +1,4 @@
-#ifndef __client_main__Client__
+﻿#ifndef __client_main__Client__
 #define __client_main__Client__
 
 #include <pthread.h>

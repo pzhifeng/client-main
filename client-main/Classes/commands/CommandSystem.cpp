@@ -6,7 +6,6 @@
 #include "utils/FileUtil.h"
 
 using namespace cocos2d;
-using namespace extension;
 
 int CommandCheck::Head=99100;
 

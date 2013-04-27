@@ -11,7 +11,7 @@ map<int,VoEmail> ConfigUtil::parseEmail(const char *jsonStr){
 	if(reader.parse(jsonStr, value)){
 		Json::Value jsonEmails=value["email"];
 		Json::Value::Members mem = jsonEmails.getMemberNames();  
-		for (auto iter = mem.begin(); iter != mem.end(); iter++)  
+		for (std::vector<std::string>::iterator iter = mem.begin(); iter != mem.end(); iter++)  
 		{   
 			if (jsonEmails[*iter].type() == Json::objectValue)  
 			{  

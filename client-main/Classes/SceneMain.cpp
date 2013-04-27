@@ -47,11 +47,11 @@ bool SceneMain::init()
     CCSprite* bg = CCSprite::create("bg.jpg");
 	bg->setPosition(_center);
 	addChild(bg);
-	/*
-	CCSprite* title = CCSprite::create("title.png");
-	title->setPosition(ccp(_center.x, _center.y + 120));
-	addChild(title);
-	*/
+	
+	//CCSprite* title = CCSprite::create("title.png");
+	//title->setPosition(ccp(_center.x, _center.y + 120));
+	//addChild(title);
+	
 	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
 	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
 	addChild(buttonPlay);

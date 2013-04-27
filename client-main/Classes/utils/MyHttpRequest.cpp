@@ -1,30 +1,27 @@
-#include "HttpRequest.h"
-#pragma comment(lib, "libcurl_imp")
-#pragma comment(lib, "libExtensions")
-using namespace std;
-HttpRequest::HttpRequest(void)
+#include "MyHttpRequest.h"
+
+MyHttpRequest::MyHttpRequest(void)
 {
 	m_responseData="";
 	m_isCompleted=false;
 }
 
-
-HttpRequest::~HttpRequest(void)
+MyHttpRequest::~MyHttpRequest(void)
 {
 }
-void HttpRequest::doGet()
+void MyHttpRequest::doGet()
 {
 	m_isCompleted=false;
 	m_responseData="";
 	CCHttpRequest* request = new CCHttpRequest();
-	request->setUrl("http://127.0.0.1:8080/springmvc/index.jsp");
+	request->setUrl("baidu.com");
 	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(HttpRequest::onHttpRequestCompleted));
+	request->setResponseCallback(this, callfuncND_selector(MyHttpRequest::onHttpRequestCompleted));
 	CCHttpClient::getInstance()->send(request); 
 	request->release();
 }
 
-void HttpRequest::onHttpRequestCompleted(CCNode *sender,void *data)  
+void MyHttpRequest::onHttpRequestCompleted(CCNode *sender,void *data)  
 {  
 	m_isCompleted=true;
 	CCHttpResponse *response = (CCHttpResponse*)data;  

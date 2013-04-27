@@ -37,22 +37,46 @@ Client* Client::GetInstance(){
 }
 
 void * revice(void* arg){
+	int pthreadDetach=pthread_detach(pthread_self());
+	if(pthreadDetach==0)
+		CCLOG("pthread_detach success!");
+	else
+		CCLOG("pthread_detach error£¬error code£º%d",pthreadDetach);
+	
     Client *_this=(Client*)arg;
 	char buff[BLOCK_SIZE];
 	string msg="";
 	Json::Reader reader;
 	Json::Value value;
+	int continueErrorTimes=0;
 	while (true)
 	{
 		memset(buff,0,BLOCK_SIZE);
         int ret=_this->odSocket.Recv(buff,BLOCK_SIZE,0);
+		CCLOG("recv===ret===%d",ret);
 		if(ret<=0)
+		{
+			continueErrorTimes++;
+			if(continueErrorTimes>15)
+			{
+				_this->odSocket.Close();
+				_this->odSocket.Clean();
+
+				_this->odSocket.Init();
+				_this->odSocket.Create(AF_INET,SOCK_STREAM,0);
+				bool b= _this->odSocket.Connect(Facade::Ip,Facade::Port);
+				if(b)
+				  continueErrorTimes=0;
+			}
 			continue;
+		}
+			
 		msg.append(buff);
 		if(buff[ret-1]!=0x0005)
 			continue;
 		vector<string> msgList=split(msg,0x0005);
 		//CCLOG("msgList-size===%d",msgList.size());
+		
 		for(int i=0;i<msgList.size();i++){
 			//CCLOG("msg===%s",msgList[i].c_str());
 			//begin do command
@@ -78,13 +102,18 @@ void * revice(void* arg){
 			}
 			//end
 		}
+		
 		msgList.clear();
 		msg.clear();
 	}
+	pthread_exit((void *)0);
 	return ((void*)NULL);
 }
 
 bool Client::connet(char* ip,int port){
+	odSocket.Close();
+	odSocket.Clean();
+
     odSocket.Init();
 	odSocket.Create(AF_INET,SOCK_STREAM,0);
     
@@ -93,7 +122,7 @@ bool Client::connet(char* ip,int port){
     if(b){
         pthread_t tid;
         pthread_create(&tid, NULL,revice, this);
-        pthread_detach(tid);
+        //pthread_detach(tid);
     }
     
     CCLOG("START|connect to %s:%d r:%d",ip,port,b);
@@ -158,10 +187,10 @@ int Client::send(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
 	chekKey.append(key);
 	msg.append(MD5(chekKey).toString());
 	msg.push_back(EOT);
-    
-    CCLOG("SEND|%s",msg.c_str());
-    
-	return odSocket.Send(msg.c_str(),strlen(msg.c_str())+2,1);
+
+	int ret=odSocket.Send(msg.c_str(),strlen(msg.c_str())+2,1);
+    CCLOG("SEND|%s ret:%d",msg.c_str(),ret);
+	return ret;
 }
 
 int Client::send(int head){

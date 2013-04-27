@@ -38,7 +38,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
 
-
 	initGame();
 
     // create a scene. it's an autorelease object
@@ -94,6 +93,7 @@ void AppDelegate::initGame(){
 	const char *langFileName="lang/zh_CN.properties";
 	Facade::Langs=ConfigUtil::parseLang(langFileName);
 }
+
 
 std::vector<std::string> split(const std::string s, char delim) {
 	std::vector<std::string> result;
