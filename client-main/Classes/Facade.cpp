@@ -6,7 +6,7 @@
 #include "commands/CommandSystem.h"
 #include "commands/CommandCareer.h"
 
-bool Facade::IsMock=true;
+bool Facade::IsMock=false;
 char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="1.0";

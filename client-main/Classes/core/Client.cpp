@@ -97,6 +97,9 @@ void Client::excuteCommand(){
             Command *command=commands->get(head);
             if(command!=NULL){
                 std::string m=value["m"].toStyledString();
+                if("null\n"==m){
+                    m="";
+                }
                 VoObject* vo=command->parse(m.c_str());
                 if(code==0){
                     LayerUI* LayerUI=command->success(vo);

@@ -17,13 +17,12 @@ LayerUI* LayerUI::create(void){
 
 void LayerUI::refresh(){
     for (std::map<void *,void*>::iterator it=components.begin(); it!=components.end();++it)
-	{
-		void* key=it->first;
-        
-		cocos2d::CCLabelTTF* pLabel=(cocos2d::CCLabelTTF*)components[key];
+    {
+        void* key=it->first;
+        cocos2d::CCLabelTTF* pLabel=(cocos2d::CCLabelTTF*)components[key];
         //CCLOG("GET VALUE: %p:%s", pLabel,*key);
         pLabel->setString((char *)key);
-	}
+    }
 }
 
 //添加一个组件

@@ -99,7 +99,7 @@ void SceneMain::start(CCObject* pSender)
 
 void SceneMain::test(CCObject* pSender)
 {
-    Facade::send(CommandTest::Head);
+    Facade::send(CommandCheck::Head);
 }
 
 

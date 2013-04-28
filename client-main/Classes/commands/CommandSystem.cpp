@@ -1,5 +1,6 @@
 #include "CommandSystem.h"
 #include "cocos2d.h"
+#include "../SceneMain.h"
 #include "../views/SceneHome.h"
 #include "../views/SceneTest.h"
 #include "../utils/jsoncpp/include/json.h"
@@ -11,12 +12,15 @@ using namespace cocos2d;
 int CommandCheck::Head=99100;
 
 LayerUI* CommandCheck::success(VoObject* vo){
-	//CCScene *pScene = SceneMain::scene();
-	//CCDirector::sharedDirector()->runWithScene(pScene);
-    return NULL;
+	LayerUI *layer= SceneMain::scene((VoMain*)vo,false);
+
+    return layer;
 }
 
 void CommandCheck::fail(int code,VoObject* vo){
+    
+    SceneMain::scene((VoMain*)vo,false);
+    
 	if(code==1){
 		/*
 		myHttpRequest=new MyHttpRequest();
