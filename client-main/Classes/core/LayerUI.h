@@ -24,7 +24,7 @@ public:
     //添加一个组件
     cocos2d::CCLabelTTF* addLable(const char *title, const char *fontName, float fontSize,void* key);
     
-    const char* langs(char* key);
+    const char* langs(const char* key);
 
 };
 

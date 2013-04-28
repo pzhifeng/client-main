@@ -33,7 +33,7 @@ cocos2d::CCLabelTTF* LayerUI::addLable(const char *title, const char *fontName, 
     return pLabel;
 }
 
-const char* LayerUI::langs(char* key){
+const char* LayerUI::langs(const char* key){
     const char* result=Facade::Langs[key].value.c_str();
     if(NULL==result||strlen(result)==0){
         return key;

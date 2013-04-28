@@ -82,4 +82,4 @@ private:
     float m_left;
 };
 
-#endif __SMART_RES_H_
+#endif 
