@@ -29,9 +29,11 @@ CommandsRegister* CommandsRegister::GetInstance(){
 
 void CommandsRegister::put(int head,Command* c){
     Command* tmp=commands[head];
+	/*
     if(NULL!=tmp){
         CCAssert(tmp, "Repeat Command Head:"+head);
     }
+	*/
     commands[head]=c;
 }
 
