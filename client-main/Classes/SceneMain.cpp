@@ -49,9 +49,8 @@ void SceneMain::initLayer()
     pMenu->setPosition( CCPointZero );
     this->addChild(pMenu, 1);
 
-	
     //add title
-    CCLabelTTF* pLabel = CCLabelTTF::create(lang("游戏名"), "Thonburi", SCALE_FACTOR*60);
+    CCLabelTTF* pLabel = CCLabelTTF::create(lang("game name"), "Thonburi", SCALE_FACTOR*60);
     pLabel->setPosition(ccp(_center.x, _top-100));
     this->addChild(pLabel, 1);
 	CCLOG("SCALE_FACTOR===%f",SCALE_FACTOR);
