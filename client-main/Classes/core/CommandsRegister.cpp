@@ -29,7 +29,7 @@ CommandsRegister* CommandsRegister::GetInstance(){
 
 void CommandsRegister::put(int head,Command* c){
     Command* tmp=commands[head];
- 
+
     CCLOG("%s,%d","Register Command Head:",head);
     CCAssert(NULL==tmp, "Repeat Command Head:"+head);
 
