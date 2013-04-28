@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#define lang(s)     Facade::langs(s)
+
 class Facade
 {
 public:
@@ -26,6 +28,7 @@ public:
     static int send(int head,char* p1,char* p2,char* p3,char* p4);
     static int send(int head,char* p1,char* p2,char* p3,char* p4,char* p5);
 
+    static const char* langs(const char* key);
     
     static Command* get(int head);
     

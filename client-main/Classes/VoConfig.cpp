@@ -30,7 +30,7 @@ map<string,VoLang> ConfigUtil::parseLang(const char *langFileName){
 	map<string,VoLang> langs;
 	string filePath = cocos2d::CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(langFileName);
 	FILE *fp;
-    fp = fopen( filePath.c_str(),"rt");
+    fp = fopen( filePath.c_str(),"r");
     if(NULL!=fp){
         char *tmpBuf;
         int maxLen=100;
@@ -38,7 +38,7 @@ map<string,VoLang> ConfigUtil::parseLang(const char *langFileName){
         while((fgets(tmpBuf, maxLen,fp))!= NULL )
         {
             CCLOG("TmpBuf===%s",tmpBuf);
-            //��ҳ=��ҳ
+            // ◊“≥= ◊“≥
             vector<string> titleList=split(tmpBuf,'=');
             VoLang lang;
             lang.value=titleList[1];

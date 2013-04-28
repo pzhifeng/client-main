@@ -51,7 +51,7 @@ void SceneMain::initLayer()
 
 	
     //add title
-    CCLabelTTF* pLabel = CCLabelTTF::create("My Game", "Thonburi", SCALE_FACTOR*60);
+    CCLabelTTF* pLabel = CCLabelTTF::create(lang("游戏名"), "Thonburi", SCALE_FACTOR*60);
     pLabel->setPosition(ccp(_center.x, _top-100));
     this->addChild(pLabel, 1);
 	CCLOG("SCALE_FACTOR===%f",SCALE_FACTOR);
@@ -77,10 +77,10 @@ void SceneMain::initLayer()
     CCMenuItemFont::setFontName("Marker Felt");
 
     CCMenuItemFont::setFontSize(SCALE_FACTOR*60);
-    CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create(langs("首页"),this,menu_selector(SceneMain::start));;
-    CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create(langs("人物"),this,menu_selector(SceneMain::start));
+    CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create(lang("首页"),this,menu_selector(SceneMain::start));;
+    CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create(lang("人物"),this,menu_selector(SceneMain::start));
     pFontMenuItem2->setPositionY(-100);
-    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create(langs("装备"),this,menu_selector(SceneMain::test));
+    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create(lang("装备"),this,menu_selector(SceneMain::test));
     pFontMenuItem3->setPositionY(-200);
 
     CCMenu* pFontMenu = CCMenu::create(pFontMenuItem1,pFontMenuItem2,pFontMenuItem3,NULL); 
