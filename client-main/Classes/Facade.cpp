@@ -60,6 +60,15 @@ Command* Facade::get(int head){
     return commands->get(head);
 }
 
+const char* Facade::langs(const char* key){
+    const char* result=Facade::Langs[key].value.c_str();
+    if(NULL==result||strlen(result)==0){
+        return key;
+    }else{
+        return result;
+    }
+}
+
 void Facade::release(){
 	CommandsRegister* commands=CommandsRegister::GetInstance();
     delete commands;

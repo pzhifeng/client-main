@@ -61,8 +61,6 @@ void AppDelegate::initGame(){
     
 	pObj=new CCObject();
     
-	CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
-    
 	Facade::registerCommands();
     
 	if(!Facade::IsMock){
@@ -74,6 +72,8 @@ void AppDelegate::initGame(){
 			Facade::send(CommandCheck::Head,Facade::Version);
 		}
 	}
+    
+    CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
 	
 	//≥ı ºªØ≈‰÷√
 	//∂¡»°≈‰÷√json
