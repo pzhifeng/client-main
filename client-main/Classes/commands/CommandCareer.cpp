@@ -2,7 +2,7 @@
 #include "Facade.h"
 #include "cocos2d.h"
 #include "../views/SceneHome.h"
-#include "../utils/jsoncpp/include/json.h"
+#include "utils/jsoncpp/json.h"
 
 using namespace cocos2d;
 

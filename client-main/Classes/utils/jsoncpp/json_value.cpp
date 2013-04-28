@@ -1,13 +1,6 @@
 #include <iostream>
-
-#ifdef WIN32
-	#include "utils/jsoncpp/include/value.h"
-	#include "utils/jsoncpp/include/writer.h"
-#else
-	#include "value.h"
-	#include "writer.h"
-#endif
-
+#include "value.h"
+#include "writer.h"
 #include <utility>
 #include <stdexcept>
 #include <cstring>

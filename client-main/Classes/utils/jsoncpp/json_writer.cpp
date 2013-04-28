@@ -1,10 +1,5 @@
-
-#ifdef WIN32
-	#include "utils/jsoncpp/include/writer.h"
-#else
-	#include "writer.h"
-#endif
-
+#include "writer.h"
+#include "writer.h"
 #include <utility>
 #include <assert.h>
 #include <stdio.h>

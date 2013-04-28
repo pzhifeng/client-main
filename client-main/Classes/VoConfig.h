@@ -6,7 +6,7 @@
 #define client_main_VoConfig_h
 
 #include <string>
-#include "utils/jsoncpp/include/json.h"
+#include "utils/jsoncpp/json.h"
 
 using namespace std;
 

@@ -1,11 +1,5 @@
-#ifdef WIN32
-	#include "utils/jsoncpp/include/value.h"
-	#include "utils/jsoncpp/include/reader.h"
-#else
-	#include "value.h"
-	#include "reader.h"
-#endif
-
+#include "value.h"
+#include "reader.h"
 #include <utility>
 #include <cstdio>
 #include <cassert>
