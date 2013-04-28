@@ -3,8 +3,7 @@
 
 #include "../core/Command.h"
 #include "cocos2d.h"
-#include "cocos-ext.h"
-#include "../utils/HttpRequest.h"
+#include "../utils/MyHttpRequest.h"
 
 using namespace cocos2d;
 
@@ -12,7 +11,7 @@ class CommandCheck :public Command
 {
 public:
     static int Head;
-	HttpRequest *myHttpRequest;
+	MyHttpRequest *myHttpRequest;
 public:
     LayerUI* success(VoObject* vo);
     void fail(int code,VoObject* vo);

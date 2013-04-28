@@ -7,32 +7,37 @@
 #include "commands/CommandSystem.h"
 #include "utils/FileUtil.h"
 #include "VoConfig.h"
+#include "core/SmartRes.h"
 
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
 {
+
 }
 
 AppDelegate::~AppDelegate()
 {
-    CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand),ccPoint);
-    delete ccPoint;
-	Facade::release();
+	SmartRes::sharedRes()->release();
+
+	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand),pObj);
+	delete pObj;
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
     CCDirector *pDirector = CCDirector::sharedDirector();
-    pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
+	CCEGLView *pEGLView = CCEGLView::sharedOpenGLView();  
+    pDirector->setOpenGLView(pEGLView);
+
+	
 
     pDirector->setDisplayStats(true);
     pDirector->setAnimationInterval(1.0 / 60);
 
-    CCScene *pScene = SceneMain::scene();
-    pDirector->runWithScene(pScene);
-
 	initGame();
+
+    LayerUI *layerUI = SceneMain::scene(NULL,true);
 
     return true;
 }
@@ -40,40 +45,61 @@ bool AppDelegate::applicationDidFinishLaunching()
 void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->pause();
+
     // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->resume();
+
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
+
 void AppDelegate::initGame(){
-    ccPoint=new CCPoint();
-	//init system commands
+    
+	pObj=new CCObject();
+    
+	CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
+    
 	Facade::registerCommands();
+    
 	if(!Facade::IsMock){
 		Client* client=Client::GetInstance();
 		bool b=client->connet(Facade::Ip, Facade::Port);
 		if(b){
-            CCDirector::sharedDirector()->getScheduler()->scheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand), ccPoint, 0.01f, false);
-            client->setConfig("18602122551", "PASSPORT");
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand), pObj, 0.01f, false);
+			client->setConfig("18602122551", "PASSPORT");
 			Facade::send(CommandCheck::Head,Facade::Version);
 		}
 	}
 	
-	//â‰¥Ä±Â ÂºÂªÃ˜â‰ˆâ€°Ã·âˆš
-	//âˆ‚Â¡Â»Â°â‰ˆâ€°Ã·âˆšjson
-//	const char * fileName= "config.txt";
-//	string jsonStr=FileUtil::read(fileName);
-	//Î©â€šÅ’Ë†json
-//	Facade::Emails=ConfigUtil::parseEmail(jsonStr.c_str());
+	//³õÊ¼»¯ÅäÖÃ
+	//¶ÁÈ¡ÅäÖÃjson
+//	const char * configFileName= "config.txt";
+//	string configStr=FileUtil::read(configFileName);
+	//½âÎöjson
+//	Facade::Emails=ConfigUtil::parseEmail(configStr.c_str());
 //	CCLOG("id==%d",Facade::Emails[1].id);
 //	CCLOG("content==%s",Facade::Emails[1].content.c_str());
+
+	//¶ÁÈ¡ÓïÑÔÎÄ¼ş
+	const char *langFileName="lang/zh_CN.properties";
+	Facade::Langs=ConfigUtil::parseLang(langFileName);
+}
+void AppDelegate::excuteCommand(float dt){
+	Client* client=Client::GetInstance();
+	client->excuteCommand();
 }
 
-void AppDelegate::excuteCommand(float dt){
-    Client* client=Client::GetInstance();
-    client->excuteCommand();
+
+std::vector<std::string> split(const std::string s, char delim) {
+	std::vector<std::string> result;
+	std::stringstream ss(s);
+	std::string item;
+	while(std::getline(ss, item, delim)) {
+		result.push_back(item);
+	}
+	return result;
 }

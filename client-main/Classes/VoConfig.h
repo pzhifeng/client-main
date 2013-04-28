@@ -25,10 +25,15 @@ struct VoEmail{
     string content;
 };
 
+struct VoLang{
+	string value;
+};
+
 class ConfigUtil
 {
 public:
 	static map<int,VoEmail> parseEmail(const char* jsonStr);
+	static map<string,VoLang> parseLang(const char *langFileName);
 };
 
 #endif

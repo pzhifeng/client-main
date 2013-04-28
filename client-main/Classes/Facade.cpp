@@ -12,7 +12,7 @@ int Facade::Port=61114;
 char* Facade::Version="1.0";
 
 map<int,VoEmail> Facade::Emails;
-
+map<string,VoLang> Facade::Langs;
 
 int Facade::send(int head){
     if(Facade::IsMock){
@@ -20,8 +20,8 @@ int Facade::send(int head){
         Command* c=commands->get(head);
 		VoObject* vo=c->parse(NULL);
 		LayerUI* LayerUI=c->success(vo);
+        LayerUI->vo=vo;
 		LayerUI->refresh();
-        delete vo;
         return 1;
     }else{
         Client* client=Client::GetInstance();

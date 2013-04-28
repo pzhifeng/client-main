@@ -17,6 +17,11 @@ struct VoServer:VoObject{
     string tag;
 };
 
+struct VoMain:VoObject {
+    char * name;
+    char * title;
+};
+
 struct VoHome:VoObject {
     char * name;
     char * title;

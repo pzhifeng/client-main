@@ -15,6 +15,7 @@
 #define BLOCK_SIZE 4096
 
 Client* Client::instance=NULL;
+extern std::vector<std::string> split(const std::string s, char delim);
 
 
 Client::Client(void){
@@ -42,17 +43,34 @@ void * revice(void* arg){
     Client *_this=(Client*)arg;
 	char buff[BLOCK_SIZE];
 	string msg="";
+	int continueErrorTimes=0;
 	while (true)
 	{
 		memset(buff,0,BLOCK_SIZE);
         int ret=_this->odSocket.Recv(buff,BLOCK_SIZE,0);
+		CCLOG("recv===ret===%d",ret);
 		if(ret<=0)
+		{
+			continueErrorTimes++;
+			if(continueErrorTimes>15)
+			{
+				_this->odSocket.Close();
+				_this->odSocket.Clean();
+
+				_this->odSocket.Init();
+				_this->odSocket.Create(AF_INET,SOCK_STREAM,0);
+				bool b= _this->odSocket.Connect(Facade::Ip,Facade::Port);
+				CCLOG("reset conn===%d",b);
+				if(b)
+					continueErrorTimes=0;
+			}
 			continue;
+		}
+			
 		msg.append(buff);
 		if(buff[ret-1]!=0x0005)
 			continue;
-		vector<string> tmp;
-		_this->split(msg,0x0005,tmp);
+		vector<string> tmp=split(msg,0x0005);
 		
 		for(int i=0;i<tmp.size();i++){
             _this->queue.push_back(tmp[i]);
@@ -196,13 +214,3 @@ int Client::send(int head,char* p1,char* p2,char* p3){
 int Client::send(int head,char* p1,char* p2,char* p3,char* p4){
     return Client::send(head,p1,p2,p3,p4,NULL);
 };
-
-std::vector<std::string>& Client::split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while(std::getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-	return elems;
-}
-

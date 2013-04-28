@@ -35,6 +35,10 @@ void SceneHome:: initLayer()
                                                           this,
                                                           menu_selector(SceneHome::back) );
     pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
+
+
+	CCLOG("name===%s",vo->name);
+	CCLOG("title===%s",vo->title);
     
     // create menu, it's an autorelease object
     CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
@@ -55,6 +59,5 @@ void SceneHome:: initLayer()
 
 void SceneHome::back(CCObject* pSender)
 {
-    CCScene *pScene = SceneMain::scene();
-	CCDirector::sharedDirector()->replaceScene(pScene);
+    LayerUI *pScene = SceneMain::scene(NULL,false);
 }

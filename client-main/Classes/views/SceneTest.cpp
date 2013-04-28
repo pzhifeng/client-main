@@ -55,6 +55,6 @@ void SceneTest:: initLayer()
 
 void SceneTest::back(CCObject* pSender)
 {
-    CCScene *pScene = SceneMain::scene();
-	CCDirector::sharedDirector()->replaceScene(pScene);
+    LayerUI *pScene = SceneMain::scene(NULL,false);
+	//CCDirector::sharedDirector()->replaceScene(pScene);
 }

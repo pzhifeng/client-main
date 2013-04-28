@@ -2,16 +2,20 @@
 #define __MAIN_SCENE_H__
 
 #include "cocos2d.h"
+#include "VoObject.h"
+#include "core/LayerUI.h"
 
-class SceneMain : public cocos2d::CCLayer
+class SceneMain : public LayerUI
 {
 public:
 
-    virtual bool init();
+    static LayerUI* scene(VoMain* vo,bool isFirst);
+    
+    VoMain* vo;
+    
+    void initLayer();
     
     void initGame();
-
-    static cocos2d::CCScene* scene();
     
     void start(CCObject* pSender);
     

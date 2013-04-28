@@ -4,9 +4,9 @@
 #include "../views/SceneTest.h"
 #include "../utils/jsoncpp/include/json.h"
 #include "VoObject.h"
+#include "../utils/FileUtil.h"
 
 using namespace cocos2d;
-using namespace extension;
 
 int CommandCheck::Head=99100;
 
@@ -18,9 +18,8 @@ LayerUI* CommandCheck::success(VoObject* vo){
 
 void CommandCheck::fail(int code,VoObject* vo){
 	if(code==1){
-        //–Ë“™∏¸–¬≈‰÷√Œƒº˛,œ¬‘ÿ◊Ó–¬≈‰÷√Œƒº˛£¨Ω¯»Î”Œœ∑
 		/*
-		myHttpRequest=new HttpRequest();
+		myHttpRequest=new MyHttpRequest();
 		myHttpRequest->doGet();
 		while(true){
 			if(myHttpRequest->m_isCompleted)
@@ -28,11 +27,13 @@ void CommandCheck::fail(int code,VoObject* vo){
 			Sleep(100);
 		}
 		//CCLOG("m_responseData===%s",myHttpRequest->m_responseData.c_str());
+
+		const char * fileName= "lang/zh_CN.properties";
+		//myHttpRequest->m_responseData="{\"v\":\"1.0\",\"email\":{\"1\":{\"content\":\"123888\",\"id\":1},\"2\":{\"content\":\"456\",\"id\":2}}}";
+		FileUtil::write(fileName,myHttpRequest->m_responseData.c_str());
+
 		myHttpRequest->release();
 		*/
-		//const char * fileName= "config.txt";
-		//string str="{\"v\":\"1.0\",\"email\":{\"1\":{\"content\":\"123888\",\"id\":1},\"2\":{\"content\":\"456\",\"id\":2}}}";
-		//FileUtil::write(fileName,myHttpRequest->m_responseData.c_str());
 	}else if(code==2){
 
 	}
@@ -58,7 +59,7 @@ void CommandServer::fail(int code,VoObject* vo){
 VoObject* CommandServer::parse(const char *data){
     VoHome* vo=new VoHome();
     vo->name="Hello OOO";
-    vo->title="你好";
+    vo->title="你好111";
     return vo;
 }
 
