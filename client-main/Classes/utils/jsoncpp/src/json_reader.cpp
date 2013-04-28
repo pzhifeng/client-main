@@ -1,4 +1,3 @@
-
 #ifdef WIN32
 	#include "utils/jsoncpp/include/value.h"
 	#include "utils/jsoncpp/include/reader.h"
