@@ -26,11 +26,17 @@ map<int,VoEmail> ConfigUtil::parseEmail(const char *jsonStr){
 	return emails;
 }
 
-map<string,VoLang> ConfigUtil::parseLang(const char *langFileName){
+
+map<string,VoLang> ConfigUtil::parseLang(const char *folderName,const char *fileName){
 	map<string,VoLang> langs;
-	string filePath = cocos2d::CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(langFileName);
+	string fullPath = cocos2d::CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(fileName);
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    string fullPath = cocos2d::CCFileUtils::sharedFileUtils()->fullPathFromRelativeFile(fileName,folderName);
+//#else
+//    string fullPath = cocos2d::CCFileUtils::sharedFileUtils()->fullPathForFilename(folderName+"/"+filename);
+//#endif
 	FILE *fp;
-    fp = fopen( filePath.c_str(),"r");
+    fp = fopen( fullPath.c_str(),"r");
     if(NULL!=fp){
         char *tmpBuf;
         int maxLen=100;

@@ -85,8 +85,8 @@ void AppDelegate::initGame(){
 //	CCLOG("content==%s",Facade::Emails[1].content.c_str());
 
 	//∂¡»°”Ô—‘Œƒº˛
-	const char *langFileName="lang/zh_CN.properties";
-	Facade::Langs=ConfigUtil::parseLang(langFileName);
+	
+	Facade::Langs=ConfigUtil::parseLang("langs","zh-CN");
 }
 void AppDelegate::excuteCommand(float dt){
 	Client* client=Client::GetInstance();

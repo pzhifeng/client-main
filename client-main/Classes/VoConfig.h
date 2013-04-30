@@ -33,7 +33,7 @@ class ConfigUtil
 {
 public:
 	static map<int,VoEmail> parseEmail(const char* jsonStr);
-	static map<string,VoLang> parseLang(const char *langFileName);
+	static map<string,VoLang> parseLang(const char *folderName,const char *fileName);
 };
 
 #endif
