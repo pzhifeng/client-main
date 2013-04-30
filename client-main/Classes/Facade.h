@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define lang(s)     Facade::langs(s)
+#define lgs(s)     Facade::langs(s)
 
 class Facade
 {
