@@ -2,7 +2,7 @@
 #include "../utils/md5.h"
 #include "Command.h"
 #include "CommandsRegister.h"
-#include "utils/jsoncpp/json.h"
+#include "../utils/jsoncpp/json.h"
 #include "Facade.h"
 #include "cocos2d.h"
 

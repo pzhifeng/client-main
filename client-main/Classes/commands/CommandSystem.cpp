@@ -3,9 +3,9 @@
 #include "../SceneMain.h"
 #include "../views/SceneHome.h"
 #include "../views/SceneTest.h"
-#include "utils/jsoncpp/json.h"
+#include "../utils/jsoncpp/json.h"
 #include "VoObject.h"
-#include "utils/FileUtil.h"
+#include "../utils/FileUtil.h"
 
 using namespace cocos2d;
 
