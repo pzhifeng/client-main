@@ -2,9 +2,9 @@
 #define __SCENE_FIGHT_H_
 
 #include "cocos2d.h"
-#include "VoObject.h"
-#include "core/LayerUI.h"
-#include "core/Ball.h"
+#include "../VoObject.h"
+#include "../core/LayerUI.h"
+#include "../domain/Ball.h"
 
 #define INDEX_DISTANCE 44
 #define _color CCRANDOM_0_1()*4+1

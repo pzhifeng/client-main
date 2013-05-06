@@ -1,7 +1,7 @@
 #include "SceneFight.h"
 #include "SceneMain.h"
 #include "Facade.h"
-#include "core/SmartRes.h"
+#include "../core/SmartRes.h"
 
 using namespace cocos2d;
 extern std::vector<std::string> split(const std::string s, char delim);
