@@ -32,8 +32,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	
 
-    pDirector->setDisplayStats(true);
-    pDirector->setAnimationInterval(1.0 / 60);
+    //pDirector->setDisplayStats(true);
+    //pDirector->setAnimationInterval(1.0 / 60);
 
 	initGame();
 

@@ -6,6 +6,7 @@
 #include "../utils/jsoncpp/json.h"
 #include "VoObject.h"
 #include "../utils/FileUtil.h"
+#include "views/SceneFight.h"
 
 using namespace cocos2d;
 
@@ -51,7 +52,8 @@ VoObject* CommandCheck::parse(const char *data){
 int CommandServer::Head=99102;
 
 LayerUI* CommandServer::success(VoObject* vo){
-	LayerUI *layer = SceneHome::scene((VoHome*)vo);
+	//LayerUI *layer = SceneHome::scene((VoHome*)vo);
+	LayerUI *layer = SceneFight::scene((VoHome*)vo);
 	
     return layer;
 }
