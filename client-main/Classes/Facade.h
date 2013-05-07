@@ -8,6 +8,7 @@
 using namespace std;
 
 #define lgs(s)     Facade::langs(s)
+#define res(d,f)     Facade::resource(d,f)
 
 class Facade
 {
@@ -29,6 +30,8 @@ public:
     static int send(int head,char* p1,char* p2,char* p3,char* p4,char* p5);
 
     static const char* langs(const char* key);
+    
+    static const char* resource(const char* folderName,const char* fileName);
     
     static Command* get(int head);
     

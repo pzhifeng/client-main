@@ -367,12 +367,12 @@ const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);
 	const char *str;
 	if(colorType==1)
-		str="red.png";
+		str=res("ui","red.png");
 	else if(colorType==2)
-		str="yellow.png";
+		str=res("ui","yellow.png");
 	else if(colorType==3)
-		str="blue.png";
+		str=res("ui","blue.png");
 	else if(colorType==4)
-		str="zise.png";
+		str=res("ui","zise.png");
 	return str;
 }

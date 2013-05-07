@@ -69,6 +69,14 @@ const char* Facade::langs(const char* key){
     }
 }
 
+const char* Facade::resource(const char* folderName,const char* fileName){
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        return fileName;
+    #else
+        return folderName+"\"+fileName;
+    #endif
+}
+
 void Facade::release(){
 	CommandsRegister* commands=CommandsRegister::GetInstance();
     delete commands;

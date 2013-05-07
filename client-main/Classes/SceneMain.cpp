@@ -38,8 +38,8 @@ void SceneMain::initLayer()
 
 
     CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-                                        "CloseNormal.png",
-                                        "CloseSelected.png",
+                                        res("ui","CloseNormal.png"),
+                                        res("ui","CloseSelected.png"),
                                         this,
                                         menu_selector(SceneMain::exit) );
     pCloseItem->setPosition(ccp(_right-30,_bottom+30));
@@ -56,7 +56,7 @@ void SceneMain::initLayer()
 	CCLOG("SCALE_FACTOR===%f",SCALE_FACTOR);
 	
     // add  screen bg
-    CCSprite* bg = CCSprite::create("bg.jpg");
+    CCSprite* bg = CCSprite::create(res("ui","bg.jpg"));
 	bg->setPosition(_center);
 	addChild(bg);
 	
@@ -64,11 +64,11 @@ void SceneMain::initLayer()
 	//title->setPosition(ccp(_center.x, _center.y + 120));
 	//addChild(title);
 	
-	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
+	CCSprite* buttonPlay = CCSprite::create(res("ui","buttonPlay.png"));
 	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
 	addChild(buttonPlay);
 
-	CCSprite* buttonMore = CCSprite::create("buttonMore.png");
+	CCSprite* buttonMore = CCSprite::create(res("ui","buttonMore.png"));
 	buttonMore->setPosition(ccp(_center.x + 180, _bottom + 140));
 	addChild(buttonMore);
     

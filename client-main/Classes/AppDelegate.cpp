@@ -37,7 +37,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	initGame();
 
-    LayerUI *layerUI = SceneMain::scene(NULL,true);
+    SceneMain::scene(NULL,true);
 
     return true;
 }
