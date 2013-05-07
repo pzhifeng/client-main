@@ -73,7 +73,7 @@ void AppDelegate::initGame(){
 		}
 	}
     
-    CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
+    //CCFileUtils::sharedFileUtils()->setResourceDirectory("hd");
 	
 	//≥ı ºªØ≈‰÷√
 	//∂¡»°≈‰÷√json

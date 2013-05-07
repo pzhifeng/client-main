@@ -365,14 +365,14 @@ int SceneFight::isHit(){
 
 const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);
-	char *str;
+	const char *str;
 	if(colorType==1)
-		str="balls/red.png";
+		str="red.png";
 	else if(colorType==2)
-		str="balls/yellow.png";
+		str="yellow.png";
 	else if(colorType==3)
-		str="balls/blue.png";
+		str="blue.png";
 	else if(colorType==4)
-		str="balls/zise.png";
+		str="zise.png";
 	return str;
 }
