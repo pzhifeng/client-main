@@ -31,13 +31,14 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setOpenGLView(pEGLView);
 
 	
+	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
 
     //pDirector->setDisplayStats(true);
     //pDirector->setAnimationInterval(1.0 / 60);
 
 	initGame();
 
-    SceneMain::scene(NULL,true);
+    LayerUI *layerUI = SceneMain::scene(NULL,true);
 
     return true;
 }

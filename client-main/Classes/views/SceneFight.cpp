@@ -49,7 +49,6 @@ void SceneFight:: initLayer()
 	pMenu->setPosition( CCPointZero );
 	this->addChild(pMenu, 1);
 
-
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	//创建地图轨迹
 	m_wayPoint=CCPointArray::create(1000);
@@ -75,6 +74,7 @@ void SceneFight:: initLayer()
 	//消球
 	CCScheduler *removeBallScheduler = CCDirector::sharedDirector()->getScheduler();
 	removeBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this,0.5f,false);
+
 }
 
 void SceneFight::back(CCObject* pSender)
@@ -120,6 +120,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 /* 得到随机球                                                        */
 /************************************************************************/
 Ball * SceneFight::getBall(){
+	CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
 	int color=_color;
 	const char *fileName=getColor(color);
 	Ball *ball=Ball::create();
@@ -201,6 +202,7 @@ void SceneFight::initWayPoint(){
 /* 显示爆炸效果                                                                     */
 /************************************************************************/
 void SceneFight::ballExplosion(CCPoint pt){
+	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
 	//粒子发射器
 	CCParticleSystem * emitter=CCParticleExplosion::create(); 
 	//爆炸效果
@@ -255,6 +257,7 @@ void SceneFight::checkHitTask(float dt){
 		}
 		//将球加入轨道
 		//CCLOG("pushBall-color-checkHitTask===%d",m_pushBall->m_color);
+		CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
 		const char *str=getColor(m_pushBall->m_color);
 		Ball *insertBall=Ball::create();
 		insertBall->m_sprite=CCSprite::create(str);
@@ -367,12 +370,12 @@ const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);
 	const char *str;
 	if(colorType==1)
-		str=res("ui","red.png");
+		str="red.png";
 	else if(colorType==2)
-		str=res("ui","yellow.png");
+		str="yellow.png";
 	else if(colorType==3)
-		str=res("ui","blue.png");
+		str="blue.png";
 	else if(colorType==4)
-		str=res("ui","zise.png");
+		str="zise.png";
 	return str;
 }
