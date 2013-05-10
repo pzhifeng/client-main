@@ -67,13 +67,13 @@ void SceneFight:: initLayer()
 	/************************************************************************/
 	//检测是否碰撞
 	CCScheduler *checkHitScheduler = CCDirector::sharedDirector()->getScheduler();
-	checkHitScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::checkHitTask),this,0.1f,false);
+	checkHitScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::checkHitTask),this,0.01f,false);
 	//创建球
 	CCScheduler *createBallScheduler = CCDirector::sharedDirector()->getScheduler();
 	createBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::createBallTask),this,0.1f,false);
 	//消球
 	CCScheduler *removeBallScheduler = CCDirector::sharedDirector()->getScheduler();
-	removeBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this,0.5f,false);
+	removeBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this,0.1f,false);
 
 }
 
@@ -102,7 +102,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 	//CCLog("ccTouchEnded");  
 	//取得触点位置
 	CCPoint touchLocation = pTouch->getLocation();  
-	CCLOG("%f,%f",touchLocation.x,touchLocation.y);
+	//CCLOG("%f,%f",touchLocation.x,touchLocation.y);
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	CCPoint start=m_pushBall->m_sprite->getPosition();
 	CCPoint end=touchLocation;
@@ -120,7 +120,6 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 /* 得到随机球                                                        */
 /************************************************************************/
 Ball * SceneFight::getBall(){
-	CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
 	int color=_color;
 	const char *fileName=getColor(color);
 	Ball *ball=Ball::create();
@@ -134,7 +133,7 @@ Ball * SceneFight::getBall(){
 /************************************************************************/
 void SceneFight::addPushBall(){
 	m_pushBall=getBall();
-	CCLOG("pushBall-color===%d",m_pushBall->m_color);
+	//CCLOG("pushBall-color===%d",m_pushBall->m_color);
 	m_pushBall->retain();
 	m_pushBall->m_sprite->setPosition(ccp(_center.x,_center.y-200));
 	addChild(m_pushBall->m_sprite);
@@ -185,7 +184,7 @@ void SceneFight::initWayPoint(){
 		if (distance > 1)
 		{
 			int d = (int)distance;
-			for (int i = 0; i < d; i++)
+			for (int i = 0; i < d; i+=5)
 			{
 				float difx = end.x - start.x;
 				float dify = end.y - start.y;
@@ -217,42 +216,48 @@ void SceneFight::ballExplosion(CCPoint pt){
 /************************************************************************/
 /* 创建轨道球                                                                     */
 /************************************************************************/
-int ballNum=0;
+
 void SceneFight::createBallTask(float dt){
 	if(m_balls->count()>0){
 		Ball *lastBall=(Ball*)m_balls->objectAtIndex(m_balls->count()-1);
 		if(lastBall->m_curPosIndex<INDEX_DISTANCE)
 			return;
 	}
-	ballNum++;
-	if(ballNum>100)
-		return;
 	Ball *ball=getBall();
+	ball->m_index=m_balls->count();
 	m_balls->addObject(ball);
 	ball->m_sprite->setPosition(m_wayPoint->getControlPointAtIndex(0));
 	addChild(ball->m_sprite);
 	ball->go();
-	ballsSort();
+	//ballsSort();
 }
 /************************************************************************/
 /* 检测碰撞                                                                   */
 /************************************************************************/
+int hitBallArrayIndex=-1;
+bool inserting=false;
+bool isRemoving=false;
 void SceneFight::checkHitTask(float dt){
-	int ballArrayIndex=isHit();
-	if(ballArrayIndex>=0){
+	if(isRemoving)
+		return;
+	int tmpHitBallArrayIndex=isHit();
+	if(tmpHitBallArrayIndex>=0){
+		hitBallArrayIndex=tmpHitBallArrayIndex;
 		m_pushBallAction->stop();
 
 		CCSize s = CCDirector::sharedDirector()->getWinSize();
 		//撞击的球
-		Ball *hitBall=(Ball*)m_balls->objectAtIndex(ballArrayIndex);
+		Ball *hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
 		//撞击点位置索引
 		int hitIndex=hitBall->m_curPosIndex+INDEX_DISTANCE;
 		//撞击点位置
 		CCPoint hitPos=m_wayPoint->getControlPointAtIndex(hitIndex);
 		//撞击点前面的球向前移动
-		for(int i=0;i<ballArrayIndex;i++){
+		for(int i=0;i<hitBallArrayIndex;i++){
 			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
-			moveBall->m_curPosIndex+=INDEX_DISTANCE;
+			//if(moveBall->m_goSequneceAction==NULL)
+				//continue;
+			moveBall->m_moveToPosIndex=moveBall->m_curPosIndex+INDEX_DISTANCE;
 			moveBall->move();
 		}
 		//将球加入轨道
@@ -264,80 +269,225 @@ void SceneFight::checkHitTask(float dt){
 		insertBall->m_wayPoint=m_wayPoint;
 		insertBall->m_curPosIndex=hitIndex;
 		insertBall->m_color=m_pushBall->m_color;
-		m_balls->insertObject(insertBall,ballArrayIndex);
-		insertBall->m_sprite->setPosition(hitPos);
-		addChild(insertBall->m_sprite);
-		insertBall->go();
+		m_balls->insertObject(insertBall,hitBallArrayIndex);
+		//设置要插入的球的起始位置
+		insertBall->m_sprite->setPosition(m_pushBall->m_sprite->getPosition());
+		//移动到轨道上
+		inserting=true;
+		CCMoveTo*  moveTo = CCMoveTo::create(0.5f, hitPos);
+		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
+		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);   
+		insertBall->m_sprite->runAction(sequenceAction);
 
+		addChild(insertBall->m_sprite);
+
+		Ball*hitNextBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex+1);
+		if(hitNextBall->m_goSequneceAction!=NULL)
+		{
+			insertBall->go();
+		}
+		else
+		{
+			insertBall->go();
+			insertBall->stop();
+			insertBall->m_goSequneceAction=NULL;
+		}
+		//清除发送球
 		this->pushBallFinish();
 	}
 }
-
+void SceneFight::insertBallFinish()
+{
+	inserting=false;
+	//removeBallTask(0.1);
+}
 
 /************************************************************************/
 /* 消球                                                                     */
 /************************************************************************/
-void SceneFight::removeBallTask(float dt){
-	CCArray *tmpBalls=CCArray::create();
-	for(int i=0;i<m_balls->count();i++){
+
+void SceneFight::removeBallTask(float dt)
+{
+	if(isRemoving==true)
+		return;
+	isRemoving=true;
+
+	//检测是否有球正在移动
+	bool moving=isMoving();
+	if(moving){isRemoving=false;return;}
+	//.....
+	for (int i=m_balls->count()-1;i>=0;i--)
+	{
 		Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
-		if(currBall->m_moving)
-			continue;
-		tmpBalls->addObject(currBall);
-		int j=0;
-		//收集要消除的球
-		for(j=i+1;j<m_balls->count();j++){
-			Ball *nextBall=(Ball*)m_balls->objectAtIndex(j);
-			if(nextBall->m_moving)
-				break;
-			int indexDistance=currBall->m_curPosIndex-nextBall->m_curPosIndex;
-			//CCLOG("i===%d===j===%d====indexDistance===%d",i,j,indexDistance);
-			if(currBall->m_color==nextBall->m_color)
-				tmpBalls->addObject(nextBall);
-			else
-				break;
+		if(currBall->m_goSequneceAction==NULL)
+		{
+			CCLOG("i===%d",i);
+
+			Ball *preBall=(Ball*)m_balls->objectAtIndex(i+1);
+			int indexDistance=currBall->m_curPosIndex-preBall->m_curPosIndex;
+			if(indexDistance<INDEX_DISTANCE+1)
+			{
+				currBall->go();
+			}
+			break;
 		}
-		//CCLOG("tmpBalls-size===%d",tmpBalls->count());
-		//CCLOG("========================================================");
-		//从球数组里消除
-		if(tmpBalls->count()>=3){
-			for(int k=0;k<tmpBalls->count();k++){
-				Ball *removeBall=(Ball*)tmpBalls->objectAtIndex(k);
-				ballExplosion(removeBall->m_sprite->getPosition());
-				removeBall->m_sprite->removeFromParentAndCleanup(true);
-				for(int n=0;n<m_balls->count();n++){
-					if(removeBall->isEqual(m_balls->objectAtIndex(n))){
-						m_balls->removeObject(removeBall);
-						break;
-					}
+	}
+
+	//没有撞击或者正在插入，则直接退出
+	if(hitBallArrayIndex==-1){isRemoving=false;return;}
+	if(inserting){isRemoving=false;return;}
+
+	//如果球不连续则先回退
+	bool isBack=ballBack(hitBallArrayIndex);
+	if(isBack){isRemoving=false;return;}
+
+	Ball *hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
+	int removeBegin=-1,removeEnd=-1;
+	//起点
+	for(int i=hitBallArrayIndex;i>=0;i--)
+	{
+		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
+		if(ball->m_color!=hitBall->m_color)
+			break;
+		removeBegin=i;
+	}
+	//终点
+	for(int i=hitBallArrayIndex;i<m_balls->count();i++)
+	{
+		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
+		if(ball->m_color!=hitBall->m_color)
+			break;
+		removeEnd=i;
+	}
+	//开始消除
+	if((removeEnd-removeBegin)>=2)
+	{
+		//界面消除
+		removeBallFromUI(removeBegin,removeEnd);
+		//记录消除后新的撞击球
+		Ball* newHitBall=(Ball*)m_balls->objectAtIndex(removeEnd+1);
+		//从数组删除
+		removeBallFromArray(removeBegin,removeEnd);
+		//获取撞击点在新数组的位置索引
+		hitBallArrayIndex=m_balls->indexOfObject(newHitBall);
+		
+		//新撞击点和左边球颜色不一样，则停止左边
+		int left=hitBallArrayIndex-1;
+		int right=hitBallArrayIndex;
+		if(left>=0)
+		{
+			Ball *leftBall=(Ball*)m_balls->objectAtIndex(left);
+			Ball *rightBall=(Ball*)m_balls->objectAtIndex(right);
+			int indexDistance=leftBall->m_curPosIndex-rightBall->m_curPosIndex;
+			CCLOG("left===%d===right===%d",left,right);
+			if(indexDistance>INDEX_DISTANCE && leftBall->m_color!=rightBall->m_color)
+			{
+				for(int i=0;i<=left;i++)
+				{
+					Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+					if(ball->m_goSequneceAction==NULL)
+						continue;
+					ball->stop();
+					ball->m_goSequneceAction=NULL;
 				}
 			}
-			ballsSort();
+
 		}
-		tmpBalls->removeAllObjects();
+	
+		isRemoving=false;
+		return ;
+	}
+	
+	hitBallArrayIndex=-1;
+	isRemoving=false;
+}
+
+
+/************************************************************************/
+/* 回退                                                                    */
+/************************************************************************/
+bool SceneFight::ballBack(int hitIndex){
+	bool isBack=false;
+	int left=hitIndex-1,right=hitIndex;//停靠点
+	if(left<0)
+		return isBack;
+	//开始移动
+	Ball *leftBall=(Ball*)m_balls->objectAtIndex(left);
+	Ball *rightBall=(Ball*)m_balls->objectAtIndex(right);
+	int indexDistance=leftBall->m_curPosIndex-rightBall->m_curPosIndex;
+	if(indexDistance>INDEX_DISTANCE && leftBall->m_color==rightBall->m_color)
+	{	
+		isBack=true;
+		for(int i=left;i>=0;i--)
+		{
+			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
+			if(moveBall->m_isRemove)
+				continue;
+			moveBall->m_moveToPosIndex=moveBall->m_curPosIndex-indexDistance+INDEX_DISTANCE;
+			moveBall->move();
+		}
+	}
+	return isBack;
+}
+/************************************************************************/
+/* 从UI删除球                                                                     */
+/************************************************************************/
+void SceneFight::removeBallFromUI(int removeStart,int removeEnd)
+{
+	for(int i=removeStart;i<=removeEnd;i++)
+	{
+		Ball *removeBall=(Ball*)m_balls->objectAtIndex(i);
+		ballExplosion(removeBall->m_sprite->getPosition());
+		removeBall->m_sprite->removeFromParentAndCleanup(true);
+	}
+
+}
+/************************************************************************/
+/* 从球数组删除                                                                     */
+/************************************************************************/
+void SceneFight::removeBallFromArray(int removeStart,int removeEnd)
+{
+	CCArray *tmpBalls=CCArray::create();
+	//收集要删除的球
+	for(int i=removeStart;i<=removeEnd;i++)
+	{
+		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		tmpBalls->addObject(ball);
+	}
+	//CCLOG("tmpBalls-size===%d",tmpBalls->count());
+	for(int i=0;i<tmpBalls->count();i++)
+	{
+		Ball *removeBall=(Ball*)tmpBalls->objectAtIndex(i);
+		for(int j=0;j<m_balls->count();j++){
+			if(removeBall->isEqual(m_balls->objectAtIndex(j))){
+				m_balls->removeObject(removeBall);
+				break;
+			}
+		}
 	}
 }
 /************************************************************************/
-/* 球重新排序                                                                     */
+/* 计算是否有球在移动                                                                     */
 /************************************************************************/
-void SceneFight::ballsSort(){
-	//界面重新排球
-	//CCLOG("ball-size===%d",m_balls->count());
-	int ballNum=m_balls->count();
-	if(ballNum<=1)
-		return;
-	for(int i=ballNum-1;i>0;i--){
-		Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
-		Ball *preBall=(Ball*)m_balls->objectAtIndex(i-1);
-		int indexDistance=preBall->m_curPosIndex-currBall->m_curPosIndex;
-		//CCLOG("indexDistance===%d",indexDistance);
-		if(indexDistance<=INDEX_DISTANCE)
-			continue;
-		preBall->m_curPosIndex-=indexDistance;
-		preBall->m_curPosIndex+=INDEX_DISTANCE;
-		preBall->move();
+bool SceneFight::isMoving()
+{
+	bool isMoving=false;
+	for(int i=0;i<m_balls->count();i++)
+	{
+		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_moving)
+		{
+			isMoving=true;
+			break;
+		}
 	}
+	return isMoving;
 }
+
 /************************************************************************/
 /* 计算是否碰撞                                                                     */
 /************************************************************************/
@@ -347,6 +497,8 @@ int SceneFight::isHit(){
 	int i=m_balls->count()-1;
 	for(;i>=0;i--){
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
 		CCSprite *_targets=ball->m_sprite;
 		CCRect _targetsrect=CCRectMake(_targets->getPosition().x-_targets->getContentSize().width/2, 
 			_targets->getPosition().y-_targets->getContentSize().height/2,
@@ -368,6 +520,7 @@ int SceneFight::isHit(){
 
 const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);
+	CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
 	const char *str;
 	if(colorType==1)
 		str="red.png";

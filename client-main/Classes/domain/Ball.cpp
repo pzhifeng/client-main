@@ -4,11 +4,13 @@ Ball::Ball(void)
 {
 	m_curPosIndex=0;
 	m_moving=false;
+	m_isRemove=false;
 }
 
 
 Ball::~Ball(void)
 {
+
 }
 
 bool Ball::init(){
@@ -23,12 +25,12 @@ void Ball::go(){
 		CCPoint end=m_wayPoint->getControlPointAtIndex(m_curPosIndex);
 		//CCLOG("end-x===%f,y===%f",end.x,end.y);
 		//速度每秒钟所移动的像素值35
-		float moveDuration = 0.1f;
+		float moveDuration = 0.3f;
 
 		CCMoveTo *actionMove = CCMoveTo::actionWithDuration(moveDuration,end);
 		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(Ball::go));
-		m_sequneceAction = CCSequence::actions(actionMove,call,NULL);   
-		this->m_sprite->runAction(m_sequneceAction);
+		m_goSequneceAction = CCSequence::actions(actionMove,call,NULL);   
+		this->m_sprite->runAction(m_goSequneceAction);
 	}
 	else
 	{
@@ -39,25 +41,42 @@ void Ball::go(){
 }
 
 void Ball::move(){
-	this->m_sprite->stopAction(m_sequneceAction);
+	
+	stop();
 	m_moving=true;
 	runMoveAction();
 }
+void Ball::stop()
+{
+	this->m_sprite->stopAction(m_goSequneceAction);
+}
 
-void Ball::runMoveAction(){
-	if(m_curPosIndex<m_wayPoint->count())
+void Ball::runMoveAction()
+{
+	if(m_curPosIndex>m_moveToPosIndex)
+		m_curPosIndex--;
+	else
+		m_curPosIndex++;
+	if(m_curPosIndex!=m_moveToPosIndex && m_curPosIndex<m_wayPoint->count())
 	{
 		CCPoint end=m_wayPoint->getControlPointAtIndex(m_curPosIndex);
 		//速度每秒钟所移动的像素值35
-		float moveDuration = 0.3f;
+		float moveDuration = 0.001f;
 
 		CCMoveTo *actionMove = CCMoveTo::actionWithDuration(moveDuration,end);
-		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(Ball::runMoveActionFinish));
-		m_sequneceAction = CCSequence::actions(actionMove,call,NULL);   
-		this->m_sprite->runAction(m_sequneceAction);
+		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(Ball::runMoveAction));
+		m_moveSequneceAction = CCSequence::actions(actionMove,call,NULL);   
+		this->m_sprite->runAction(m_moveSequneceAction);
+	}
+	//CCLOG("m_curPosIndex===%d===m_moveToPosIndex===%d",m_curPosIndex,m_moveToPosIndex);	
+	if(m_curPosIndex==m_moveToPosIndex)
+	{
+		m_moving=false;
+		if(m_goSequneceAction!=NULL)
+			go();
 	}
 }
 void Ball::runMoveActionFinish(){
-	m_moving=false;
-	go();
+
+	runMoveAction();
 }

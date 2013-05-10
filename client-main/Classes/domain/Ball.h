@@ -7,9 +7,13 @@ public :
 	CCSprite *m_sprite;
 	CCPointArray *m_wayPoint;
     int m_curPosIndex;
-	CCAction *m_sequneceAction;
+	CCAction *m_goSequneceAction;
+	CCAction *m_moveSequneceAction;
 	int m_color;//1=ºì£¬2=»Æ£¬3=À¶
+	int m_moveToPosIndex;
 	bool m_moving;
+	int m_index;
+	bool m_isRemove;
 public:
 	Ball(void);
 	~Ball(void);
@@ -19,6 +23,7 @@ public:
 
 	void go();
 	void move();
+	void stop();
 private:
 	void runMoveAction();
 	void runMoveActionFinish();
