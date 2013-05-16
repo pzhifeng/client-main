@@ -4,7 +4,7 @@ Ball::Ball(void)
 {
 	m_curPosIndex=0;
 	m_moving=false;
-	m_isRemove=false;
+	m_goSequneceAction=NULL;
 }
 
 
@@ -76,7 +76,8 @@ void Ball::runMoveAction()
 			go();
 	}
 }
-void Ball::runMoveActionFinish(){
+void Ball::runMoveActionFinish()
+{
 
 	runMoveAction();
 }

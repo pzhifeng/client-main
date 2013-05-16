@@ -12,8 +12,7 @@ public :
 	int m_color;//1=ºì£¬2=»Æ£¬3=À¶
 	int m_moveToPosIndex;
 	bool m_moving;
-	int m_index;
-	bool m_isRemove;
+
 public:
 	Ball(void);
 	~Ball(void);
