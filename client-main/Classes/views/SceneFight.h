@@ -2,12 +2,26 @@
 #define __SCENE_FIGHT_H_
 
 #include "cocos2d.h"
-#include "../VoObject.h"
 #include "../core/LayerUI.h"
 #include "../domain/Ball.h"
 
 #define INDEX_DISTANCE 5
 #define _color CCRANDOM_0_1()*4+1
+
+//å¼€æˆ˜è¯·æ±‚ï¼Œè·å–NPCæ•°æ®
+struct VoFight:VoObject {
+    int * id;
+    int * npc;
+};
+
+//æˆ˜æ–—ç»“æŸï¼Œè·å–æˆ˜æŠ¥
+struct VoReport:VoObject {
+    int * id;
+    int * score;
+    int * coin;
+    int * exp;
+    int * propertyId;
+};
 
 class SceneFight :public LayerUI
 {
@@ -17,9 +31,9 @@ public:
 	CCPointArray  * m_wayPoint;
 	CCAction *m_pushBallAction;
 public:
-	static LayerUI* scene(VoHome* vo);
+	static LayerUI* scene(VoFight* vo);
 
-	VoHome* vo;
+	VoFight* vo;
 
 	void initLayer();
 
@@ -34,25 +48,25 @@ public:
 	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
 
 	Ball * getBall();
-	void addPushBall();//ÅÚÌ¨Ôö¼Ó·¢ÉäÇò
-	void pushBall(float interval,CCPoint pos);//·¢Éä
-	void pushBallFinish();//·¢ÉäÍê³É
-	void ballExplosion(CCPoint pt);//±¬Õ¨ÌØĞ§
-	bool ballBack(int hitIndex);//»ØÍË
-	bool ballBackMove(int start,int end);//»ØÍËÊ±ÒÆ¶¯
-	void removeBallFromUI(int removeStart,int removeEnd);//´Ó½çÃæÉ¾³ıÇò
-	void removeBallFromArray(int removeStart,int removeEnd);//´ÓÇòÊı×éÉ¾³ı
-	bool isMoving();//ÅĞ¶ÏÊÇ·ñÓĞÇòÕıÔÚÒÆ¶¯
+	void addPushBall();//â‰ˆâ„ÃƒÂ®â€˜Ë†Âºâ€âˆ‘Â¢â€¦â€°Â«Ãš
+	void pushBall(float interval,CCPoint pos);//âˆ‘Â¢â€¦â€°
+	void pushBallFinish();//âˆ‘Â¢â€¦â€°Ã•Ãâ‰¥â€¦
+	void ballExplosion(CCPoint pt);//Â±Â¨â€™Â®ÃƒÃ¿â€“ÃŸ
+	bool ballBack(int hitIndex);//ÂªÃ¿Ã•Ã€
+	bool ballBackMove(int start,int end);//ÂªÃ¿Ã•Ã€Â Â±â€œâˆ†âˆ‚Ã˜
+	void removeBallFromUI(int removeStart,int removeEnd);//Â¥â€Î©ÃâˆšÃŠâ€¦Ã¦â‰¥ËÂ«Ãš
+	void removeBallFromArray(int removeStart,int removeEnd);//Â¥â€Â«ÃšÂ Ëâ—ŠÃˆâ€¦Ã¦â‰¥Ë
+	bool isMoving();//â‰ˆâ€“âˆ‚Å“Â Â«âˆ‘Ã’â€â€“Â«Ãšâ€™Ëâ€˜â„â€œâˆ†âˆ‚Ã˜
 
-	void initWayPoint();//³õÊ¼»¯µØÍ¼
-	void insertBall();//²åÈëÇòµ½¹ìµÀ
-	void insertBallFinish();//²åÈëÇòµ½¹ìµÀÍê³É
-	void createBallTask(float dt);//´´½¨Çò¶¨Ê±Æ÷
-	void removeBallTask(float dt);//ÒÆ³ıÇò¶¨Ê±Æ÷
+	void initWayPoint();//â‰¥Ä±Â ÂºÂªÃ˜ÂµÃ¿Ã•Âº
+	void insertBall();//â‰¤Ã‚Â»ÃÂ«ÃšÂµÎ©Ï€ÃÂµÂ¿
+	void insertBallFinish();//â‰¤Ã‚Â»ÃÂ«ÃšÂµÎ©Ï€ÃÂµÂ¿Ã•Ãâ‰¥â€¦
+	void createBallTask(float dt);//Â¥Â¥Î©Â®Â«Ãšâˆ‚Â®Â Â±âˆ†Ëœ
+	void removeBallTask(float dt);//â€œâˆ†â‰¥ËÂ«Ãšâˆ‚Â®Â Â±âˆ†Ëœ
 
 	const char * getColor(int colorType);
-	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//¼ÆËãÇòÊÇ·ñÅö×²
-	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//Åö×²µÄ½¹µã
+	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//Âºâˆ†Ã€â€Â«ÃšÂ Â«âˆ‘Ã’â‰ˆË†â—Šâ‰¤
+	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//â‰ˆË†â—Šâ‰¤ÂµÆ’Î©Ï€Âµâ€
 };
 #endif
 

@@ -9,21 +9,21 @@ extern std::vector<std::string> split(const std::string s, char delim);
 int hitBallArrayIndex=-1;
 char insertSide;
 
-LayerUI* SceneFight::scene(VoHome* vo)
+LayerUI* SceneFight::scene(VoFight* vo)
 {
-
+    
 	CCScene *scene = CCScene::create();
-
+    
 	SceneFight *layer = SceneFight::create();
-
+    
 	layer->vo=vo;
-
+    
 	layer->initLayer();
-
+    
 	scene->addChild(layer);
-
+    
 	CCDirector::sharedDirector()->replaceScene(scene);
-
+    
 	return layer;
 }
 
@@ -33,47 +33,44 @@ void SceneFight:: initLayer()
 	{
 		return;
 	}
-
-
+    
+    
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
-		this,
-		menu_selector(SceneFight::back) );
+                                                          "CloseNormal.png",
+                                                          "CloseSelected.png",
+                                                          this,
+                                                          menu_selector(SceneFight::back) );
 	pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
-
-
-	CCLOG("name===%s",vo->name);
-	CCLOG("title===%s",vo->title);
-
+    
+    
 	// create menu, it's an autorelease object
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition( CCPointZero );
 	this->addChild(pMenu, 1);
-
+    
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
-	//´´½¨µØÍ¼¹ì¼£
+	//åˆ›å»ºåœ°å›¾è½¨è¿¹
 	m_wayPoint=CCPointArray::create(1000);
 	m_wayPoint->retain();
 	initWayPoint();
-
-	//´´½¨ÇòÊı×é
+    
+	//åˆ›å»ºçƒæ•°ç»„
 	m_balls=CCArray::create();
 	m_balls->retain();
-
-	//´´½¨·¢ÉäÇò
+    
+	//åˆ›å»ºå‘å°„çƒ
 	addPushBall();
-
+    
 	/************************************************************************/
-	/* ¶¨Ê±ÈÎÎñ                                                                     */
+	/* å®šæ—¶ä»»åŠ¡                                                                     */
 	/************************************************************************/
-	//´´½¨Çò
+	//åˆ›å»ºçƒ
 	CCScheduler *createBallScheduler = CCDirector::sharedDirector()->getScheduler();
 	createBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::createBallTask),this,0.1f,false);
-	//ÏûÇò
+	//æ¶ˆçƒ
 	CCScheduler *removeBallScheduler = CCDirector::sharedDirector()->getScheduler();
 	removeBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this,0.001f,false);
-
+    
 }
 
 void SceneFight::back(CCObject* pSender)
@@ -82,10 +79,10 @@ void SceneFight::back(CCObject* pSender)
 }
 
 void SceneFight::onEnter(){
-	//CCLog("onEnter");  
+	//CCLog("onEnter");
 	CCLayer::onEnter();
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN+1, true);
-	//CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this,0); 
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this,0);
 }
 
 void SceneFight::onExit(){
@@ -98,14 +95,14 @@ bool SceneFight::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
 }
 
 void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
-	//CCLog("ccTouchEnded");  
-	//È¡µÃ´¥µãÎ»ÖÃ
-	CCPoint touchLocation = pTouch->getLocation();  
+	//CCLog("ccTouchEnded");
+	//å–å¾—è§¦ç‚¹ä½ç½®
+	CCPoint touchLocation = pTouch->getLocation();
 	//CCLOG("%f,%f",touchLocation.x,touchLocation.y);
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	CCPoint start=m_pushBall->m_sprite->getPosition();
 	CCPoint end=touchLocation;
-	//Á½µã¾àÀë
+	//ä¸¤ç‚¹è·ç¦»
 	float distance = ccpDistance(start, end);
 	float difx = end.x - start.x;
 	float dify = end.y - start.y;
@@ -121,32 +118,32 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 		Ball*endBall=(Ball*)m_balls->objectAtIndex(i+1);
 		CCPoint startBallPos=m_wayPoint->getControlPointAtIndex(startBall->m_curPosIndex);
 		CCPoint endBallPos=m_wayPoint->getControlPointAtIndex(endBall->m_curPosIndex);
-
+        
 		CCPoint c=CCPointMake(startBallPos.x,startBallPos.y);
 		CCPoint d=CCPointMake(endBallPos.x,endBallPos.y);
-
-		CCPoint pointCross; 
-		//¼ÆËãÊÇ·ñÅö×²
-		bCross = IsLineSegmentCross(a,b,c,d);  
+        
+		CCPoint pointCross;
+		//è®¡ç®—æ˜¯å¦ç¢°æ’
+		bCross = IsLineSegmentCross(a,b,c,d);
 		if(i==0 && !bCross)
 		{
-			//²åÈëµ½¿ªÍ·
+			//æ’å…¥åˆ°å¼€å¤´
 			startBallPos=m_wayPoint->getControlPointAtIndex(startBall->m_curPosIndex+INDEX_DISTANCE);
 			endBallPos=m_wayPoint->getControlPointAtIndex(startBall->m_curPosIndex);
 			c=CCPointMake(startBallPos.x,startBallPos.y);
 			d=CCPointMake(endBallPos.x,endBallPos.y);
-			bCross = IsLineSegmentCross(a,b,c,d);  
-			if (bCross) 
+			bCross = IsLineSegmentCross(a,b,c,d);
+			if (bCross)
 			{
 				insertSide='R';
 				hitBallArrayIndex=i;
 				break;
 			}
 		}
-		if (bCross)  
-		{  
-			//Åö×²µÄ½¹µã
-			pointCross = GetCrossPoint(a,b,c,d);  
+		if (bCross)
+		{
+			//ç¢°æ’çš„ç„¦ç‚¹
+			pointCross = GetCrossPoint(a,b,c,d);
 			float cDistance = ccpDistance(pointCross, c);
 			float dDistance = ccpDistance(pointCross, d);
 			CCLOG("pointCross===x===%f===y===%f",pointCross.x,pointCross.y);
@@ -161,7 +158,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 				bCross=false;
 			hitBallArrayIndex=i+1;
 			break;
-		}  
+		}
 	}
 	if(!bCross)
 		pushBall(0.3f,tmpPos);
@@ -170,7 +167,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 }
 
 /************************************************************************/
-/* µÃµ½Ëæ»úÇò                                                        */
+/* å¾—åˆ°éšæœºçƒ                                                        */
 /************************************************************************/
 Ball * SceneFight::getBall()
 {
@@ -183,7 +180,7 @@ Ball * SceneFight::getBall()
 	return ball;
 }
 /************************************************************************/
-/* ´´½¨·¢ÉäÇò                                                              */
+/* åˆ›å»ºå‘å°„çƒ                                                              */
 /************************************************************************/
 void SceneFight::addPushBall(){
 	m_pushBall=getBall();
@@ -193,27 +190,27 @@ void SceneFight::addPushBall(){
 	addChild(m_pushBall->m_sprite);
 };
 /************************************************************************/
-/* ·¢ÉäÇò                                                               */
+/* å‘å°„çƒ                                                               */
 /************************************************************************/
 void SceneFight::pushBall(float interval,CCPoint pos)
 {
 	CCActionInterval*  actionTo = CCMoveTo::create(interval, pos);
 	CCCallFunc * call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::pushBallFinish));
 	m_pushBallAction=CCSequence::actions(actionTo,call,NULL);
-	m_pushBall->m_sprite->runAction(m_pushBallAction);	
+	m_pushBall->m_sprite->runAction(m_pushBallAction);
 }
 /************************************************************************/
-/* ·¢ËÍÍê³É                                                                    */
+/* å‘é€å®Œæˆ                                                                    */
 /************************************************************************/
 void SceneFight::pushBallFinish(){
-	//ÖØĞÂ´´½¨·¢ËÍÇò
+	//é‡æ–°åˆ›å»ºå‘é€çƒ
 	m_pushBall->m_sprite->removeFromParentAndCleanup(true);
 	m_pushBall->release();
 	m_pushBall=NULL;
 	addPushBall();
 }
 /************************************************************************/
-/* ´´½¨¹ìµÀÇòÈÎÎñ                                                                     */
+/* åˆ›å»ºè½¨é“çƒä»»åŠ¡                                                                     */
 /************************************************************************/
 void SceneFight::createBallTask(float dt){
 	if(m_balls->count()>0){
@@ -228,13 +225,13 @@ void SceneFight::createBallTask(float dt){
 	ball->go();
 }
 /************************************************************************/
-/* ²åÈëÇòµ½¹ìµÀ                                                               */
+/* æ’å…¥çƒåˆ°è½¨é“                                                               */
 /************************************************************************/
 bool inserting=false;
 void SceneFight::insertBall(){
 	if(hitBallArrayIndex>=0){
 		CCSize s = CCDirector::sharedDirector()->getWinSize();
-		//×²»÷µãÎ»ÖÃË÷Òı
+		//æ’å‡»ç‚¹ä½ç½®ç´¢å¼•
 		int hitCurPosIndex=0;
 		CCLOG("insertSide===%c",insertSide);
 		if(insertSide=='L')
@@ -247,15 +244,15 @@ void SceneFight::insertBall(){
 			Ball*hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
 			hitCurPosIndex=hitBall->m_curPosIndex+INDEX_DISTANCE;
 		}
-		//×²»÷µãÎ»ÖÃ
+		//æ’å‡»ç‚¹ä½ç½®
 		CCPoint hitPos=m_wayPoint->getControlPointAtIndex(hitCurPosIndex);
-		//×²»÷µãÇ°ÃæµÄÇòÏòÇ°ÒÆ¶¯
+		//æ’å‡»ç‚¹å‰é¢çš„çƒå‘å‰ç§»åŠ¨
 		for(int i=0;i<hitBallArrayIndex;i++){
 			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
 			moveBall->m_moveToPosIndex=moveBall->m_curPosIndex+INDEX_DISTANCE;
 			moveBall->move();
 		}
-		//½«Çò¼ÓÈë¹ìµÀ
+		//å°†çƒåŠ å…¥è½¨é“
 		//CCLOG("pushBall-color-checkHitTask===%d",m_pushBall->m_color);
 		CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
 		const char *str=getColor(m_pushBall->m_color);
@@ -265,13 +262,13 @@ void SceneFight::insertBall(){
 		insertBall->m_curPosIndex=hitCurPosIndex;
 		insertBall->m_color=m_pushBall->m_color;
 		m_balls->insertObject(insertBall,hitBallArrayIndex);
-		//ÉèÖÃÒª²åÈëµÄÇòµÄÆğÊ¼Î»ÖÃ
+		//è®¾ç½®è¦æ’å…¥çš„çƒçš„èµ·å§‹ä½ç½®
 		insertBall->m_sprite->setPosition(m_pushBall->m_sprite->getPosition());
-		//ÒÆ¶¯µ½¹ìµÀÉÏ
+		//ç§»åŠ¨åˆ°è½¨é“ä¸Š
 		inserting=true;
 		CCMoveTo*  moveTo = CCMoveTo::create(0.2f, hitPos);
 		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
-		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);   
+		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
 		insertBall->m_sprite->runAction(sequenceAction);
 		
 		addChild(insertBall->m_sprite);
@@ -281,20 +278,20 @@ void SceneFight::insertBall(){
 void SceneFight::insertBallFinish()
 {
 	inserting=false;
-	//Çå³ı·¢ËÍÇò
+	//æ¸…é™¤å‘é€çƒ
 	this->pushBallFinish();
 }
 
 /************************************************************************/
-/* ÏûÇò                                                                     */
+/* æ¶ˆçƒ                                                                     */
 /************************************************************************/
 void SceneFight::removeBallTask(float dt)
 {
-	//¼ì²âÊÇ·ñÓĞÇòÕıÔÚÒÆ¶¯
+	//æ£€æµ‹æ˜¯å¦æœ‰çƒæ­£åœ¨ç§»åŠ¨
 	bool moving=isMoving();
 	if(moving){return;}
 	
-	//Í£Ö¹ÇòÒÆ¶¯
+	//åœæ­¢çƒç§»åŠ¨
 	for (int i=m_balls->count()-1;i>0;i--)
 	{
 		Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
@@ -311,7 +308,7 @@ void SceneFight::removeBallTask(float dt)
 			break;
 		}
 	}
-	//¾²Ö¹ÇòÖØĞÂÒÆ¶¯
+	//é™æ­¢çƒé‡æ–°ç§»åŠ¨
 	for (int i=m_balls->count()-1;i>0;i--)
 	{
 		Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
@@ -327,16 +324,16 @@ void SceneFight::removeBallTask(float dt)
 		}
 		
 	}
-	//Ã»ÓĞ×²»÷»òÕßÕıÔÚ²åÈë£¬ÔòÖ±½ÓÍË³ö
+	//æ²¡æœ‰æ’å‡»æˆ–è€…æ­£åœ¨æ’å…¥ï¼Œåˆ™ç›´æ¥é€€å‡º
 	if(hitBallArrayIndex==-1){return;}
 	if(inserting){return;}
-	//»ØÍË
+	//å›é€€
 	bool isBack=ballBack(hitBallArrayIndex);
 	if(isBack){return;}
-
+    
 	Ball *hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
 	int removeBegin=-1,removeEnd=-1;
-	//Æğµã
+	//èµ·ç‚¹
 	for(int i=hitBallArrayIndex;i>=0;i--)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
@@ -344,7 +341,7 @@ void SceneFight::removeBallTask(float dt)
 			break;
 		removeBegin=i;
 	}
-	//ÖÕµã
+	//ç»ˆç‚¹
 	for(int i=hitBallArrayIndex;i<m_balls->count();i++)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
@@ -352,16 +349,16 @@ void SceneFight::removeBallTask(float dt)
 			break;
 		removeEnd=i;
 	}
-	//¿ªÊ¼Ïû³ı
+	//å¼€å§‹æ¶ˆé™¤
 	if((removeEnd-removeBegin)>=2)
 	{
-		//½çÃæÏû³ı
+		//ç•Œé¢æ¶ˆé™¤
 		removeBallFromUI(removeBegin,removeEnd);
-		//¼ÇÂ¼Ïû³ıºóĞÂµÄ×²»÷Çò
+		//è®°å½•æ¶ˆé™¤åæ–°çš„æ’å‡»çƒ
 		Ball* newHitBall=(Ball*)m_balls->objectAtIndex(removeEnd+1);
-		//´ÓÊı×éÉ¾³ı
+		//ä»æ•°ç»„åˆ é™¤
 		removeBallFromArray(removeBegin,removeEnd);
-		//»ñÈ¡×²»÷µãÔÚĞÂÊı×éµÄÎ»ÖÃË÷Òı
+		//è·å–æ’å‡»ç‚¹åœ¨æ–°æ•°ç»„çš„ä½ç½®ç´¢å¼•
 		hitBallArrayIndex=m_balls->indexOfObject(newHitBall);
 		return ;
 	}
@@ -370,28 +367,28 @@ void SceneFight::removeBallTask(float dt)
 
 
 /************************************************************************/
-/* »ØÍË                                                                    */
+/* å›é€€                                                                    */
 /************************************************************************/
 bool SceneFight::ballBack(int hitIndex){
 	bool isBack=false;
-	int start=hitIndex-1,end=hitIndex;//Í£¿¿ÔÚÓÒ±ß
+	int start=hitIndex-1,end=hitIndex;//åœé åœ¨å³è¾¹
 	if(start<0)
 		return isBack;
-	//¿ªÊ¼ÒÆ¶¯
+	//å¼€å§‹ç§»åŠ¨
 	isBack=ballBackMove(start,end);
-	//ÔÙÍ£¿¿×ó±ßµÄÇé¿ö
+	//å†åœé å·¦è¾¹çš„æƒ…å†µ
 	if(!isBack)
 	{
-		start=hitIndex,end=hitIndex+1;//Í£¿¿ÔÚ×ó±ß
+		start=hitIndex,end=hitIndex+1;//åœé åœ¨å·¦è¾¹
 		if(end>=m_balls->count())
 			return isBack;
-		//¿ªÊ¼ÒÆ¶¯
+		//å¼€å§‹ç§»åŠ¨
 		isBack=ballBackMove(start,end);
 	}
 	return isBack;
 }
 /************************************************************************/
-/* »ØÍËÊ±ÒÆ¶¯                                                                     */
+/* å›é€€æ—¶ç§»åŠ¨                                                                     */
 /************************************************************************/
 bool SceneFight::ballBackMove(int start,int end)
 {
@@ -400,7 +397,7 @@ bool SceneFight::ballBackMove(int start,int end)
 	Ball *endBall=(Ball*)m_balls->objectAtIndex(end);
 	int indexDistance=startBall->m_curPosIndex-endBall->m_curPosIndex;
 	if(indexDistance>INDEX_DISTANCE && startBall->m_color==endBall->m_color)
-	{	
+	{
 		isBack=true;
 		for(int i=start;i>=0;i--)
 		{
@@ -413,7 +410,7 @@ bool SceneFight::ballBackMove(int start,int end)
 }
 
 /************************************************************************/
-/* ´ÓUIÉ¾³ıÇò                                                                     */
+/* ä»UIåˆ é™¤çƒ                                                                     */
 /************************************************************************/
 void SceneFight::removeBallFromUI(int removeStart,int removeEnd)
 {
@@ -423,15 +420,15 @@ void SceneFight::removeBallFromUI(int removeStart,int removeEnd)
 		ballExplosion(removeBall->m_sprite->getPosition());
 		removeBall->m_sprite->removeFromParentAndCleanup(true);
 	}
-
+    
 }
 /************************************************************************/
-/* ´ÓÇòÊı×éÉ¾³ı                                                                     */
+/* ä»çƒæ•°ç»„åˆ é™¤                                                                     */
 /************************************************************************/
 void SceneFight::removeBallFromArray(int removeStart,int removeEnd)
 {
 	CCArray *tmpBalls=CCArray::create();
-	//ÊÕ¼¯ÒªÉ¾³ıµÄÇò
+	//æ”¶é›†è¦åˆ é™¤çš„çƒ
 	for(int i=removeStart;i<=removeEnd;i++)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
@@ -450,7 +447,7 @@ void SceneFight::removeBallFromArray(int removeStart,int removeEnd)
 	}
 }
 /************************************************************************/
-/* ¼ÆËãÊÇ·ñÓĞÇòÔÚÒÆ¶¯                                                                     */
+/* è®¡ç®—æ˜¯å¦æœ‰çƒåœ¨ç§»åŠ¨                                                                     */
 /************************************************************************/
 bool SceneFight::isMoving()
 {
@@ -467,42 +464,42 @@ bool SceneFight::isMoving()
 	return isMoving;
 }
 
-/* 
-ÅĞ¶ÏÁ½ÌõÏß¶ÎÊÇ·ñÏà½»(ÓĞ½»µã) 
-*/  
-bool SceneFight::IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2)  
-{  
-	//Ã¿¸öÏß¶ÎµÄÁ½µã¶¼ÔÚÁíÒ»¸öÏß¶ÎµÄ×óÓÒ²»Í¬²à£¬ÔòÄÜ¶Ï¶¨Ïß¶ÎÏà½»  
-	//¹«Ê½¶ÔÓÚÏòÁ¿(x1,y1)->(x2,y2),ÅĞ¶Ïµã(x3,y3)ÔÚÏòÁ¿µÄ×ó±ß,ÓÒ±ß,»¹ÊÇÏßÉÏ.  
-	//p=x1(y3-y2)+x2(y1-y3)+x3(y2-y1).p<0 ×ó²à,    p=0 ÏßÉÏ, p>0 ÓÒ²à  
-	long Linep1,Linep2;  
-	//ÅĞ¶ÏpSecond1ºÍpSecond2ÊÇ·ñÔÚpFirst1->pFirst2Á½²à  
-	Linep1 = pFirst1.x * (pSecond1.y - pFirst2.y) +  
-		pFirst2.x * (pFirst1.y - pSecond1.y) +  
-		pSecond1.x * (pFirst2.y - pFirst1.y);  
-	Linep2 = pFirst1.x * (pSecond2.y - pFirst2.y) +  
-		pFirst2.x * (pFirst1.y - pSecond2.y) +  
-		pSecond2.x * (pFirst2.y - pFirst1.y);  
-	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//·ûºÅÎ»Òì»òÎª0:pSecond1ºÍpSecond2ÔÚpFirst1->pFirst2Í¬²à  
-	{  
-		return false;  
-	}  
-	//ÅĞ¶ÏpFirst1ºÍpFirst2ÊÇ·ñÔÚpSecond1->pSecond2Á½²à  
-	Linep1 = pSecond1.x * (pFirst1.y - pSecond2.y) +  
-		pSecond2.x * (pSecond1.y - pFirst1.y) +  
-		pFirst1.x * (pSecond2.y - pSecond1.y);  
-	Linep2 = pSecond1.x * (pFirst2.y - pSecond2.y) +  
-		pSecond2.x * (pSecond1.y - pFirst2.y) +  
-		pFirst2.x * (pSecond2.y - pSecond1.y);  
-	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//·ûºÅÎ»Òì»òÎª0:pFirst1ºÍpFirst2ÔÚpSecond1->pSecond2Í¬²à  
-	{  
-		return false;  
-	}  
-	//·ñÔòÅĞÎªÏà½»  
-	return true;  
-}  
+/*
+ åˆ¤æ–­ä¸¤æ¡çº¿æ®µæ˜¯å¦ç›¸äº¤(æœ‰äº¤ç‚¹)
+ */
+bool SceneFight::IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2)
+{
+	//æ¯ä¸ªçº¿æ®µçš„ä¸¤ç‚¹éƒ½åœ¨å¦ä¸€ä¸ªçº¿æ®µçš„å·¦å³ä¸åŒä¾§ï¼Œåˆ™èƒ½æ–­å®šçº¿æ®µç›¸äº¤
+	//å…¬å¼å¯¹äºå‘é‡(x1,y1)->(x2,y2),åˆ¤æ–­ç‚¹(x3,y3)åœ¨å‘é‡çš„å·¦è¾¹,å³è¾¹,è¿˜æ˜¯çº¿ä¸Š.
+	//p=x1(y3-y2)+x2(y1-y3)+x3(y2-y1).p<0 å·¦ä¾§,    p=0 çº¿ä¸Š, p>0 å³ä¾§
+	long Linep1,Linep2;
+	//åˆ¤æ–­pSecond1å’ŒpSecond2æ˜¯å¦åœ¨pFirst1->pFirst2ä¸¤ä¾§
+	Linep1 = pFirst1.x * (pSecond1.y - pFirst2.y) +
+    pFirst2.x * (pFirst1.y - pSecond1.y) +
+    pSecond1.x * (pFirst2.y - pFirst1.y);
+	Linep2 = pFirst1.x * (pSecond2.y - pFirst2.y) +
+    pFirst2.x * (pFirst1.y - pSecond2.y) +
+    pSecond2.x * (pFirst2.y - pFirst1.y);
+	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//ç¬¦å·ä½å¼‚æˆ–ä¸º0:pSecond1å’ŒpSecond2åœ¨pFirst1->pFirst2åŒä¾§
+	{
+		return false;
+	}
+	//åˆ¤æ–­pFirst1å’ŒpFirst2æ˜¯å¦åœ¨pSecond1->pSecond2ä¸¤ä¾§
+	Linep1 = pSecond1.x * (pFirst1.y - pSecond2.y) +
+    pSecond2.x * (pSecond1.y - pFirst1.y) +
+    pFirst1.x * (pSecond2.y - pSecond1.y);
+	Linep2 = pSecond1.x * (pFirst2.y - pSecond2.y) +
+    pSecond2.x * (pSecond1.y - pFirst2.y) +
+    pFirst2.x * (pSecond2.y - pSecond1.y);
+	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//ç¬¦å·ä½å¼‚æˆ–ä¸º0:pFirst1å’ŒpFirst2åœ¨pSecond1->pSecond2åŒä¾§
+	{
+		return false;
+	}
+	//å¦åˆ™åˆ¤ä¸ºç›¸äº¤
+	return true;
+}
 /************************************************************************/
-/* ³õÊ¼»¯µØÍ¼¹ì¼£½Úµã                                                                     */
+/* åˆå§‹åŒ–åœ°å›¾è½¨è¿¹èŠ‚ç‚¹                                                                     */
 /************************************************************************/
 void SceneFight::initWayPoint(){
 	std::string pts="705.809937,234.493042|618.227051,198.563858|474.503174,135.688690|301.588257,126.706619|164.602722,167.126144|79.264282,252.457718|61.295475,331.054443|74.766144,420.881439|162.347595,506.219116|283.618622,542.151428|404.890686,544.397217|517.179077,519.693726|566.584900,483.761627|629.463135,402.915833";
@@ -517,11 +514,11 @@ void SceneFight::initWayPoint(){
 			m_wayPoint->addControlPoint(start);
 			break;
 		}
-
+        
 		std::string nextPoint=points[i+1];
 		std::vector<std::string> nextXY=split(nextPoint,nextPattern);
 		CCPoint end=CCPointMake(atof(nextXY[0].c_str()),atof(nextXY[1].c_str()));
-		//Á½µã¾àÀë
+		//ä¸¤ç‚¹è·ç¦»
 		float distance = ccpDistance(start, end);
 		if (distance > 1)
 		{
@@ -535,46 +532,46 @@ void SceneFight::initWayPoint(){
 				//CCLOG("pos===x===%f===y===%f",tmpPos.x,tmpPos.y);
 				m_wayPoint->addControlPoint(tmpPos);
 			}
-		}	
+		}
 	}
 }
 
 /************************************************************************/
-/* ÏÔÊ¾±¬Õ¨Ğ§¹û                                                                     */
+/* æ˜¾ç¤ºçˆ†ç‚¸æ•ˆæœ                                                                     */
 /************************************************************************/
 void SceneFight::ballExplosion(CCPoint pt){
 	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
-	//Á£×Ó·¢ÉäÆ÷
-	CCParticleSystem * emitter=CCParticleExplosion::create(); 
-	//±¬Õ¨Ğ§¹û
-	emitter->setPosition(ccp(pt.x,pt.y)); 
-	emitter->setTexture(CCTextureCache::sharedTextureCache()->addImage("CloseNormal.png")); 
+	//ç²’å­å‘å°„å™¨
+	CCParticleSystem * emitter=CCParticleExplosion::create();
+	//çˆ†ç‚¸æ•ˆæœ
+	emitter->setPosition(ccp(pt.x,pt.y));
+	emitter->setTexture(CCTextureCache::sharedTextureCache()->addImage("CloseNormal.png"));
 	emitter->setBlendAdditive(true);
-	emitter->setLife(0.5f);//Á£×ÓÊÙÃü
+	emitter->setLife(0.5f);//ç²’å­å¯¿å‘½
 	emitter->setLifeVar(0);
 	emitter->setAutoRemoveOnFinish(true);
 	this->addChild(emitter);
 }
-/* 
-ÇóÁ½Ö±Ïß½»µã£¬Ç°ÌáÊÇÁ½ÌõÖ±Ïß±ØĞëÓĞ½»µã 
-ÔÚÏà½»µÄÇé¿öÏÂ£¬¿ÉÒÔÓ¦¸¶¸÷ÖÖÇé¿ö(´¹Ö±¡¢ÏµÊıµÈ) 
-*/  
-CCPoint SceneFight::GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2)  
-{  
-	//±ØĞëÏà½»Çó³öµÄ²ÅÊÇÏß¶ÎµÄ½»µã£¬µ«ÊÇÏÂÃæµÄ³ÌĞò¶ÎÊÇÍ¨ÓÃµÄ  
-	assert(IsLineSegmentCross(p1,p2,q1,q2));  
-	/*¸ù¾İÁ½µãÊ½»¯Îª±ê×¼Ê½£¬½ø¶øÇóÏßĞÔ·½³Ì×é*/  
-	CCPoint crossPoint;  
-	long tempLeft,tempRight;  
-	//Çóx×ø±ê  
-	tempLeft = (q2.x - q1.x) * (p1.y - p2.y) - (p2.x - p1.x) * (q1.y - q2.y);  
-	tempRight = (p1.y - q1.y) * (p2.x - p1.x) * (q2.x - q1.x) + q1.x * (q2.y - q1.y) * (p2.x - p1.x) - p1.x * (p2.y - p1.y) * (q2.x - q1.x);  
-	crossPoint.x =(int)( (double)tempRight / (double)tempLeft );  
-	//Çóy×ø±ê    
-	tempLeft = (p1.x - p2.x) * (q2.y - q1.y) - (p2.y - p1.y) * (q1.x - q2.x);  
-	tempRight = p2.y * (p1.x - p2.x) * (q2.y - q1.y) + (q2.x- p2.x) * (q2.y - q1.y) * (p1.y - p2.y) - q2.y * (q1.x - q2.x) * (p2.y - p1.y);  
-	crossPoint.y =(int)( (double)tempRight / (double)tempLeft );  
-	return crossPoint;  
+/*
+ æ±‚ä¸¤ç›´çº¿äº¤ç‚¹ï¼Œå‰ææ˜¯ä¸¤æ¡ç›´çº¿å¿…é¡»æœ‰äº¤ç‚¹
+ åœ¨ç›¸äº¤çš„æƒ…å†µä¸‹ï¼Œå¯ä»¥åº”ä»˜å„ç§æƒ…å†µ(å‚ç›´ã€ç³»æ•°ç­‰)
+ */
+CCPoint SceneFight::GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2)
+{
+	//å¿…é¡»ç›¸äº¤æ±‚å‡ºçš„æ‰æ˜¯çº¿æ®µçš„äº¤ç‚¹ï¼Œä½†æ˜¯ä¸‹é¢çš„ç¨‹åºæ®µæ˜¯é€šç”¨çš„
+	assert(IsLineSegmentCross(p1,p2,q1,q2));
+	/*æ ¹æ®ä¸¤ç‚¹å¼åŒ–ä¸ºæ ‡å‡†å¼ï¼Œè¿›è€Œæ±‚çº¿æ€§æ–¹ç¨‹ç»„*/
+	CCPoint crossPoint;
+	long tempLeft,tempRight;
+	//æ±‚xåæ ‡
+	tempLeft = (q2.x - q1.x) * (p1.y - p2.y) - (p2.x - p1.x) * (q1.y - q2.y);
+	tempRight = (p1.y - q1.y) * (p2.x - p1.x) * (q2.x - q1.x) + q1.x * (q2.y - q1.y) * (p2.x - p1.x) - p1.x * (p2.y - p1.y) * (q2.x - q1.x);
+	crossPoint.x =(int)( (double)tempRight / (double)tempLeft );
+	//æ±‚yåæ ‡
+	tempLeft = (p1.x - p2.x) * (q2.y - q1.y) - (p2.y - p1.y) * (q1.x - q2.x);
+	tempRight = p2.y * (p1.x - p2.x) * (q2.y - q1.y) + (q2.x- p2.x) * (q2.y - q1.y) * (p1.y - p2.y) - q2.y * (q1.x - q2.x) * (p2.y - p1.y);
+	crossPoint.y =(int)( (double)tempRight / (double)tempLeft );
+	return crossPoint;
 } 
 const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);

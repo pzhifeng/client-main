@@ -2,8 +2,19 @@
 #define __client_main__SenceHome__
 
 #include "cocos2d.h"
-#include "../VoObject.h"
 #include "../core/LayerUI.h"
+
+//大地图，有UI头 UI尾
+struct VoHome:VoObject {
+    VoHead * head;
+    cocos2d::CCArray finishGates;
+};
+
+//已完成关卡及评分
+struct VoFinish:VoObject {
+    int * id;
+    int * score;
+};
 
 class SceneHome : public LayerUI
 {

@@ -7,6 +7,7 @@
 
 using namespace cocos2d;
 
+//======CommandCheck======
 class CommandCheck :public Command
 {
 public:
@@ -18,6 +19,7 @@ public:
     VoObject* parse(const char *data);
 };
 
+//======CommandServer======
 class CommandServer :public Command
 {
 public:
@@ -28,15 +30,7 @@ public:
     VoObject* parse(const char *data);
 };
 
-class CommandTest :public Command
-{
-public:
-    static int Head;
-public:
-    LayerUI* success(VoObject* vo);
-    void fail(int code,VoObject* vo);
-    VoObject* parse(const char *data);
-};
+
 
 
 

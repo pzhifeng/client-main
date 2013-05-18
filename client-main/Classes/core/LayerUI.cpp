@@ -25,6 +25,14 @@ void LayerUI::refresh(){
     }
 }
 
+void LayerUI::addHead(){
+    
+}
+
+void LayerUI::addFoot(){
+    
+}
+
 //添加一个组件
 cocos2d::CCLabelTTF* LayerUI::addLable(const char *title, const char *fontName, float fontSize,void* key){
     cocos2d::CCLabelTTF* pLabel = cocos2d::CCLabelTTF::create(title, fontName, fontSize);
