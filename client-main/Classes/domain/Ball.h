@@ -12,7 +12,8 @@ public :
 	int m_color;//1=ºì£¬2=»Æ£¬3=À¶
 	int m_moveToPosIndex;
 	bool m_moving;
-
+	bool m_isPause;
+	bool m_isStop;
 public:
 	Ball(void);
 	~Ball(void);
@@ -25,6 +26,6 @@ public:
 	void stop();
 private:
 	void runMoveAction();
-	void runMoveActionFinish();
+	//void runMoveActionFinish();
 };
 

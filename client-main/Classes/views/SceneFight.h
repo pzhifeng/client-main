@@ -6,7 +6,8 @@
 #include "../core/LayerUI.h"
 #include "../domain/Ball.h"
 
-#define INDEX_DISTANCE 5
+//#define _distanceOfBall 34
+#define _indexDistanceOfBall 8
 #define _color CCRANDOM_0_1()*4+1
 
 class SceneFight :public LayerUI
@@ -37,9 +38,11 @@ public:
 	void addPushBall();//炮台增加发射球
 	void pushBall(float interval,CCPoint pos);//发射
 	void pushBallFinish();//发射完成
-	void ballExplosion(CCPoint pt);//爆炸特效
-	bool ballBack(int hitIndex);//回退
-	bool ballBackMove(int start,int end);//回退时移动
+	void explosionBall(CCPoint pt);//爆炸特效
+	bool backBall(int hitIndex);//回退
+	bool backBallMove(int start,int end);//回退时移动
+	void goAll();//移动所有
+	void stopAll();//停止所有
 	void removeBallFromUI(int removeStart,int removeEnd);//从界面删除球
 	void removeBallFromArray(int removeStart,int removeEnd);//从球数组删除
 	bool isMoving();//判断是否有球正在移动
