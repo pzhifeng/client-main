@@ -5,7 +5,8 @@
 #include "../core/LayerUI.h"
 #include "../domain/Ball.h"
 
-#define INDEX_DISTANCE 5
+//#define _distanceOfBall 34
+#define _indexDistanceOfBall 8
 #define _color CCRANDOM_0_1()*4+1
 
 //开战请求，获取NPC数据
@@ -14,7 +15,7 @@ struct VoFight:VoObject {
     int * npc;
 };
 
-//战斗结束，获取战报
+//战斗结束，获取战�?
 struct VoReport:VoObject {
     int * id;
     int * score;
@@ -48,25 +49,27 @@ public:
 	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
 
 	Ball * getBall();
-	void addPushBall();//≈⁄Ã®‘ˆº”∑¢…‰«Ú
-	void pushBall(float interval,CCPoint pos);//∑¢…‰
-	void pushBallFinish();//∑¢…‰ÕÍ≥…
-	void ballExplosion(CCPoint pt);//±¨’®Ãÿ–ß
-	bool ballBack(int hitIndex);//ªÿÕÀ
-	bool ballBackMove(int start,int end);//ªÿÕÀ ±“∆∂Ø
-	void removeBallFromUI(int removeStart,int removeEnd);//¥”ΩÁ√Ê…æ≥˝«Ú
-	void removeBallFromArray(int removeStart,int removeEnd);//¥”«Ú ˝◊È…æ≥˝
-	bool isMoving();//≈–∂œ «∑Ò”–«Ú’˝‘⁄“∆∂Ø
+	void addPushBall();//��̨���ӷ�����
+	void pushBall(float interval,CCPoint pos);//����
+	void pushBallFinish();//�������
+	void explosionBall(CCPoint pt);//��ը��Ч
+	bool backBall(int hitIndex);//����
+	bool backBallMove(int start,int end);//����ʱ�ƶ�
+	void goAll();//�ƶ�����
+	void stopAll();//ֹͣ����
+	void removeBallFromUI(int removeStart,int removeEnd);//�ӽ���ɾ����
+	void removeBallFromArray(int removeStart,int removeEnd);//��������ɾ��
+	bool isMoving();//�ж��Ƿ����������ƶ�
 
-	void initWayPoint();//≥ı ºªØµÿÕº
-	void insertBall();//≤Â»Î«ÚµΩπÏµ¿
-	void insertBallFinish();//≤Â»Î«ÚµΩπÏµ¿ÕÍ≥…
-	void createBallTask(float dt);//¥¥Ω®«Ú∂® ±∆˜
-	void removeBallTask(float dt);//“∆≥˝«Ú∂® ±∆˜
+	void initWayPoint();//��ʼ����ͼ
+	void insertBall();//�����򵽹��
+	void insertBallFinish();//�����򵽹�����
+	void createBallTask(float dt);//������ʱ��
+	void removeBallTask(float dt);//�Ƴ���ʱ��
 
 	const char * getColor(int colorType);
-	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//º∆À„«Ú «∑Ò≈ˆ◊≤
-	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//≈ˆ◊≤µƒΩπµ„
+	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//º∆À„«Ú «∑Ò≈ˆ◊�?
+	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//≈ˆ◊≤µƒΩπµ�?
 };
 #endif
 
