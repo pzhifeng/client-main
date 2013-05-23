@@ -2,8 +2,16 @@
 #define __MAIN_SCENE_H__
 
 #include "cocos2d.h"
-#include "VoObject.h"
 #include "core/LayerUI.h"
+#include "views/UIServer.h"
+
+
+//首次可交互页
+struct VoMain:VoObject {
+    long * uid;
+    VoServer * server;
+};
+
 
 class SceneMain : public LayerUI
 {

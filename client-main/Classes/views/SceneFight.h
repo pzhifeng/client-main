@@ -2,13 +2,27 @@
 #define __SCENE_FIGHT_H_
 
 #include "cocos2d.h"
-#include "../VoObject.h"
 #include "../core/LayerUI.h"
 #include "../domain/Ball.h"
 
 //#define _distanceOfBall 34
 #define _indexDistanceOfBall 8
 #define _color CCRANDOM_0_1()*4+1
+
+//å¼€æˆ˜è¯·æ±‚ï¼Œè·å–NPCæ•°æ®
+struct VoFight:VoObject {
+    int * id;
+    int * npc;
+};
+
+//æˆ˜æ–—ç»“æŸï¼Œè·å–æˆ˜æŠ?
+struct VoReport:VoObject {
+    int * id;
+    int * score;
+    int * coin;
+    int * exp;
+    int * propertyId;
+};
 
 class SceneFight :public LayerUI
 {
@@ -18,9 +32,9 @@ public:
 	CCPointArray  * m_wayPoint;
 	CCAction *m_pushBallAction;
 public:
-	static LayerUI* scene(VoHome* vo);
+	static LayerUI* scene(VoFight* vo);
 
-	VoHome* vo;
+	VoFight* vo;
 
 	void initLayer();
 
@@ -54,8 +68,8 @@ public:
 	void removeBallTask(float dt);//ÒÆ³ıÇò¶¨Ê±Æ÷
 
 	const char * getColor(int colorType);
-	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//¼ÆËãÇòÊÇ·ñÅö×²
-	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//Åö×²µÄ½¹µã
+	bool IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2);//Âºâˆ†Ã€â€Â«ÃšÂ Â«âˆ‘Ã’â‰ˆË†â—Šâ‰?
+	CCPoint GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2);//â‰ˆË†â—Šâ‰¤ÂµÆ’Î©Ï€Âµâ€?
 };
 #endif
 

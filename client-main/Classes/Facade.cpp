@@ -1,10 +1,10 @@
 #include "Facade.h"
-#include "VoObject.h"
 #include "core/LayerUI.h"
 #include "core/Client.h"
 #include "core/CommandsRegister.h"
 #include "commands/CommandSystem.h"
-#include "commands/CommandCareer.h"
+#include "commands/CommandUser.h"
+#include "commands/CommandFight.h"
 
 bool Facade::IsMock=true;
 char* Facade::Ip="192.168.1.78";
@@ -78,6 +78,6 @@ void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     commands->put(CommandCheck::Head,new CommandCheck());
     commands->put(CommandServer::Head,new CommandServer());
-    commands->put(CommandCareer::Head,new CommandCareer());
-    commands->put(CommandTest::Head,new CommandTest());
+    commands->put(CommandUser::Head,new CommandUser());
+    commands->put(CommandFightPve::Head,new CommandFightPve());
 }

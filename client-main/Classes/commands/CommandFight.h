@@ -1,9 +1,11 @@
-#ifndef __client_main__CommandCareer__
-#define __client_main__CommandCareer__
+#ifndef __client_main__CommandFight__
+#define __client_main__CommandFight__
 
 #include "../core/Command.h"
-#include "../VoObject.h"
-class CommandCareer :public Command
+#include "cocos2d.h"
+
+//======CommandFightPve======
+class CommandFightPve :public Command
 {
 public:
     static int Head;

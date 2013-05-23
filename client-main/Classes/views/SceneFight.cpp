@@ -9,21 +9,21 @@ extern std::vector<std::string> split(const std::string s, char delim);
 int hitBallArrayIndex=-1;
 char insertSide;
 
-LayerUI* SceneFight::scene(VoHome* vo)
+LayerUI* SceneFight::scene(VoFight* vo)
 {
-
+    
 	CCScene *scene = CCScene::create();
-
+    
 	SceneFight *layer = SceneFight::create();
-
+    
 	layer->vo=vo;
-
+    
 	layer->initLayer();
-
+    
 	scene->addChild(layer);
-
+    
 	CCDirector::sharedDirector()->replaceScene(scene);
-
+    
 	return layer;
 }
 
@@ -33,37 +33,34 @@ void SceneFight:: initLayer()
 	{
 		return;
 	}
-
-
+    
+    
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
-		this,
-		menu_selector(SceneFight::back) );
+                                                          "CloseNormal.png",
+                                                          "CloseSelected.png",
+                                                          this,
+                                                          menu_selector(SceneFight::back) );
 	pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
-
-
-	CCLOG("name===%s",vo->name);
-	CCLOG("title===%s",vo->title);
-
+    
+    
 	// create menu, it's an autorelease object
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition( CCPointZero );
 	this->addChild(pMenu, 1);
-
+    
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	//创建地图轨迹
 	m_wayPoint=CCPointArray::create(1000);
 	m_wayPoint->retain();
 	initWayPoint();
-
+    
 	//创建球数组
 	m_balls=CCArray::create();
 	m_balls->retain();
-
+    
 	//创建发射球
 	addPushBall();
-
+    
 	/************************************************************************/
 	/* 定时任务                                                                     */
 	/************************************************************************/
@@ -73,7 +70,7 @@ void SceneFight:: initLayer()
 	//消球
 	CCScheduler *removeBallScheduler = CCDirector::sharedDirector()->getScheduler();
 	removeBallScheduler->scheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this,0.001f,false);
-
+    
 }
 
 void SceneFight::back(CCObject* pSender)
@@ -84,10 +81,10 @@ void SceneFight::back(CCObject* pSender)
 }
 
 void SceneFight::onEnter(){
-	//CCLog("onEnter");  
+	//CCLog("onEnter");
 	CCLayer::onEnter();
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN+1, true);
-	//CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this,0); 
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this,0);
 }
 
 void SceneFight::onExit(){
@@ -103,10 +100,12 @@ bool SceneFight::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
 }
 
 void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
-	//CCLog("ccTouchEnded");  
+	//CCLog("ccTouchEnded");
 	//取得触点位置
+
 	CCPoint touchLocation = pTouch->getLocation();  
 	CCLOG("%f,%f",touchLocation.x,touchLocation.y);
+
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	CCPoint start=m_pushBall->m_sprite->getPosition();
 	CCPoint end=touchLocation;
@@ -126,13 +125,13 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 		Ball*endBall=(Ball*)m_balls->objectAtIndex(i+1);
 		CCPoint startBallPos=m_wayPoint->getControlPointAtIndex(startBall->m_curPosIndex);
 		CCPoint endBallPos=m_wayPoint->getControlPointAtIndex(endBall->m_curPosIndex);
-
+        
 		CCPoint c=CCPointMake(startBallPos.x,startBallPos.y);
 		CCPoint d=CCPointMake(endBallPos.x,endBallPos.y);
-
-		CCPoint pointCross; 
+        
+		CCPoint pointCross;
 		//计算是否碰撞
-		bCross = IsLineSegmentCross(a,b,c,d);  
+		bCross = IsLineSegmentCross(a,b,c,d);
 		if(i==0 && !bCross)
 		{
 			//插入到开头
@@ -140,18 +139,18 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 			endBallPos=m_wayPoint->getControlPointAtIndex(startBall->m_curPosIndex);
 			c=CCPointMake(startBallPos.x,startBallPos.y);
 			d=CCPointMake(endBallPos.x,endBallPos.y);
-			bCross = IsLineSegmentCross(a,b,c,d);  
-			if (bCross) 
+			bCross = IsLineSegmentCross(a,b,c,d);
+			if (bCross)
 			{
 				insertSide='R';
 				hitBallArrayIndex=i;
 				break;
 			}
 		}
-		if (bCross)  
-		{  
+		if (bCross)
+		{
 			//碰撞的焦点
-			pointCross = GetCrossPoint(a,b,c,d);  
+			pointCross = GetCrossPoint(a,b,c,d);
 			float cDistance = ccpDistance(pointCross, c);
 			float dDistance = ccpDistance(pointCross, d);
 			//CCLOG("pointCross===x===%f===y===%f",pointCross.x,pointCross.y);
@@ -166,7 +165,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 				bCross=false;
 			hitBallArrayIndex=i+1;
 			break;
-		}  
+		}
 	}
 	if(!bCross)
 		pushBall(0.3f,tmpPos);
@@ -205,7 +204,7 @@ void SceneFight::pushBall(float interval,CCPoint pos)
 	CCActionInterval*  actionTo = CCMoveTo::create(interval, pos);
 	CCCallFunc * call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::pushBallFinish));
 	m_pushBallAction=CCSequence::actions(actionTo,call,NULL);
-	m_pushBall->m_sprite->runAction(m_pushBallAction);	
+	m_pushBall->m_sprite->runAction(m_pushBallAction);
 }
 /************************************************************************/
 /* 发送完成                                                                    */
@@ -322,7 +321,7 @@ void SceneFight::insertBall()
 		inserting=true;
 		CCMoveTo*  moveTo = CCMoveTo::create(0.3f, hitPos);
 		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
-		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);   
+		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
 		insertBall->m_sprite->runAction(sequenceAction);
 		
 		/*
@@ -402,7 +401,7 @@ void SceneFight::removeBallTask(float dt)
 	//回退
 	bool isBack=backBall(hitBallArrayIndex);
 	if(isBack){return;}
-
+    
 	Ball *hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
 	int removeBegin=-1,removeEnd=-1;
 	//起点
@@ -487,9 +486,11 @@ bool SceneFight::backBallMove(int start,int end)
 	Ball *startBall=(Ball*)m_balls->objectAtIndex(start);
 	Ball *endBall=(Ball*)m_balls->objectAtIndex(end);
 	int indexDistance=startBall->m_curPosIndex-endBall->m_curPosIndex;
+
 	if(indexDistance>_indexDistanceOfBall&& startBall->m_color==endBall->m_color)//&& startBall->m_color==endBall->m_color
 	{	
 		CCLOG("indexDistance===%d",indexDistance);
+
 		isBack=true;
 		//回退之前停止球移动
 		stopAll();
@@ -518,7 +519,7 @@ void SceneFight::removeBallFromUI(int removeStart,int removeEnd)
 		explosionBall(removeBall->m_sprite->getPosition());
 		removeBall->m_sprite->removeFromParentAndCleanup(true);
 	}
-
+    
 }
 /************************************************************************/
 /* 从球数组删除                                                                     */
@@ -591,6 +592,7 @@ void SceneFight::stopAll()
 	}
 }
 
+
 /************************************************************************/
 /* 初始化地图轨迹节点                                                                     */
 /************************************************************************/
@@ -607,7 +609,7 @@ void SceneFight::initWayPoint(){
 			m_wayPoint->addControlPoint(start);
 			break;
 		}
-
+        
 		std::string nextPoint=points[i+1];
 		std::vector<std::string> nextXY=split(nextPoint,nextPattern);
 		CCPoint end=CCPointMake(atof(nextXY[0].c_str()),atof(nextXY[1].c_str()));
@@ -625,7 +627,7 @@ void SceneFight::initWayPoint(){
 				//CCLOG("pos===x===%f===y===%f",tmpPos.x,tmpPos.y);
 				m_wayPoint->addControlPoint(tmpPos);
 			}
-		}	
+		}
 	}
 }
 
@@ -635,16 +637,17 @@ void SceneFight::initWayPoint(){
 void SceneFight::explosionBall(CCPoint pt){
 	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
 	//粒子发射器
-	CCParticleSystem * emitter=CCParticleExplosion::create(); 
+	CCParticleSystem * emitter=CCParticleExplosion::create();
 	//爆炸效果
-	emitter->setPosition(ccp(pt.x,pt.y)); 
-	emitter->setTexture(CCTextureCache::sharedTextureCache()->addImage("CloseNormal.png")); 
+	emitter->setPosition(ccp(pt.x,pt.y));
+	emitter->setTexture(CCTextureCache::sharedTextureCache()->addImage("CloseNormal.png"));
 	emitter->setBlendAdditive(true);
 	emitter->setLife(0.5f);//粒子寿命
 	emitter->setLifeVar(0);
 	emitter->setAutoRemoveOnFinish(true);
 	this->addChild(emitter);
 }
+
 /* 
 判断两条线段是否相交(有交点) 
 */  

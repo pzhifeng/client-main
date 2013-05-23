@@ -2,13 +2,13 @@
 #include "cocos2d.h"
 #include "../SceneMain.h"
 #include "../views/SceneHome.h"
-#include "../views/SceneTest.h"
 #include "../utils/jsoncpp/json.h"
-#include "../VoObject.h"
 #include "../utils/FileUtil.h"
-#include "../views/SceneFight.h"
+
 
 using namespace cocos2d;
+
+//======CommandCheck======
 
 int CommandCheck::Head=99100;
 
@@ -49,11 +49,12 @@ VoObject* CommandCheck::parse(const char *data){
 }
 
 
+//======CommandServer======
+
 int CommandServer::Head=99102;
 
 LayerUI* CommandServer::success(VoObject* vo){
-	//LayerUI *layer = SceneHome::scene((VoHome*)vo);
-	LayerUI *layer = SceneFight::scene((VoHome*)vo);
+	LayerUI *layer = UIServer::scene((VoServer*)vo);
 	
     return layer;
 }
@@ -63,30 +64,13 @@ void CommandServer::fail(int code,VoObject* vo){
 }
 
 VoObject* CommandServer::parse(const char *data){
-    VoHome* vo=new VoHome();
-    vo->name="Hello OOO";
-    vo->title="你好111";
+    VoServer* vo=new VoServer();
+    vo->id=1;
+    vo->name="luan shi ying xiong";
+    vo->domain="s1.gameus.cn";
+    vo->tag="xin";
     return vo;
 }
-
-int CommandTest::Head=99103;
-
-LayerUI* CommandTest::success(VoObject* vo){
-	LayerUI *layer = SceneTest::scene((VoTest*)vo);
-    return layer;
-}
-
-void CommandTest::fail(int code,VoObject* vo){
-	
-}
-
-VoObject* CommandTest::parse(const char *data){
-    VoTest* vo=new VoTest();
-    vo->name="Hello TEST";
-    vo->title="你好TEST";
-    return vo;
-}
-
 
 
 

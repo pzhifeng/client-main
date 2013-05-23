@@ -1,26 +1,26 @@
-#include "CommandCareer.h"
 #include "Facade.h"
 #include "cocos2d.h"
+#include "CommandUser.h"
 #include "../views/SceneHome.h"
 #include "../utils/jsoncpp/json.h"
 
 using namespace cocos2d;
 
-int CommandCareer::Head=10200;
+int CommandUser::Head=10200;
 
-LayerUI* CommandCareer::success(VoObject* vo){
-    VoServer* voServer=(VoServer*)vo;
+LayerUI* CommandUser::success(VoObject* vo){
+    
 	
     
     return  NULL;
 }
 
-void CommandCareer::fail(int code,VoObject* vo){
+void CommandUser::fail(int code,VoObject* vo){
 	
 }
 
-VoObject* CommandCareer::parse(const char *data){
-    VoServer* voServer=new VoServer();
+VoObject* CommandUser::parse(const char *data){
+    VoHome* voServer=new VoHome();
     if(sizeof(data)>0){
         Json::Reader reader;
 		Json::Value value;

@@ -22,28 +22,28 @@ bool SmartRes::init(void)
 }
 
 /************************************************************************/
-/* ÉèÖÃÉè¼Æ·Ö±æÂÊ´óÐ¡                                                                     */
+/* è®¾ç½®è®¾è®¡åˆ†è¾¨çŽ‡å¤§å°                                                                     */
 /************************************************************************/
 void SmartRes::setDesignResolutionSize()
 {
-    // Ä¾ÓÐÕÒµ½ 2.0 ÀïÃæÔõÃ´»ñÈ¡Éè±¸·½Ïò¡£¡£ËùÒÔ¼Ù¶¨ÊÇºáÏòÁË
+    // æœ¨æœ‰æ‰¾åˆ° 2.0 é‡Œé¢æ€Žä¹ˆèŽ·å–è®¾å¤‡æ–¹å‘ã€‚ã€‚æ‰€ä»¥å‡å®šæ˜¯æ¨ªå‘äº†
 	CCDirector* pDirector = CCDirector::sharedDirector();
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-	//µÃµ½ÆÁÄ»µÄÕæÊµ·Ö±æÂÊ´óÐ¡
+	//å¾—åˆ°å±å¹•çš„çœŸå®žåˆ†è¾¨çŽ‡å¤§å°
 	CCSize frameSize= pEGLView->getFrameSize();
 	CCLOG("winSize width: %0.2f, winSize height: %0.2f",frameSize.width, frameSize.height);
-
+    
     m_scale = frameSize.width / resSize.width;
     designSize.width = resSize.width;
     designSize.height = frameSize.height / m_scale;
-	//ÉèÖÃÉè¼Æ·Ö±æÂÊ´óÐ¡
-	//kResolutionNoBorder£º³¬³öÆÁÄ»µÄ²¿·Ö»á±»²Ã¼ô£¬Á½²àÃ»ÓÐºÚ±ß£¬ÆÌÂúÆÁÄ»£¬°´Í¼Æ¬Ô­Ê¼±ÈÀýÏÔÊ¾£¬Í¼Æ¬²»±äÐÎ¡£
-	//kResolutionShowAll£ºÕû¸öÓÎÏ·½çÃæÊÇ¿É¼ûµÄ£¬»á°´Ô­Ê¼±ÈÀý½øÐÐËõ·Å£¬Í¼Æ¬²»±äÐÎ£¬µ«Á½²à¿ÉÄÜ»áÁôÓÐºÚ±ß£¬²»ÆÌÂúÆÁÄ»¡£
-	//kResolutionExactFit£ºÕû¸öÓÎÏ·½çÃæÊÇ¿É¼ûµÄ£¬Í¼Æ¬¿ÉÄÜ»á½øÐÐÀ­Éì»òÕßÑ¹Ëõ´¦Àí£¬ÆÌÂúÆÁÄ»£¬Í¼Æ¬»á±äÐÎ¡£¿ÉÒÔ¸ù¾Ý×Ô¼ºµÄÒªÇóÑ¡Ôñ¡£
-    pEGLView->setDesignResolutionSize(designSize.width, designSize.height, kResolutionNoBorder);
-	//×ÊÔ´±³¾°µÄ¸ß¶ÈÊÊÓ¦Éè¼Æ·Ö±æÂÊ
+	//è®¾ç½®è®¾è®¡åˆ†è¾¨çŽ‡å¤§å°
+	//kResolutionNoBorderï¼šè¶…å‡ºå±å¹•çš„éƒ¨åˆ†ä¼šè¢«è£å‰ªï¼Œä¸¤ä¾§æ²¡æœ‰é»‘è¾¹ï¼Œé“ºæ»¡å±å¹•ï¼ŒæŒ‰å›¾ç‰‡åŽŸå§‹æ¯”ä¾‹æ˜¾ç¤ºï¼Œå›¾ç‰‡ä¸å˜å½¢ã€‚
+	//kResolutionShowAllï¼šæ•´ä¸ªæ¸¸æˆç•Œé¢æ˜¯å¯è§çš„ï¼Œä¼šæŒ‰åŽŸå§‹æ¯”ä¾‹è¿›è¡Œç¼©æ”¾ï¼Œå›¾ç‰‡ä¸å˜å½¢ï¼Œä½†ä¸¤ä¾§å¯èƒ½ä¼šç•™æœ‰é»‘è¾¹ï¼Œä¸é“ºæ»¡å±å¹•ã€‚
+	//kResolutionExactFitï¼šæ•´ä¸ªæ¸¸æˆç•Œé¢æ˜¯å¯è§çš„ï¼Œå›¾ç‰‡å¯èƒ½ä¼šè¿›è¡Œæ‹‰ä¼¸æˆ–è€…åŽ‹ç¼©å¤„ç†ï¼Œé“ºæ»¡å±å¹•ï¼Œå›¾ç‰‡ä¼šå˜å½¢ã€‚å¯ä»¥æ ¹æ®è‡ªå·±çš„è¦æ±‚é€‰æ‹©ã€‚
+    pEGLView->setDesignResolutionSize(designSize.width, designSize.height, kResolutionShowAll);
+	//èµ„æºèƒŒæ™¯çš„é«˜åº¦é€‚åº”è®¾è®¡åˆ†è¾¨çŽ‡
 	pDirector->setContentScaleFactor(resSize.height/designSize.height);
-
+    
     CCLOG("Virtual width: %0.2f, Virtual height: %0.2f, scale: %0.2f",designSize.width, designSize.height, m_scale);
 	
     CCSize winSize = pDirector->getWinSize();

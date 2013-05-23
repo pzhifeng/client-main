@@ -4,9 +4,6 @@
 #include "cocos2d.h"
 #include "LayerUI.h"
 
-struct VoObject{
-    
-};
 
 class Command
 {

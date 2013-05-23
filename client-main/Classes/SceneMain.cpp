@@ -1,6 +1,7 @@
 #include "SceneMain.h"
 #include "Facade.h"
 #include "commands/CommandSystem.h"
+#include "commands/CommandFight.h"
 #include "core/SmartRes.h"
 
 using namespace cocos2d;
@@ -59,22 +60,18 @@ void SceneMain::initLayer()
     CCSprite* bg = CCSprite::create("bg.jpg");
 	bg->setPosition(_center);
 	addChild(bg);
-	
-	//CCSprite* title = CCSprite::create("title.png");
-	//title->setPosition(ccp(_center.x, _center.y + 120));
-	//addChild(title);
-	
-	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
-	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
-	addChild(buttonPlay);
 
-	CCSprite* buttonMore = CCSprite::create("buttonMore.png");
-	buttonMore->setPosition(ccp(_center.x + 180, _bottom + 140));
-	addChild(buttonMore);
+	
+//	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
+//	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
+//	addChild(buttonPlay);
+//
+//	CCSprite* buttonMore = CCSprite::create("buttonMore.png");
+//	buttonMore->setPosition(ccp(_center.x + 180, _bottom + 140));
+//	addChild(buttonMore);
     
     //add menu
     CCMenuItemFont::setFontName("Marker Felt");
-
     CCMenuItemFont::setFontSize(SCALE_FACTOR*60);
     CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create(lgs("首页"),this,menu_selector(SceneMain::start));;
     CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create(lgs("人物"),this,menu_selector(SceneMain::start));
@@ -93,7 +90,7 @@ void SceneMain::initLayer()
 
 void SceneMain::start(CCObject* pSender)
 {
-    Facade::send(CommandServer::Head);
+    Facade::send(CommandFightPve::Head);
 }
 
 void SceneMain::test(CCObject* pSender)
