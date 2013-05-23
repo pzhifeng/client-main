@@ -2,6 +2,7 @@
 #include "core/LayerUI.h"
 #include "core/Client.h"
 #include "core/CommandsRegister.h"
+#include "commands/CommandHead.h"
 #include "commands/CommandSystem.h"
 #include "commands/CommandUser.h"
 #include "commands/CommandFight.h"
@@ -17,11 +18,10 @@ map<string,VoLang> Facade::Langs;
 int Facade::send(int head){
     if(Facade::IsMock){
         CommandsRegister* commands=CommandsRegister::GetInstance();
-        Command* c=commands->get(head);
-		VoObject* vo=c->parse(NULL);
-		LayerUI* LayerUI=c->success(vo);
-        LayerUI->vo=vo;
-		LayerUI->refresh();
+        Command* c=commands->get(head);		
+		LayerUI* layer=c->init();
+        c->parse(layer, NULL);
+        c->success(layer);
         return 1;
     }else{
         Client* client=Client::GetInstance();
@@ -76,8 +76,10 @@ void Facade::release(){
 
 void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
-    commands->put(CommandCheck::Head,new CommandCheck());
-    commands->put(CommandServer::Head,new CommandServer());
-    commands->put(CommandUser::Head,new CommandUser());
-    commands->put(CommandFightPve::Head,new CommandFightPve());
+    commands->put(CommandHead::Check,new CommandCheck());
+    commands->put(CommandHead::Main,new CommandMain());
+    commands->put(CommandHead::Server,new CommandServer());
+    commands->put(CommandHead::Home,new CommandHome());
+    commands->put(CommandHead::User,new CommandUser());
+    commands->put(CommandHead::Pve,new CommandPve());
 }

@@ -75,7 +75,7 @@ void SceneFight:: initLayer()
 
 void SceneFight::back(CCObject* pSender)
 {
-	LayerUI *pScene = SceneMain::scene(NULL,false);
+	LayerUI *pScene = SceneMain::scene();
 }
 
 void SceneFight::onEnter(){
