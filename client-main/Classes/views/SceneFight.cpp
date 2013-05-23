@@ -233,8 +233,8 @@ void SceneFight::createBallTask(float dt){
 			break;
 		}
 	}
-	
-	if(m_balls->count()>0){
+	if(m_balls->count()>0)
+	{
 		Ball *lastBall=(Ball*)m_balls->objectAtIndex(m_balls->count()-1);
 		if(lastBall->m_curPosIndex<=_indexDistanceOfBall)
 			return;
@@ -264,7 +264,8 @@ void SceneFight::createBallTask(float dt){
 /* 插入球到轨道                                                               */
 /************************************************************************/
 bool inserting=false;
-void SceneFight::insertBall(){
+void SceneFight::insertBall()
+{
 	if(hitBallArrayIndex>=0){
 		CCSize s = CCDirector::sharedDirector()->getWinSize();
 		//撞击点位置索引
@@ -458,7 +459,8 @@ void SceneFight::removeBallTask(float dt)
 /************************************************************************/
 /* 回退                                                                    */
 /************************************************************************/
-bool SceneFight::backBall(int hitIndex){
+bool SceneFight::backBall(int hitIndex)
+{
 	bool isBack=false;
 	int start=hitIndex-1,end=hitIndex;//停靠在右边
 	if(start<0)
