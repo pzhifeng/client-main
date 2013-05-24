@@ -11,26 +11,38 @@ using namespace cocos2d;
 class CommandCheck :public Command
 {
 public:
-    static int Head;
 	MyHttpRequest *myHttpRequest;
 public:
-    LayerUI* success(VoObject* vo);
-    void fail(int code,VoObject* vo);
-    VoObject* parse(const char *data);
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);
+};
+
+//======CommandMain======
+class CommandMain :public Command
+{
+public:
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);
 };
 
 //======CommandServer======
 class CommandServer :public Command
 {
 public:
-    static int Head;
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);};
+
+//======CommandHome======
+class CommandHome :public Command
+{
 public:
-    LayerUI* success(VoObject* vo);
-    void fail(int code,VoObject* vo);
-    VoObject* parse(const char *data);
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);
 };
-
-
 
 
 
