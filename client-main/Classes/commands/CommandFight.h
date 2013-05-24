@@ -4,13 +4,15 @@
 #include "../core/Command.h"
 #include "cocos2d.h"
 
-//======CommandPve======
-class CommandPve :public Command
+//======CommandFightPve======
+class CommandFightPve :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    static int Head;
+public:
+    LayerUI* success(VoObject* vo);
+    void fail(int code,VoObject* vo);
+    VoObject* parse(const char *data);
 };
 
 #endif 

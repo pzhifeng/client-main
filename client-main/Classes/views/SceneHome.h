@@ -16,60 +16,19 @@ struct VoFinish:VoObject {
     int * score;
 };
 
-class SceneHome :
-  public LayerUI
-, public cocos2d::extension::CCBMemberVariableAssigner
-, public cocos2d::extension::CCBSelectorResolver
+class SceneHome : public LayerUI
 {
     
 public:
+    static LayerUI* scene(VoHome* vo);
     
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(SceneHome, create);
-    bool init();
+    VoHome* vo;
     
-    virtual bool onAssignCCBMemberVariable(CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
-    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+    void initLayer();
 
-    void onGate1(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+    void back(CCObject* pSender);
+
+    CREATE_FUNC(SceneHome);
 };
-
-class SceneHomeLoader : public cocos2d::extension::CCLayerLoader
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(SceneHomeLoader, loader);
-protected:
-    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(SceneHome);
-};
-
-//=========SceneMap===========
-
-//class SceneMap :
-//public LayerUI
-//, public cocos2d::extension::CCBMemberVariableAssigner
-//, public cocos2d::extension::CCBSelectorResolver
-//{
-//    
-//public:
-//    
-//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(SceneMap, create);
-//    
-//    virtual bool onAssignCCBMemberVariable(CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
-//    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-//    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-//    
-//    
-//    void onGate1(cocos2d::CCObject *pSender);
-//    
-//};
-//
-//class SceneMapLoader : public cocos2d::extension::CCLayerLoader
-//{
-//public:
-//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(SceneMapLoader, loader);
-//protected:
-//    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(SceneMap);
-//};
-
 
 #endif 

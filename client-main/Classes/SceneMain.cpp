@@ -1,88 +1,108 @@
 #include "SceneMain.h"
 #include "Facade.h"
-#include "views/SceneHome.h"
-#include "commands/CommandHead.h"
+#include "commands/CommandSystem.h"
+#include "commands/CommandFight.h"
+#include "core/SmartRes.h"
 
+using namespace cocos2d;
 
-USING_NS_CC;
-USING_NS_CC_EXT;
-
-SceneMain::SceneMain()
-: version(NULL)
-, server(NULL)
-{}
-
-SceneMain::~SceneMain()
+LayerUI* SceneMain::scene(VoMain* vo,bool isFisrt)
 {
-    CC_SAFE_RELEASE(version);
-    CC_SAFE_RELEASE(server);
-}
-
-LayerUI* SceneMain::scene()
-{
+    
     CCScene *scene = CCScene::create();
     
-    CCNodeLoaderLibrary *lib = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+    SceneMain *layer = SceneMain::create();
     
-    lib->registerCCNodeLoader("SceneMain", SceneMainLoader::loader());
+    layer->vo=vo;
     
-    CCBReader *reader = new CCBReader(lib);
+    layer->initLayer();
     
-    CCNode *node = reader->readNodeGraphFromFile("SceneMain.ccbi", scene);
-    
-    reader->release();
-    
-    if (node!=NULL)
-    {
-        scene->addChild(node);
-    }
-    
-    
-    if(NULL==CCDirector::sharedDirector()->getRunningScene()){
+    scene->addChild(layer);
+
+    if(isFisrt){
         CCDirector::sharedDirector()->runWithScene(scene);
     }else{
         CCDirector::sharedDirector()->replaceScene(scene);
     }
     
     
-    return (LayerUI*)node;
+    return layer;
 }
 
-bool SceneMain::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
+
+void SceneMain::initLayer()
 {
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "version", CCLabelTTF*, this->version);
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "server", CCLabelTTF*, this->server);
+    if ( !CCLayer::init() )
+    {
+        return ;
+    }
+
+
+    CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
+                                        "CloseNormal.png",
+                                        "CloseSelected.png",
+                                        this,
+                                        menu_selector(SceneMain::exit) );
+    pCloseItem->setPosition(ccp(_right-30,_bottom+30));
+
+    // create menu, it's an autorelease object
+    CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
+    pMenu->setPosition( CCPointZero );
+    this->addChild(pMenu, 1);
+
+    //add title
+    CCLabelTTF* pLabel = CCLabelTTF::create(lgs("game name"), "Thonburi", SCALE_FACTOR*60);
+    pLabel->setPosition(ccp(_center.x, _top-100));
+    this->addChild(pLabel, 1);
+	CCLOG("SCALE_FACTOR===%f",SCALE_FACTOR);
+	
+    // add  screen bg
+    CCSprite* bg = CCSprite::create("bg.jpg");
+	bg->setPosition(_center);
+	addChild(bg);
+
+	
+//	CCSprite* buttonPlay = CCSprite::create("buttonPlay.png");
+//	buttonPlay->setPosition(ccp(_center.x - 180, _bottom + 140));
+//	addChild(buttonPlay);
+//
+//	CCSprite* buttonMore = CCSprite::create("buttonMore.png");
+//	buttonMore->setPosition(ccp(_center.x + 180, _bottom + 140));
+//	addChild(buttonMore);
     
-    return false;
+    //add menu
+    CCMenuItemFont::setFontName("Marker Felt");
+    CCMenuItemFont::setFontSize(SCALE_FACTOR*60);
+    CCMenuItemFont* pFontMenuItem1 = CCMenuItemFont::create(lgs("首页"),this,menu_selector(SceneMain::start));;
+    CCMenuItemFont* pFontMenuItem2 = CCMenuItemFont::create(lgs("人物"),this,menu_selector(SceneMain::start));
+    pFontMenuItem2->setPositionY(-100);
+    CCMenuItemFont* pFontMenuItem3 = CCMenuItemFont::create(lgs("装备"),this,menu_selector(SceneMain::test));
+    pFontMenuItem3->setPositionY(-200);
+
+    CCMenu* pFontMenu = CCMenu::create(pFontMenuItem1,pFontMenuItem2,pFontMenuItem3,NULL); 
+	pFontMenu->setPosition(ccp(_center.x, _top-300)); 
+
+    this->addChild(pFontMenu);
+
 }
 
-SEL_MenuHandler SceneMain::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
+
+
+void SceneMain::start(CCObject* pSender)
 {
-    return NULL;
+    Facade::send(CommandFightPve::Head);
 }
 
-SEL_CCControlHandler SceneMain::onResolveCCBCCControlSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
+void SceneMain::test(CCObject* pSender)
 {
-    CCB_SELECTORRESOLVER_CCCONTROL_GLUE(this, "onStart", SceneMain::onStart);
-    
-    return NULL;
-}
-
-void SceneMain::onNodeLoaded(cocos2d::CCNode *pNode, cocos2d::extension::CCNodeLoader *pNodeLoader)
-{
-    //this->mLabelText->setString("All Loaded");
+    Facade::send(CommandCheck::Head);
 }
 
 
-void SceneMain::onStart(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
-{
-    Facade::send(CommandHead::Home);
-}
-
-
-void SceneMain::onExit(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
+void SceneMain::exit(CCObject* pSender)
 {
     CCDirector::sharedDirector()->end();
+    
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);

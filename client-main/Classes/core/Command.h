@@ -12,10 +12,9 @@ public:
 	Command(void){};
 	~Command(void){};
     
-    virtual LayerUI* init()= 0;
-    virtual void parse(LayerUI* layer,const char *data)=0;
-	virtual void success(LayerUI* layer)= 0;
-    
+	virtual LayerUI* success(VoObject* vo)= 0;
+	virtual void fail(int code,VoObject* vo)= 0;
+    virtual VoObject* parse(const char *data)=0;
 };
 
 

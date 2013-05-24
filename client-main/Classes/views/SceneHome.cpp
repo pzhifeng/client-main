@@ -1,62 +1,38 @@
-#include "cocos-ext.h"
-#include "Facade.h"
 #include "SceneHome.h"
 #include "../SceneMain.h"
-#include "../commands/CommandHead.h"
+#include "Facade.h"
+using namespace cocos2d;
 
-USING_NS_CC;
-USING_NS_CC_EXT;
-
-
-bool SceneHome::init(){
-    if ( !CCLayer::init() ){
-        return false;
-    }
-    //todo初始化大地图
+LayerUI* SceneHome::scene(VoHome* vo)
+{
     
-    return true;
+    CCScene *scene = CCScene::create();
+
+    SceneHome *layer = SceneHome::create();
+    
+    layer->vo=vo;
+    
+    layer->initLayer();
+
+    scene->addChild(layer);
+    
+    CCDirector::sharedDirector()->replaceScene(scene);
+    
+    return layer;
 }
 
-bool SceneHome::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
+void SceneHome:: initLayer()
 {
-    return false;
+    if ( !CCLayer::init() )
+    {
+        return;
+    }
+    
+
+
 }
 
-SEL_MenuHandler SceneHome::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
+void SceneHome::back(CCObject* pSender)
 {
-    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "onGate1", SceneHome::onGate1);
-    return NULL;
+    LayerUI *pScene = SceneMain::scene(NULL,false);
 }
-
-SEL_CCControlHandler SceneHome::onResolveCCBCCControlSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
-{
-
-    return NULL;
-}
-
-void SceneHome::onGate1(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
-{
-    Facade::send(CommandHead::Pve);
-    CCLOG("%s","onGate1");
-}
-
-
-//SEL_MenuHandler SceneMap::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
-//{
-//    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "onGate1", SceneMap::onGate1);
-//    return NULL;
-//}
-//
-//SEL_MenuHandler SceneMap::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
-//{
-//    CCB_SELECTORRESOLVER_CCMENUITEM_GLUE(this, "onGate1", SceneMap::onGate1);
-//    return NULL;
-//}
-//
-//void SceneMap::onGate1(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
-//{
-//    Facade::send(CommandHead::Pve);
-//    CCLOG("%s","onGate1");
-//}
-
-

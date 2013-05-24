@@ -100,14 +100,15 @@ void Client::excuteCommand(){
                 if("null\n"==m){
                     m="";
                 }
-                LayerUI* layer=command->init();
-                command->parse(layer, m.c_str());
+                VoObject* vo=command->parse(m.c_str());
                 if(code==0){
-                    command->success(layer);
+                    LayerUI* LayerUI=command->success(vo);
+                    LayerUI->refresh();
                 }else{
-                    layer->exception(code,m.c_str());
+                    command->fail(code,vo);
                     CCLOG("FAIL|%d  %s",code,m.c_str());
                 }
+                delete vo;
             }
         }
         

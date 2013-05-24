@@ -6,34 +6,33 @@
 
 using namespace cocos2d;
 
-LayerUI* CommandUser::init(){
-    return NULL;
+int CommandUser::Head=10200;
+
+LayerUI* CommandUser::success(VoObject* vo){
+    
+	
+    
+    return  NULL;
 }
 
-
-void CommandUser::parse(LayerUI* layer,const char *data){
-        
-}
-
-void CommandUser::success(LayerUI* layer){
+void CommandUser::fail(int code,VoObject* vo){
 	
 }
 
-
-//VoObject* CommandUser::parse(const char *data){
-//    VoHome* voServer=new VoHome();
-//    if(sizeof(data)>0){
-//        Json::Reader reader;
-//		Json::Value value;
-//        if(reader.parse(data, value)){
-//            //voServer->name=value["domain"].asString();
-//            //voServer->id=value["id"].asInt();
-//            
-//        }
-//    }
-//    
-//    
-//    return voServer;
-//}
+VoObject* CommandUser::parse(const char *data){
+    VoHome* voServer=new VoHome();
+    if(sizeof(data)>0){
+        Json::Reader reader;
+		Json::Value value;
+        if(reader.parse(data, value)){
+            //voServer->name=value["domain"].asString();
+            //voServer->id=value["id"].asInt();
+            
+        }
+    }
+    
+    
+    return voServer;
+}
 
 

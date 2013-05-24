@@ -1,51 +1,37 @@
 #ifndef __MAIN_SCENE_H__
 #define __MAIN_SCENE_H__
 
-#include "cocos-ext.h"
 #include "cocos2d.h"
-#include "LayerUI.h"
+#include "core/LayerUI.h"
+#include "views/UIServer.h"
 
 
 //首次可交互页
 struct VoMain:VoObject {
     long * uid;
-
+    VoServer * server;
 };
 
 
-class SceneMain
-: public LayerUI
-, public cocos2d::extension::CCBMemberVariableAssigner
-, public cocos2d::extension::CCBSelectorResolver
-, public cocos2d::extension::CCNodeLoaderListener
+class SceneMain : public LayerUI
 {
 public:
-    SceneMain();
-    ~SceneMain();
+
+    static LayerUI* scene(VoMain* vo,bool isFirst);
     
-    static LayerUI* scene();
+    VoMain* vo;
     
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(SceneMain, create);
+    void initLayer();
     
-    virtual bool onAssignCCBMemberVariable(CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
-    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    virtual void onNodeLoaded(CCNode * pNode, cocos2d::extension::CCNodeLoader * pNodeLoader);
+    void initGame();
     
-    void onStart(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void onExit(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-   private:
-    cocos2d::CCLabelTTF *version;
-    cocos2d::CCLabelTTF *server;
+    void start(CCObject* pSender);
+    
+    void test(CCObject* pSender);
+    
+    void exit(CCObject* pSender);
+
+    CREATE_FUNC(SceneMain);
 };
 
-
-class SceneMainLoader : public cocos2d::extension::CCLayerLoader
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(SceneMainLoader, loader);
-protected:
-    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(SceneMain);
-};
-
-#endif
+#endif 
