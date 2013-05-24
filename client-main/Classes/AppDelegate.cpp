@@ -1,12 +1,12 @@
 #include "AppDelegate.h"
 
 #include "cocos2d.h"
+#include "Facade.h"
+#include "VoConfig.h"
 #include "SceneMain.h"
 #include "core/Client.h"
-#include "Facade.h"
-#include "commands/CommandSystem.h"
+#include "commands/CommandHead.h"
 #include "utils/FileUtil.h"
-#include "VoConfig.h"
 #include "core/SmartRes.h"
 
 USING_NS_CC;
@@ -30,15 +30,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCEGLView *pEGLView = CCEGLView::sharedOpenGLView();  
     pDirector->setOpenGLView(pEGLView);
 
-	
-	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
-
     //pDirector->setDisplayStats(true);
     //pDirector->setAnimationInterval(1.0 / 60);
 
 	initGame();
 
-    LayerUI *layerUI = SceneMain::scene(NULL,true);
+    Facade::send(CommandHead::Main);
+    
 
     return true;
 }
@@ -70,7 +68,7 @@ void AppDelegate::initGame(){
 		if(b){
 			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(SEL_SCHEDULE(&AppDelegate::excuteCommand), pObj, 0.01f, false);
 			client->setConfig("18602122551", "PASSPORT");
-			Facade::send(CommandCheck::Head,Facade::Version);
+			Facade::send(CommandHead::Check,Facade::Version);
 		}
 	}
     

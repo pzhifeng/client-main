@@ -1,21 +1,17 @@
 #include "CommandFight.h"
 #include "../views/SceneFight.h"
 
-//======CommandFightPve======
+//======CommandPve======
 
-int CommandFightPve::Head=20100;
-
-LayerUI* CommandFightPve::success(VoObject* vo){
-	LayerUI *layer = SceneFight::scene((VoFight*)vo);
-	
-    return layer;
+LayerUI* CommandPve::init(){
+    return SceneFight::scene(NULL);
 }
 
-void CommandFightPve::fail(int code,VoObject* vo){
-	
+
+void CommandPve::parse(LayerUI* layer,const char *data){
+    
 }
 
-VoObject* CommandFightPve::parse(const char *data){
-    VoFight* vo=new VoFight();
-    return vo;
+void CommandPve::success(LayerUI* layer){
+	
 }

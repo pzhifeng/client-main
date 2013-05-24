@@ -75,7 +75,7 @@ void SceneFight:: initLayer()
 
 void SceneFight::back(CCObject* pSender)
 {
-	LayerUI *pScene = SceneMain::scene(NULL,false);
+	LayerUI *pScene = SceneMain::scene();
 	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&SceneFight::createBallTask),this);
 	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this);
 }
@@ -167,13 +167,9 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 			break;
 		}
 	}
-	/*
 	if(!bCross)
 		pushBall(0.3f,tmpPos);
 	else
-		insertBall();
-		*/
-	if(bCross)
 		insertBall();
 }
 
@@ -311,9 +307,9 @@ void SceneFight::insertBall()
 		}
 		m_balls->insertObject(insertBall,hitBallArrayIndex);
 		//插入位置
-		insertBall->m_sprite->setOpacity(0);
-		insertBall->m_sprite->setPosition(hitPos);
-		//insertBall->m_sprite->setPosition(m_pushBall->m_sprite->getPosition());
+		//insertBall->m_sprite->setOpacity(0);
+		//insertBall->m_sprite->setPosition(hitPos);
+		insertBall->m_sprite->setPosition(m_pushBall->m_sprite->getPosition());
 		//撞击点前面的球向前移动
 		for(int i=0;i<hitBallArrayIndex;i++){
 			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
@@ -322,17 +318,24 @@ void SceneFight::insertBall()
 		}
 		
 		//新增球移动到轨道上
-		/*
 		inserting=true;
 		CCMoveTo*  moveTo = CCMoveTo::create(0.3f, hitPos);
 		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
 		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
 		insertBall->m_sprite->runAction(sequenceAction);
+		
+		/*
+		for(int i=0;i<m_balls->count();i++){
+			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
+			//moveBall->go();
+		}
 		*/
-		
-		CCActionInterval*  insertAction = CCFadeIn::create(0.5f);
+		/*
+		CCActionInterval*  insertAction = CCFadeIn::create(1.0f);
 		insertBall->m_sprite->runAction(insertAction);
-		
+		*/
+		//insertBall->go();
+
 		addChild(insertBall->m_sprite);
 		//清除发送球
 		this->pushBallFinish();
