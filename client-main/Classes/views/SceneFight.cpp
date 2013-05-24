@@ -329,7 +329,7 @@ void SceneFight::insertBall()
 		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
 		insertBall->m_sprite->runAction(sequenceAction);
 		*/
-		
+		//
 		CCActionInterval*  insertAction = CCFadeIn::create(0.5f);
 		insertBall->m_sprite->runAction(insertAction);
 		
