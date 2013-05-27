@@ -60,6 +60,8 @@ void AppDelegate::initGame(){
     
 	pObj=new CCObject();
     
+    //cocos2d::extension::CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary()->registerCCNodeLoader("LayerUI",LayerUILoader::loader());
+    
 	Facade::registerCommands();
     
 	if(!Facade::IsMock){

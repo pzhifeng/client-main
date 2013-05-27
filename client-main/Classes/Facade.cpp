@@ -5,6 +5,8 @@
 #include "commands/CommandHead.h"
 #include "commands/CommandSystem.h"
 #include "commands/CommandUser.h"
+#include "commands/CommandHome.h"
+#include "commands/CommandSkill.h"
 #include "commands/CommandFight.h"
 
 bool Facade::IsMock=true;
@@ -79,7 +81,13 @@ void Facade::registerCommands(){
     commands->put(CommandHead::Check,new CommandCheck());
     commands->put(CommandHead::Main,new CommandMain());
     commands->put(CommandHead::Server,new CommandServer());
-    commands->put(CommandHead::Home,new CommandHome());
+    
     commands->put(CommandHead::User,new CommandUser());
-    commands->put(CommandHead::Pve,new CommandPve());
+    commands->put(CommandHead::UserName,new CommandUserName());
+    
+    commands->put(CommandHead::Home,new CommandHome());
+    commands->put(CommandHead::HomeGate,new CommandHomeGate());
+    commands->put(CommandHead::HomePve,new CommandHomePve());
+    
+    commands->put(CommandHead::Skill,new CommandSkill());
 }

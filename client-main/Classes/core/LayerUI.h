@@ -26,80 +26,88 @@ struct VoFoot:VoObject{
     
 };
 
+//=========Header======
+//class Header
+//: public cocos2d::CCLayer
+//, public cocos2d::extension::CCBMemberVariableAssigner
+//{
+//public:
+//    //cocos2d::CCLabelTTF *title;
+//public:
+//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(Header, create);
+//    
+//    virtual bool onAssignCCBMemberVariable(cocos2d::CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
+//    //virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+//    //virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+//    
+//    //void onHeader(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+//    
+//    
+//private:
+//    
+//};
+//
+//class HeaderLoader : public cocos2d::extension::CCLayerLoader
+//{
+//public:
+//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(HeaderLoader, loader);
+//protected:
+//    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(Header);
+//};
+//
+//
+////===========Footer======
+//class Footer
+//: public cocos2d::CCLayer
+//, public cocos2d::extension::CCBSelectorResolver
+//{
+//public:
+//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(Footer, create);
+//    
+//    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+//    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+//    
+//    void onMenu(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+//    
+//};
+//
+//class FooterLoader : public cocos2d::extension::CCLayerLoader
+//{
+//public:
+//    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(FooterLoader, loader);
+//protected:
+//    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(Footer);
+//};
+//
+//========LayerUI==============
 
-class LayerUI :public cocos2d::CCLayer
+class LayerUI
+: public cocos2d::CCLayer
 {
-private:
-    
-    std::map<void *,void*> components;
-    
 public:
+    cocos2d::CCLabelTTF *title;
+public:
+    //LayerUI();
+    //~LayerUI();
+    
+    
+    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(LayerUI, create);
+    
+    //页头页尾公共方法
+    void onHeader(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+    void onMenu(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+    
+    //打开全屏窗体
+    static LayerUI* scene(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
+    
+    //打开非全屏的弹层
+    static LayerUI* layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
 
     //非正常场景的统一处理
     void exception(int code,const char *data);
-    
-    //打开非全屏的弹层
-    LayerUI* layer(const char * pCCBFileName, const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
-    
-    //打开全屏的新窗体
-    LayerUI* window(const char * pCCBFileName, const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
 
 };
 
 
-//=========Header======
-class Header
-: public cocos2d::CCLayer
-, public cocos2d::extension::CCBMemberVariableAssigner
-, public cocos2d::extension::CCBSelectorResolver
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(Header, create);
-    
-    virtual bool onAssignCCBMemberVariable(CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
-    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    
-    void onClick(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
- 
-private:
-    cocos2d::CCLabelTTF *name;
-};
-
-class HeaderLoader : public cocos2d::extension::CCLayerLoader
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(HeaderLoader, loader);
-protected:
-    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(Header);
-};
-
-
-//===========Footer======
-class Footer
-: public cocos2d::CCLayer
-, public cocos2d::extension::CCBSelectorResolver
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(Footer, create);
-    
-    virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
-    
-    void menuHome(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void menuSkill(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void menuGod(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void menuArena(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void menuCoin(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-    void menuStore(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-};
-
-class FooterLoader : public cocos2d::extension::CCLayerLoader
-{
-public:
-    CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(FooterLoader, loader);
-protected:
-    CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(Footer);
-};
 
 #endif

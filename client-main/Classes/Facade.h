@@ -19,6 +19,7 @@ public:
 	static map<int,VoEmail> Emails;
     static map<int,VoBall> Balls;
 	static map<string,VoLang> Langs;
+
 public:
     static int send(int head);
     static int send(int head,char* p1);

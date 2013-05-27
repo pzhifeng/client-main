@@ -3,14 +3,7 @@
 
 #include "cocos-ext.h"
 #include "cocos2d.h"
-#include "core/LayerUI.h"
-
-
-//首次可交互页
-struct VoMain:VoObject {
-    long * uid;
-
-};
+#include "LayerUI.h"
 
 
 class SceneMain
@@ -19,6 +12,9 @@ class SceneMain
 , public cocos2d::extension::CCBSelectorResolver
 , public cocos2d::extension::CCNodeLoaderListener
 {
+public:
+    cocos2d::CCLabelTTF *version;
+    cocos2d::CCLabelTTF *server;
 public:
     SceneMain();
     ~SceneMain();
@@ -34,9 +30,7 @@ public:
     
     void onStart(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
     void onExit(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
-   private:
-    cocos2d::CCLabelTTF *version;
-    cocos2d::CCLabelTTF *server;
+
 };
 
 

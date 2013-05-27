@@ -1,12 +1,11 @@
-#include "CommandSystem.h"
 #include "cocos2d.h"
+#include "CommandSystem.h"
 #include "../SceneMain.h"
-#include "../views/SceneHome.h"
 #include "../utils/jsoncpp/json.h"
 #include "../utils/FileUtil.h"
 
-
-using namespace cocos2d;
+USING_NS_CC;
+USING_NS_CC_EXT;
 
 //======CommandCheck======
 
@@ -59,6 +58,9 @@ LayerUI* CommandMain::init(){
 
 void CommandMain::parse(LayerUI* layer,const char *data){
     //SceneMain *scene=(SceneMain*)layer;
+    SceneMain *scene=dynamic_cast<SceneMain*>(layer);
+    scene->version->setString("v1.2.0");
+    scene->server->setString("HelloServer");
     
 }
 
@@ -83,23 +85,8 @@ void CommandServer::success(LayerUI* layer){
 	
 }
 
-//======CommandHome======
-
-LayerUI* CommandHome::init(){
-    SceneHome *layer =SceneHome::create();
-    layer->window("SceneHome.ccbi", "SceneHome", SceneHomeLoader::loader());
-    return layer;
-}
 
 
-void CommandHome::parse(LayerUI* layer,const char *data){
-    SceneHome *home=(SceneHome*)layer;
-    
-}
-
-void CommandHome::success(LayerUI* layer){
-	
-}
 
 
 

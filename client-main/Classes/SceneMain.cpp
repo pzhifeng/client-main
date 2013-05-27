@@ -52,7 +52,6 @@ bool SceneMain::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *
 {
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "version", CCLabelTTF*, this->version);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "server", CCLabelTTF*, this->server);
-    
     return false;
 }
 

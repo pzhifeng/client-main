@@ -4,12 +4,24 @@
 class CommandHead
 {
 public:
-    static int User;
+    //系统模块
     static int Check;
     static int Main;
     static int Server;
+    //角色模块
+    static int User;
+    static int UserName;
+    //功能模块
     static int Home;
-    static int Pve;
-};
+    static int HomeGate;
+    static int HomePve;
+    
+    static int Skill;
+    static int God;
+    static int Coin;
+    static int Arena;
+    static int Store;
+    
+    };
 
 #endif 

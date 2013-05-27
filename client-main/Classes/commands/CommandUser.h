@@ -11,4 +11,12 @@ public:
     void success(LayerUI* layer);
 };
 
+class CommandUserName :public Command
+{
+public:
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);
+};
+
 #endif 

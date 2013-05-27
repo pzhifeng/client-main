@@ -1,25 +1,12 @@
-#ifndef __client_main__CommandServer__
-#define __client_main__CommandServer__
+#ifndef __client_main__CommandHome__
+#define __client_main__CommandHome__
 
 #include "cocos2d.h"
 #include "../core/Command.h"
-#include "../utils/MyHttpRequest.h"
 
-using namespace cocos2d;
 
-//======CommandCheck======
-class CommandCheck :public Command
-{
-public:
-	MyHttpRequest *myHttpRequest;
-public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
-};
-
-//======CommandMain======
-class CommandMain :public Command
+//======CommandHome======
+class CommandHome :public Command
 {
 public:
     LayerUI* init();
@@ -27,8 +14,8 @@ public:
     void success(LayerUI* layer);
 };
 
-//======CommandServer======
-class CommandServer :public Command
+//======CommandHomeGate======
+class CommandHomeGate :public Command
 {
 public:
     LayerUI* init();
@@ -36,7 +23,12 @@ public:
     void success(LayerUI* layer);
 };
 
-
-
-
-#endif
+//======CommandHomePve======
+class CommandHomePve :public Command
+{
+public:
+    LayerUI* init();
+    void parse(LayerUI* layer,const char *data);
+    void success(LayerUI* layer);
+};
+#endif 
