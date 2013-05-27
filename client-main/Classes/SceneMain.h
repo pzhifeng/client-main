@@ -3,7 +3,7 @@
 
 #include "cocos-ext.h"
 #include "cocos2d.h"
-#include "LayerUI.h"
+#include "core/LayerUI.h"
 
 
 //首次可交互页
