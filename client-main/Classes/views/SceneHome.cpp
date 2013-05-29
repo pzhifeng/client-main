@@ -14,6 +14,7 @@ bool SceneHome::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *
 {
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "title", CCLabelTTF*, this->title);
     
+    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "homeMap", CCSprite*, this->homeMap);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "homeGate1", CCMenuItemImage*, this->homeGate1);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "homeGate2", CCMenuItemImage*, this->homeGate2);
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "homeGate3", CCMenuItemImage*, this->homeGate3);
@@ -46,11 +47,58 @@ SEL_CCControlHandler SceneHome::onResolveCCBCCControlSelector(cocos2d::CCObject 
     return NULL;
 }
 
+void SceneHome::onNodeLoaded(cocos2d::CCNode *pNode, cocos2d::extension::CCNodeLoader *pNodeLoader)
+{
+    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this,0,true);
+}
+
 void SceneHome::onHomeGate(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent){
     Facade::send(CommandHead::HomeGate);
 }
 
-//todo 大地图可以拖动
+CCPoint began;
+bool SceneHome::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCLOG("SceneHome ccTouchBegan");
+    CCPoint touchLocation = pTouch->getLocationInView();
+    // 把点的坐标转换成OpenGL坐标（左下角为原点）
+    touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
+    // 把OpenGL的坐标转换成CCLayer的坐标
+    began = convertToNodeSpace(touchLocation);
+    return true;
+}
+
+void SceneHome::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCLOG("SceneHome ccTouchMoved");
+    //获取点在视图中的坐标（左上角为原点）
+    CCPoint touchLocation = pTouch->getLocationInView();
+    // 把点的坐标转换成OpenGL坐标（左下角为原点）
+    touchLocation = CCDirector::sharedDirector()->convertToGL(touchLocation);
+    // 把OpenGL的坐标转换成CCLayer的坐标
+    CCPoint moved = convertToNodeSpace(touchLocation);
+    int x=homeMap->getPositionX()+(moved.x-began.x);
+    int y=homeMap->getPositionY()+(moved.y-began.y);
+    CCSize winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+    if(x<winSize.width-homeMap->getContentSize().width/2){
+        x=winSize.width-homeMap->getContentSize().width/2;
+    }
+    if(x>homeMap->getContentSize().width/2){
+        x=homeMap->getContentSize().width/2;
+    }
+    
+    if(y<winSize.height-homeMap->getContentSize().height/2){
+        y=winSize.height-homeMap->getContentSize().height/2;
+    }
+    if(y>homeMap->getContentSize().height/2){
+        y=homeMap->getContentSize().height/2;
+    }
+
+    homeMap->setPositionX(x);
+    homeMap->setPositionY(y);
+}
+
+void SceneHome::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCLOG("SceneHome ccTouchEnded");
+}
 
 //==========UIHomeGate===============
 bool UIHomeGate::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
@@ -88,9 +136,10 @@ bool UIHomeGate::init(){
 
 bool UIHomeGate::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
     CCLOG("ccTouchBegan");
+    CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this->homePve);
     LayerUI::removeLayer();
     
-    return true;
+    return false;
 }
 
 

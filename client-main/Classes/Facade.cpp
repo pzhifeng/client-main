@@ -19,43 +19,63 @@ map<int,VoServer*> Facade::Servers;
 map<int,VoEmail> Facade::Emails;
 map<string,VoLang> Facade::Langs;
 
+int sendMock(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
+    CCLOG("Send|%d %c %c %c %c %c",head,p1,p2,p3,p4,p5);
+    CommandsRegister* commands=CommandsRegister::GetInstance();
+    Command* c=commands->get(head);
+    LayerUI* layer=c->success(NULL);
+    return 1;
+}
+
 int Facade::send(int head){
-    CCLOG("Send|%d",head);
+    
     if(Facade::IsMock){
-        CommandsRegister* commands=CommandsRegister::GetInstance();
-        Command* c=commands->get(head);		
-		LayerUI* layer=c->success(NULL);
-        return 1;
+        return sendMock(head,NULL,NULL,NULL,NULL,NULL);
     }else{
         Client* client=Client::GetInstance();
         return client->send(head);
     }
-    
 };
 int Facade::send(int head,char* p1){
-    Client* client=Client::GetInstance();
-    return client->send(head,p1);
+    if(Facade::IsMock){
+        return sendMock(head,p1,NULL,NULL,NULL,NULL);
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head,p1);
+    }
 
 };
 int Facade::send(int head,char* p1,char* p2){
-    Client* client=Client::GetInstance();
-    return client->send(head,p1,p2);
-
+    if(Facade::IsMock){
+        return sendMock(head,p1,p2,NULL,NULL,NULL);
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head,p1,p2);
+    }
 };
 int Facade::send(int head,char* p1,char* p2,char* p3){
-    Client* client=Client::GetInstance();
-    return client->send(head,p1,p2,p3);
-
+    if(Facade::IsMock){
+        return sendMock(head,p1,p2,p3,NULL,NULL);
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head,p1,p2,p3);
+    }
 };
 int Facade::send(int head,char* p1,char* p2,char* p3,char* p4){
-    Client* client=Client::GetInstance();
-    return client->send(head,p1,p2,p3,p4);
-
+    if(Facade::IsMock){
+        return sendMock(head,p1,p2,p3,p4,NULL);
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head,p1,p2,p3,p4);
+    }
 };
 int Facade::send(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
-    Client* client=Client::GetInstance();
-    return client->send(head,p1,p2,p3,p4,p5);
-
+    if(Facade::IsMock){
+        return sendMock(head,p1,p2,p3,p4,p5);
+    }else{
+        Client* client=Client::GetInstance();
+        return client->send(head,p1,p2,p3,p4,p5);
+    }
 };
 
 Command* Facade::get(int head){

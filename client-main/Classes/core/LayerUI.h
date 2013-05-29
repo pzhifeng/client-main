@@ -11,14 +11,14 @@ struct VoObject{
 //UI头
 struct VoHead:VoObject{
     char * image;//头衔头像
-    int * lv;
-    int * exp;
-    int * expMax;
-    int * power;
-    int * powerMax;
-    int * leftSeconds;
-    int * coin;
-    int * money;
+    int lv;
+    int exp;
+    int expMax;
+    int power;
+    int powerMax;
+    int leftSeconds;
+    int coin;
+    int money;
 };
 
 //UI尾，功能的开放等级
@@ -105,7 +105,7 @@ public:
     //打开非全屏的弹层
     static LayerUI* layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
     
-    static cocos2d::CCScene* removeLayer();
+    static void removeLayer();
 
     //非正常场景的统一处理
     static void exception(int code,const char *data);

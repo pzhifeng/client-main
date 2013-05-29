@@ -55,7 +55,9 @@ LayerUI* LayerUI::scene(const char * pCCNodeName, cocos2d::extension::CCNodeLoad
 }
 
 LayerUI* LayerUI::layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader){
-    CCScene* scene=removeLayer();
+    removeLayer();
+    
+    CCScene* scene=cocos2d::CCDirector::sharedDirector()->getRunningScene();
 
     cocos2d::extension::CCNodeLoaderLibrary *lib = cocos2d::extension::CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
     lib->registerCCNodeLoader(pCCNodeName, pCCNodeLoader);
@@ -70,22 +72,20 @@ LayerUI* LayerUI::layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoad
     CCSize layerSize=node->getContentSize();
     node->setPosition(winSize.width/2-layerSize.width/2, winSize.height/2-layerSize.height/2+30);
     node->setTag(SubWin);
-
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate((CCLayer*)node,0,true);
     
-    scene->addChild(node);    
+    scene->addChild(node);
     
     return (LayerUI*)node;
 }
 
-CCScene* LayerUI::removeLayer(){
+void LayerUI::removeLayer(){
     CCScene* scene=cocos2d::CCDirector::sharedDirector()->getRunningScene();
     CCNode* sub=scene->getChildByTag(SubWin);
     if(NULL!=sub){
-        scene->removeChildByTag(SubWin, true);
         CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate((CCTouchDelegate*)sub);
+        scene->removeChildByTag(SubWin, true);
     }
-    return scene;
 }
 
 

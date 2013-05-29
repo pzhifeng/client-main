@@ -73,7 +73,7 @@ SEL_CCControlHandler SceneMain::onResolveCCBCCControlSelector(cocos2d::CCObject 
 
 void SceneMain::onNodeLoaded(cocos2d::CCNode *pNode, cocos2d::extension::CCNodeLoader *pNodeLoader)
 {
-    //this->mLabelText->setString("All Loaded");
+    
 }
 
 
