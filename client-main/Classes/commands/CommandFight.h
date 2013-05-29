@@ -8,18 +8,13 @@
 class CommandGate :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
 //======CommandPve======
 class CommandPve :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
-};
+    LayerUI* success(const char *data);};
 
 #endif 

@@ -1,5 +1,6 @@
 #include "cocos2d.h"
 #include "CommandSystem.h"
+#include "../Facade.h";
 #include "../SceneMain.h"
 #include "../utils/jsoncpp/json.h"
 #include "../utils/FileUtil.h"
@@ -7,82 +8,54 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-//======CommandCheck======
-
-LayerUI* CommandCheck::init(){
+//=========================
+LayerUI* CommandCheck::success(const char *data){
     return NULL;
 }
 
-
-void CommandCheck::parse(LayerUI* layer,const char *data){
+//=========================
+LayerUI* CommandMain::success(const char *data){
+	SceneMain *scene=(SceneMain*)SceneMain::scene();
     
-}
-
-void CommandCheck::success(LayerUI* layer){
-	
-}
-
-
-//void CommandCheck::fail(int code,VoObject* vo){
-//    
-//    SceneMain::scene((VoMain*)vo,false);
-//    
-//	if(code==1){
-//		/*
-//		myHttpRequest=new MyHttpRequest();
-//		myHttpRequest->doGet();
-//		while(true){
-//			if(myHttpRequest->m_isCompleted)
-//				break;
-//			Sleep(100);
-//		}
-//		//CCLOG("m_responseData===%s",myHttpRequest->m_responseData.c_str());
-//
-//		const char * fileName= "lang/zh_CN.properties";
-//		//myHttpRequest->m_responseData="{\"v\":\"1.0\",\"email\":{\"1\":{\"content\":\"123888\",\"id\":1},\"2\":{\"content\":\"456\",\"id\":2}}}";
-//		FileUtil::write(fileName,myHttpRequest->m_responseData.c_str());
-//
-//		myHttpRequest->release();
-//		*/
-//	}else if(code==2){
-//
-//	}
-//}
-
-//======CommandMain======
-
-LayerUI* CommandMain::init(){
-    return SceneMain::scene();
-}
-
-
-void CommandMain::parse(LayerUI* layer,const char *data){
-    //SceneMain *scene=(SceneMain*)layer;
-    SceneMain *scene=dynamic_cast<SceneMain*>(layer);
+    VoServer *vo=new VoServer();
+    vo->id=1;
+    vo->name="一区 东方不败";
+    vo->tag="爆满";
+    VoServer *vo2=new VoServer();
+    vo2->id=1;
+    vo2->name="二区 日月神教";
+    vo2->tag="推荐";
+    Facade::Servers[1]=vo;
+    Facade::Servers[2]=vo2;
+    
     scene->version->setString("v1.2.0");
-    scene->server->setString("HelloServer");
+    scene->mainServer->setTitleForState(CCString::create("HelloServer"), CCControlStateNormal);
     
+    return (LayerUI*)scene;
 }
 
-void CommandMain::success(LayerUI* layer){
-	
-}
-
-
-//======CommandServer======
-
-LayerUI* CommandServer::init(){
-    return NULL;
-}
-
-
-void CommandServer::parse(LayerUI* layer,const char *data){
+//=========================
+LayerUI* CommandMainServer::success(const char *data){
+    CCScene* scene=cocos2d::CCDirector::sharedDirector()->getRunningScene();
     
+    UIMainServer* layer=UIMainServer::create();
     
+    scene->addChild(layer);
+    return (LayerUI*)layer;
 }
 
-void CommandServer::success(LayerUI* layer){
-	
+//=========================
+LayerUI* CommandMainServerSelect::success(const char *data){
+    SceneMain *scene=(SceneMain*)SceneMain::scene();
+    
+    int id=0;
+    VoServer *vo=Facade::Servers[id+1];
+    std:string tmp;
+    tmp.append(vo->name).append("  ").append(vo->tag);
+
+    scene->mainServer->setTitleForState(CCString::create(tmp.c_str()), CCControlStateNormal);
+
+    return (LayerUI*)scene;
 }
 
 

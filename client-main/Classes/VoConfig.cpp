@@ -43,7 +43,7 @@ map<string,VoLang> ConfigUtil::parseLang(const char *folderName,const char *file
         tmpBuf = (char*)malloc(maxLen);
         while((fgets(tmpBuf, maxLen,fp))!= NULL )
         {
-            CCLOG("TmpBuf===%s",tmpBuf);
+            CCLOG("%s",tmpBuf);
             // ◊“≥= ◊“≥
             vector<string> titleList=split(tmpBuf,'=');
             VoLang lang;

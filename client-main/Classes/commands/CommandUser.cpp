@@ -7,35 +7,14 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-//===========CommandUser=============
-
-LayerUI* CommandUser::init(){
+//=========================
+LayerUI* CommandUser::success(const char *data){
     return NULL;
 }
 
-
-void CommandUser::parse(LayerUI* layer,const char *data){
-        
-}
-
-void CommandUser::success(LayerUI* layer){
-	
-}
-
-
-//===========CommandUserName=============
-
-LayerUI* CommandUserName::init(){
+//=========================
+LayerUI* CommandUserName::success(const char *data){
     return NULL;
-}
-
-
-void CommandUserName::parse(LayerUI* layer,const char *data){
-    
-}
-
-void CommandUserName::success(LayerUI* layer){
-	
 }
 
 

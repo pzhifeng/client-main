@@ -39,15 +39,17 @@ protected:
 };
 
 
-//=========UIGate===========
+//=========UIHomeGate===========
 class UIHomeGate :
 public LayerUI
 , public cocos2d::extension::CCBMemberVariableAssigner
 , public cocos2d::extension::CCBSelectorResolver
+, public cocos2d::extension::CCNodeLoaderListener
 {
     
 public:
-    cocos2d::CCLabelTTF *title;    
+    cocos2d::CCLabelTTF *gateTitle;
+    cocos2d::extension::CCControlButton *homePve;
 public:
     
     CCB_STATIC_NEW_AUTORELEASE_OBJECT_WITH_INIT_METHOD(UIHomeGate, create);
@@ -55,8 +57,12 @@ public:
     virtual bool onAssignCCBMemberVariable(CCObject * pTarget, cocos2d::CCString * pMemberVariableName, CCNode * pNode);
     virtual cocos2d::SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
     virtual cocos2d::extension::SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, cocos2d::CCString * pSelectorName);
+    virtual void onNodeLoaded(CCNode * pNode, cocos2d::extension::CCNodeLoader * pNodeLoader);
     
     void onHomePve(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+    
+    virtual bool init();
+    virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
    
 };
 

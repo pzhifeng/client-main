@@ -100,13 +100,11 @@ void Client::excuteCommand(){
                 if("null\n"==m){
                     m="";
                 }
-                LayerUI* layer=command->init();
-                command->parse(layer, m.c_str());
+                CCLOG("RECIVE|%d  %s",code,m.c_str());
                 if(code==0){
-                    command->success(layer);
+                    LayerUI* layer=command->success(m.c_str());
                 }else{
-                    layer->exception(code,m.c_str());
-                    CCLOG("FAIL|%d  %s",code,m.c_str());
+                    LayerUI::exception(code,m.c_str());
                 }
             }
         }

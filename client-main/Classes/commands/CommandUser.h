@@ -3,20 +3,18 @@
 
 #include "../core/Command.h"
 
+//=========================
 class CommandUser :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
+//=========================
 class CommandUserName :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
 #endif 

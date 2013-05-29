@@ -7,15 +7,16 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+//========SceneMain==========
 SceneMain::SceneMain()
 : version(NULL)
-, server(NULL)
+, mainServer(NULL)
 {}
 
 SceneMain::~SceneMain()
 {
     CC_SAFE_RELEASE(version);
-    CC_SAFE_RELEASE(server);
+    CC_SAFE_RELEASE(mainServer);
 }
 
 LayerUI* SceneMain::scene()
@@ -51,7 +52,7 @@ LayerUI* SceneMain::scene()
 bool SceneMain::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
 {
     CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "version", CCLabelTTF*, this->version);
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "server", CCLabelTTF*, this->server);
+    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "mainServer", CCControlButton*, this->mainServer);
     return false;
 }
 
@@ -62,6 +63,9 @@ SEL_MenuHandler SceneMain::onResolveCCBCCMenuItemSelector(cocos2d::CCObject *pTa
 
 SEL_CCControlHandler SceneMain::onResolveCCBCCControlSelector(cocos2d::CCObject *pTarget, CCString *pSelectorName)
 {
+    CCB_SELECTORRESOLVER_CCCONTROL_GLUE(this, "onMainServer", SceneMain::onMainServer);
+    CCB_SELECTORRESOLVER_CCCONTROL_GLUE(this, "onMainServer2", SceneMain::onMainServer);
+    
     CCB_SELECTORRESOLVER_CCCONTROL_GLUE(this, "onStart", SceneMain::onStart);
     
     return NULL;
@@ -78,6 +82,11 @@ void SceneMain::onStart(cocos2d::CCObject *pSender, cocos2d::extension::CCContro
     Facade::send(CommandHead::Home);
 }
 
+void SceneMain::onMainServer(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
+{
+    Facade::send(CommandHead::MainServer);
+}
+
 
 void SceneMain::onExit(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
 {
@@ -86,4 +95,87 @@ void SceneMain::onExit(cocos2d::CCObject *pSender, cocos2d::extension::CCControl
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+//=========UIMainServer=========
+
+bool UIMainServer::init()
+{
+    bool bRet = false;
+    do
+    {
+        CC_BREAK_IF( !CCLayer::init() );
+        
+        CCSize winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+        CCTableView* pTableView = CCTableView::create(this, CCSizeMake(220,180));
+        pTableView->setDirection(kCCScrollViewDirectionVertical);
+        pTableView->setPosition(CCPointMake(winSize.width/2-90,winSize.height/2-60));
+        pTableView->setDelegate(this);
+        pTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+        pTableView->setTag(LayerUI::SubWin);
+        this->addChild(pTableView);
+        pTableView->reloadData();        
+        bRet = true;
+    }while(0);
+    
+    return bRet;
+}
+
+void UIMainServer::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+{
+    CCLog("cell touched at index: %i", cell->getIdx());
+    this->removeChildByTag(LayerUI::SubWin, true);
+    
+    Facade::send(CommandHead::MainServerSelect);
+}
+
+CCSize UIMainServer::cellSizeForTable(CCTableView *table)
+{
+    return CCSizeMake(220,30);
+}
+
+CCTableViewCell* UIMainServer::tableCellAtIndex(CCTableView *table, unsigned int idx)
+{
+    CCString *pString = CCString::createWithFormat("%d", idx);
+    CCTableViewCell *pCell = table->dequeueCell();
+    if (!pCell) {
+        pCell = new CCTableViewCell();
+        pCell->autorelease();
+        CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
+        CCSprite *pSprite = CCSprite::create("home-bg.png");
+        pSprite->setAnchorPoint(CCPointZero);
+        pSprite->setPosition(CCPointZero);
+        pCell->addChild(pSprite);
+        
+        VoServer *vo=Facade::Servers[idx+1];
+        std:string tmp;
+        tmp.append(vo->name).append("  ").append(vo->tag);
+        CCLabelTTF *pLabel = CCLabelTTF::create(tmp.c_str(), "Arial", 20.0);
+        pLabel->setPosition(CCPointZero);
+        pLabel->setAnchorPoint(CCPointZero);
+        pLabel->setTag(1000+idx);
+        pCell->addChild(pLabel);
+    }
+    else
+    {
+        //CCLabelTTF *pLabel = (CCLabelTTF*)pCell->getChildByTag(1000+idx);
+        //pLabel->setString(pString->getCString());
+    }
+    
+    return pCell;
+}
+
+unsigned int UIMainServer::numberOfCellsInTableView(CCTableView *table)
+{
+    return Facade::Servers.size();
+}
+
+void UIMainServer::scrollViewDidScroll(CCScrollView *view)
+{
+    CCLog("scrollViewDidScroll");
+}
+
+void UIMainServer::scrollViewDidZoom(CCScrollView *view)
+{
+    CCLog("scrollViewDidScroll");
 }

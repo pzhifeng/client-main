@@ -7,35 +7,35 @@
 
 using namespace cocos2d;
 
-//======CommandCheck======
+//=========================
 class CommandCheck :public Command
 {
 public:
 	MyHttpRequest *myHttpRequest;
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
-//======CommandMain======
+//=========================
 class CommandMain :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
-//======CommandServer======
-class CommandServer :public Command
+//=========================
+class CommandMainServer :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
+//=========================
+class CommandMainServerSelect :public Command
+{
+public:
+    LayerUI* success(const char *data);
+};
 
 
 

@@ -4,7 +4,8 @@
 //系统模块
 int CommandHead::Check=10100;
 int CommandHead::Main=10101;
-int CommandHead::Server=10102;
+int CommandHead::MainServer=10102;
+int CommandHead::MainServerSelect=10103;
 
 //角色模块
 int CommandHead::User=11100;

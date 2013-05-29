@@ -7,7 +7,8 @@ public:
     //系统模块
     static int Check;
     static int Main;
-    static int Server;
+    static int MainServer;
+    static int MainServerSelect;
     //角色模块
     static int User;
     static int UserName;

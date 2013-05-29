@@ -6,15 +6,9 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-//======CommandHome======
-
-LayerUI* CommandHome::init(){
-    return LayerUI::scene("SceneHome", SceneHomeLoader::loader());
-}
-
-
-void CommandHome::parse(LayerUI* layer,const char *data){
-    SceneHome *scene=(SceneHome*)layer;
+//=========================
+LayerUI* CommandHome::success(const char *data){
+    SceneHome *scene=(SceneHome*)LayerUI::scene("SceneHome", SceneHomeLoader::loader());
     scene->title->setString("SceneHome OK!");
     CCMenuItemImage *homeGate5=scene->homeGate5;
     homeGate5->setEnabled(false);
@@ -22,40 +16,24 @@ void CommandHome::parse(LayerUI* layer,const char *data){
     CCMenuItemImage *homeGate1=scene->homeGate1;
     CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
     homeGate1->setNormalImage(CCSprite::create("btn-a-0.png"));
-}
-
-void CommandHome::success(LayerUI* layer){
-	
-}
-
-//======CommandHomeGate======
-
-LayerUI* CommandHomeGate::init(){
-    return LayerUI::layer("UIHomeGate", UIHomeGateLoader::loader());
-}
-
-
-void CommandHomeGate::parse(LayerUI* layer,const char *data){
-    UIHomeGate *scene=(UIHomeGate*)layer;
-    //scene->title->setString("HomeGate OK!");
     
-}
-
-void CommandHomeGate::success(LayerUI* layer){
-	
-}
-
-//======CommandHomePve======
-
-LayerUI* CommandHomePve::init(){
-    return SceneFight::scene(NULL);
+    return (LayerUI*)scene;
 }
 
 
-void CommandHomePve::parse(LayerUI* layer,const char *data){
-
+//=========================
+LayerUI* CommandHomeGate::success(const char *data){
+    UIHomeGate *scene=(UIHomeGate*)LayerUI::layer("UIHomeGate", UIHomeGateLoader::loader());
+    
+    scene->gateTitle->setString("HomeGate OK!");
+    
+    return (LayerUI*)scene;
 }
 
-void CommandHomePve::success(LayerUI* layer){
-	
+
+//=========================
+LayerUI* CommandHomePve::success(const char *data){
+    SceneFight *scene=(SceneFight*)SceneFight::scene(NULL);;
+    
+    return (LayerUI*)scene;
 }

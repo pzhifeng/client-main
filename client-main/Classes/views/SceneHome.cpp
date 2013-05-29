@@ -1,4 +1,5 @@
 #include "cocos-ext.h"
+#include "cocos2d.h"
 #include "Facade.h"
 #include "SceneHome.h"
 #include "../SceneMain.h"
@@ -8,7 +9,6 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-//todo大地图可拖动
 //==========SceneHome===============
 bool SceneHome::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
 {
@@ -50,11 +50,13 @@ void SceneHome::onHomeGate(cocos2d::CCObject *pSender, cocos2d::extension::CCCon
     Facade::send(CommandHead::HomeGate);
 }
 
+//todo 大地图可以拖动
 
 //==========UIHomeGate===============
 bool UIHomeGate::onAssignCCBMemberVariable(cocos2d::CCObject *pTarget, CCString *pMemberVariableName, cocos2d::CCNode *pNode)
 {
-    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "title", CCLabelTTF*, this->title);
+    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "gateTitle", CCLabelTTF*, this->gateTitle);
+    CCB_MEMBERVARIABLEASSIGNER_GLUE(this, "homePve", CCControlButton*, this->homePve); 
     
     return false;
 }
@@ -70,9 +72,25 @@ SEL_CCControlHandler UIHomeGate::onResolveCCBCCControlSelector(cocos2d::CCObject
     return NULL;
 }
 
+void UIHomeGate::onNodeLoaded(cocos2d::CCNode *pNode, cocos2d::extension::CCNodeLoader *pNodeLoader)
+{
+    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this->homePve,-1,true);
+}
+
 void UIHomeGate::onHomePve(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent){
     Facade::send(CommandHead::HomePve);
 }
 
+bool UIHomeGate::init(){
+    
+    return true;
+}
+
+bool UIHomeGate::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCLOG("ccTouchBegan");
+    LayerUI::removeLayer();
+    
+    return true;
+}
 
 

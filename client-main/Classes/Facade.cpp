@@ -14,16 +14,17 @@ char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="1.0";
 
+map<int,VoServer*> Facade::Servers;
+
 map<int,VoEmail> Facade::Emails;
 map<string,VoLang> Facade::Langs;
 
 int Facade::send(int head){
+    CCLOG("Send|%d",head);
     if(Facade::IsMock){
         CommandsRegister* commands=CommandsRegister::GetInstance();
         Command* c=commands->get(head);		
-		LayerUI* layer=c->init();
-        c->parse(layer, NULL);
-        c->success(layer);
+		LayerUI* layer=c->success(NULL);
         return 1;
     }else{
         Client* client=Client::GetInstance();
@@ -80,7 +81,8 @@ void Facade::registerCommands(){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     commands->put(CommandHead::Check,new CommandCheck());
     commands->put(CommandHead::Main,new CommandMain());
-    commands->put(CommandHead::Server,new CommandServer());
+    commands->put(CommandHead::MainServer,new CommandMainServer());
+    commands->put(CommandHead::MainServerSelect,new CommandMainServerSelect());
     
     commands->put(CommandHead::User,new CommandUser());
     commands->put(CommandHead::UserName,new CommandUserName());

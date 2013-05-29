@@ -85,6 +85,8 @@ class LayerUI
 : public cocos2d::CCLayer
 {
 public:
+    static int MainWin;
+    static int SubWin;
     cocos2d::CCLabelTTF *title;
 public:
     //LayerUI();
@@ -102,9 +104,11 @@ public:
     
     //打开非全屏的弹层
     static LayerUI* layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);
+    
+    static cocos2d::CCScene* removeLayer();
 
     //非正常场景的统一处理
-    void exception(int code,const char *data);
+    static void exception(int code,const char *data);
 
 };
 

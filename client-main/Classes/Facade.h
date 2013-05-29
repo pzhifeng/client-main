@@ -3,6 +3,7 @@
 
 #include "core/Command.h"
 #include "VoConfig.h"
+#include "SceneMain.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ public:
     static int Port;
     static char* Version;
     
+    static map<int,VoServer*> Servers;
 	static map<int,VoEmail> Emails;
     static map<int,VoBall> Balls;
 	static map<string,VoLang> Langs;

@@ -9,26 +9,20 @@
 class CommandHome :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
 //======CommandHomeGate======
 class CommandHomeGate :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 
 //======CommandHomePve======
 class CommandHomePve :public Command
 {
 public:
-    LayerUI* init();
-    void parse(LayerUI* layer,const char *data);
-    void success(LayerUI* layer);
+    LayerUI* success(const char *data);
 };
 #endif 
