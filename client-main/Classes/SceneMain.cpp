@@ -112,7 +112,7 @@ bool UIMainServer::init()
         pTableView->setPosition(CCPointMake(winSize.width/2-90,winSize.height/2-60));
         pTableView->setDelegate(this);
         pTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-        pTableView->setTag(LayerUI::SubWin);
+        pTableView->setTag(LayerUI::TagLayer);
         this->addChild(pTableView);
         pTableView->reloadData();        
         bRet = true;
@@ -124,7 +124,7 @@ bool UIMainServer::init()
 void UIMainServer::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
     CCLog("cell touched at index: %i", cell->getIdx());
-    this->removeChildByTag(LayerUI::SubWin, true);
+    this->removeChildByTag(LayerUI::TagLayer, true);
     
     Facade::send(CommandHead::MainServerSelect);
 }

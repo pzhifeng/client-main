@@ -79,7 +79,7 @@ protected:
 //};
 
 class UIMainServer
-: public cocos2d::CCLayer
+: public LayerUI
 , public cocos2d::extension::CCTableViewDataSource
 , public cocos2d::extension::CCTableViewDelegate
 {

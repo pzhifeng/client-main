@@ -14,6 +14,8 @@ char* Facade::Ip="192.168.1.78";
 int Facade::Port=61114;
 char* Facade::Version="1.0";
 
+VoHead * Facade::header;
+
 map<int,VoServer*> Facade::Servers;
 
 map<int,VoEmail> Facade::Emails;
@@ -24,6 +26,10 @@ int sendMock(int head,char* p1,char* p2,char* p3,char* p4,char* p5){
     CommandsRegister* commands=CommandsRegister::GetInstance();
     Command* c=commands->get(head);
     LayerUI* layer=c->success(NULL);
+    if(layer->menuHome!=NULL){
+        layer->freshHeader();
+        layer->freshFooter(head);
+    }
     return 1;
 }
 

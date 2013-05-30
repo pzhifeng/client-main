@@ -103,6 +103,8 @@ void Client::excuteCommand(){
                 CCLOG("RECIVE|%d  %s",code,m.c_str());
                 if(code==0){
                     LayerUI* layer=command->success(m.c_str());
+                    layer->freshHeader();
+                    layer->freshFooter(head);
                 }else{
                     LayerUI::exception(code,m.c_str());
                 }

@@ -17,6 +17,8 @@ public:
     static int Port;
     static char* Version;
     
+    static VoHead *header;
+    
     static map<int,VoServer*> Servers;
 	static map<int,VoEmail> Emails;
     static map<int,VoBall> Balls;

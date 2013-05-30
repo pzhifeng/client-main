@@ -85,9 +85,17 @@ class LayerUI
 : public cocos2d::CCLayer
 {
 public:
-    static int MainWin;
-    static int SubWin;
+    static int TagLayer;
+    
     cocos2d::CCLabelTTF *title;
+    cocos2d::CCSprite *expBg;
+    
+    cocos2d::CCMenuItemImage *menuHome;
+    cocos2d::CCMenuItemImage *menuSkill;
+    cocos2d::CCMenuItemImage *menuGod;
+    cocos2d::CCMenuItemImage *menuCoin;
+    cocos2d::CCMenuItemImage *menuArena;
+    cocos2d::CCMenuItemImage *menuStore;
 public:
     //LayerUI();
     //~LayerUI();
@@ -98,6 +106,9 @@ public:
     //页头页尾公共方法
     void onHeader(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
     void onMenu(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent);
+    
+    void freshFooter(int head);
+    void freshHeader();
     
     //打开全屏窗体
     static LayerUI* scene(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader);

@@ -17,8 +17,7 @@ USING_NS_CC_EXT;
 //    CC_SAFE_RELEASE(title);
 //}
 
-int LayerUI::MainWin=9999999;
-int LayerUI::SubWin=9999998;
+int LayerUI::TagLayer=9999999;
 
 
 void LayerUI::onHeader(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEvent pCCControlEvent)
@@ -31,8 +30,67 @@ void LayerUI::onMenu(cocos2d::CCObject *pSender, cocos2d::extension::CCControlEv
 {
     CCMenuItemImage* menu=(CCMenuItemImage*)pSender;
     Facade::send(menu->getTag());
-    //this->title->setString("onMenu");
-    CCLOG("%s:%d","onMenu",menu->getTag());
+}
+
+void LayerUI::freshHeader(){
+    //经验进度条
+    CCProgressTo *expTo = CCProgressTo::create(0.6,30);
+    CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
+    CCProgressTimer *left = CCProgressTimer::create(CCSprite::create("exp-value.png"));
+    left->setType(kCCProgressTimerTypeBar);
+    left->setMidpoint(ccp(0,0));
+    left->setBarChangeRate(ccp(1,0));
+    left->setAnchorPoint(ccp(0,0));
+    left->setPosition(CCPointZero);
+    left->runAction(expTo);
+    expBg->addChild(left);
+
+}
+
+void LayerUI::freshFooter(int head){
+    if(head==CommandHead::Home){
+        menuHome->setEnabled(false);
+        menuSkill->setEnabled(true);
+        menuGod->setEnabled(true);
+        menuCoin->setEnabled(true);
+        menuArena->setEnabled(true);
+        menuStore->setEnabled(true);
+    }else if(head==CommandHead::Skill){
+        menuHome->setEnabled(true);
+        menuSkill->setEnabled(false);
+        menuGod->setEnabled(true);
+        menuCoin->setEnabled(true);
+        menuArena->setEnabled(true);
+        menuStore->setEnabled(true);
+    }else if(head==CommandHead::God){
+        menuHome->setEnabled(true);
+        menuSkill->setEnabled(true);
+        menuGod->setEnabled(false);
+        menuCoin->setEnabled(true);
+        menuArena->setEnabled(true);
+        menuStore->setEnabled(true);
+    }else if(head==CommandHead::Coin){
+        menuHome->setEnabled(true);
+        menuSkill->setEnabled(true);
+        menuGod->setEnabled(true);
+        menuCoin->setEnabled(false);
+        menuArena->setEnabled(true);
+        menuStore->setEnabled(true);
+    }else if(head==CommandHead::Arena){
+        menuHome->setEnabled(true);
+        menuSkill->setEnabled(true);
+        menuGod->setEnabled(true);
+        menuCoin->setEnabled(true);
+        menuArena->setEnabled(false);
+        menuStore->setEnabled(true);
+    }else if(head==CommandHead::Store){
+        menuHome->setEnabled(true);
+        menuSkill->setEnabled(true);
+        menuGod->setEnabled(true);
+        menuCoin->setEnabled(true);
+        menuArena->setEnabled(true);
+        menuStore->setEnabled(false);
+    }
 }
 
 LayerUI* LayerUI::scene(const char * pCCNodeName, cocos2d::extension::CCNodeLoader * pCCNodeLoader){
@@ -46,7 +104,6 @@ LayerUI* LayerUI::scene(const char * pCCNodeName, cocos2d::extension::CCNodeLoad
     tmp.append(pCCNodeName).append(".ccbi");
     CCNode *node = reader->readNodeGraphFromFile(tmp.c_str(), scene);
     reader->autorelease();
-    node->setTag(MainWin);
     scene->addChild(node);
     
     cocos2d::CCDirector::sharedDirector()->replaceScene(scene);
@@ -71,7 +128,7 @@ LayerUI* LayerUI::layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoad
     CCSize winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
     CCSize layerSize=node->getContentSize();
     node->setPosition(winSize.width/2-layerSize.width/2, winSize.height/2-layerSize.height/2+30);
-    node->setTag(SubWin);
+    node->setTag(TagLayer);
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate((CCLayer*)node,0,true);
     
     scene->addChild(node);
@@ -81,10 +138,10 @@ LayerUI* LayerUI::layer(const char * pCCNodeName, cocos2d::extension::CCNodeLoad
 
 void LayerUI::removeLayer(){
     CCScene* scene=cocos2d::CCDirector::sharedDirector()->getRunningScene();
-    CCNode* sub=scene->getChildByTag(SubWin);
+    CCNode* sub=scene->getChildByTag(TagLayer);
     if(NULL!=sub){
         CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate((CCTouchDelegate*)sub);
-        scene->removeChildByTag(SubWin, true);
+        scene->removeChildByTag(TagLayer, true);
     }
 }
 

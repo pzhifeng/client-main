@@ -57,12 +57,15 @@ public:
 	bool backBallMove(int start,int end);//回退时移动
 	void goAll();//移动所有
 	void stopAll();//停止所有
-	void removeBallFromUI(int removeStart,int removeEnd);//从界面删除球
+	void removeBallFromUI(int removeStart,int removeEnd,bool isExplosion);//从界面删除球
 	void removeBallFromArray(int removeStart,int removeEnd);//从球数组删除
 	bool isMoving();//判断是否有球正在移动
+	void removeBallFromGoFinish();//到达终点移除所有球，游戏结束
+	void NPCDebuff();
+
 
 	void initWayPoint();//初始化地图
-	void insertBall();//插入球到轨道
+	void insertBall(int hitIndex,char insertSide,int color,bool isPlayer);//插入球到轨道
 	void insertBallFinish();//插入球到轨道完成
 	void createBallTask(float dt);//创建球定时器
 	void removeBallTask(float dt);//移除球定时器

@@ -14,6 +14,7 @@ public :
 	bool m_moving;
 	bool m_isPause;
 	bool m_isStop;
+	bool m_isRemove;
 public:
 	Ball(void);
 	~Ball(void);

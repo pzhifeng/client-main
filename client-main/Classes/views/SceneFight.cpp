@@ -6,8 +6,7 @@
 using namespace cocos2d;
 extern std::vector<std::string> split(const std::string s, char delim);
 
-int hitBallArrayIndex=-1;
-char insertSide;
+int gHitBallArrayIndex=-1;
 
 LayerUI* SceneFight::scene(VoFight* vo)
 {
@@ -80,32 +79,37 @@ void SceneFight::back(CCObject* pSender)
 	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this);
 }
 
-void SceneFight::onEnter(){
+void SceneFight::onEnter()
+{
 	//CCLog("onEnter");
 	CCLayer::onEnter();
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN+1, true);
 	//CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this,0);
 }
 
-void SceneFight::onExit(){
+void SceneFight::onExit()
+{
 	CCLayer::onExit();
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
-    
+
 	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&SceneFight::createBallTask),this);
 	CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(SEL_SCHEDULE(&SceneFight::removeBallTask),this);
 }
 
-bool SceneFight::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
+bool SceneFight::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+{
 	return true;
 }
 
-void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
+void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
 	//CCLog("ccTouchEnded");
 	//取得触点位置
-    
-	CCPoint touchLocation = pTouch->getLocation();
-	CCLOG("%f,%f",touchLocation.x,touchLocation.y);
-    
+	if(m_balls->count()==0)
+		return ;
+	CCPoint touchLocation = pTouch->getLocation();  
+	//CCLOG("%f,%f",touchLocation.x,touchLocation.y);
+
 	CCSize s = CCDirector::sharedDirector()->getWinSize();
 	CCPoint start=m_pushBall->m_sprite->getPosition();
 	CCPoint end=touchLocation;
@@ -119,6 +123,8 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 	CCPoint a=CCPointMake(start.x,start.y);
 	CCPoint b=CCPointMake(tmpPos.x,tmpPos.y);
 	bool bCross=false;
+	int hitIndex=-1;
+	char insertSide;
 	for(int i=0;i<m_balls->count()-1;i++)
 	{
 		Ball*startBall=(Ball*)m_balls->objectAtIndex(i);
@@ -143,7 +149,7 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 			if (bCross)
 			{
 				insertSide='R';
-				hitBallArrayIndex=i;
+				hitIndex=i;
 				break;
 			}
 		}
@@ -163,18 +169,18 @@ void SceneFight::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
 				insertSide='R';
 			else
 				bCross=false;
-			hitBallArrayIndex=i+1;
+			hitIndex=i+1;
 			break;
 		}
 	}
 	/*
-     if(!bCross)
-     pushBall(0.3f,tmpPos);
-     else
-     insertBall();
-     */
-	if(bCross)
+	if(!bCross)
+		pushBall(0.3f,tmpPos);
+	else
 		insertBall();
+		*/
+	if(bCross)
+		insertBall(hitIndex,insertSide,m_pushBall->m_color,true);
 }
 
 /************************************************************************/
@@ -193,7 +199,8 @@ Ball * SceneFight::getBall()
 /************************************************************************/
 /* 创建发射球                                                              */
 /************************************************************************/
-void SceneFight::addPushBall(){
+void SceneFight::addPushBall()
+{
 	m_pushBall=getBall();
 	//CCLOG("pushBall-color===%d",m_pushBall->m_color);
 	m_pushBall->retain();
@@ -213,7 +220,8 @@ void SceneFight::pushBall(float interval,CCPoint pos)
 /************************************************************************/
 /* 发送完成                                                                    */
 /************************************************************************/
-void SceneFight::pushBallFinish(){
+void SceneFight::pushBallFinish()
+{
 	//重新创建发送球
 	m_pushBall->m_sprite->removeFromParentAndCleanup(true);
 	m_pushBall->release();
@@ -224,18 +232,8 @@ void SceneFight::pushBallFinish(){
 /* 创建轨道球任务                                                                     */
 /************************************************************************/
 int ballNum=0;
-void SceneFight::createBallTask(float dt){
-	for(int i=0;i<m_balls->count();i++)
-	{
-		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
-		if(ball->m_curPosIndex>=m_wayPoint->count()-50)
-		{
-			ball->stop();
-			ball->m_sprite->removeFromParentAndCleanup(true);
-			m_balls->removeObject(ball,true);
-			break;
-		}
-	}
+void SceneFight::createBallTask(float dt)
+{
 	if(m_balls->count()>0)
 	{
 		Ball *lastBall=(Ball*)m_balls->objectAtIndex(m_balls->count()-1);
@@ -243,22 +241,20 @@ void SceneFight::createBallTask(float dt){
 			return;
 	}
 	
-	/*
-     int distance=-1;
-     if(m_balls->count()>0)
-     {
-     CCPoint wayFirstPos=m_wayPoint->getControlPointAtIndex(0);
-     Ball *lastBall=(Ball*)m_balls->objectAtIndex(m_balls->count()-1);
-     CCPoint lastBallPos=lastBall->m_sprite->getPosition();
-     distance=ccpDistance(wayFirstPos,lastBallPos);
-     CCLOG("distance===%d===lastBallIndex===%d",distance,lastBall->m_curPosIndex);
-     }
-     */
-	ballNum++;
 	if(ballNum>100)
 		return;
+	ballNum++;
+
+	int debuff=ballNum%5;
+	//CCLOG("debuff===%d",debuff);
+	if(debuff==0)
+	{
+		NPCDebuff();
+	}
+
 	Ball *ball=getBall();
 	m_balls->addObject(ball);
+	//ball->m_balls=m_balls;
 	ball->m_sprite->setPosition(m_wayPoint->getControlPointAtIndex(0));
 	addChild(ball->m_sprite);
 	ball->go();
@@ -267,22 +263,22 @@ void SceneFight::createBallTask(float dt){
 /* 插入球到轨道                                                               */
 /************************************************************************/
 bool inserting=false;
-void SceneFight::insertBall()
+void SceneFight::insertBall(int hitIndex,char insertSide,int color,bool isPlayer)
 {
-	if(hitBallArrayIndex>=0){
-		CCSize s = CCDirector::sharedDirector()->getWinSize();
+	if(hitIndex>=0)
+	{
 		//撞击点位置索引
 		int hitCurPosIndex=0;
-		CCLOG("insertSide===%c",insertSide);
+		//CCLOG("insertSide===%c",insertSide);
 		Ball*hitBall=NULL;
 		if(insertSide=='L')
 		{
-			hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex-1);
+			hitBall=(Ball*)m_balls->objectAtIndex(hitIndex-1);
 			hitCurPosIndex=hitBall->m_curPosIndex;
 		}
 		else if(insertSide=='R')
 		{
-			hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
+			hitBall=(Ball*)m_balls->objectAtIndex(hitIndex);
 			hitCurPosIndex=hitBall->m_curPosIndex+_indexDistanceOfBall;
 		}
 		//撞击点位置
@@ -291,14 +287,14 @@ void SceneFight::insertBall()
 		stopAll();
 		//开始将球加入轨道
 		CCFileUtils::sharedFileUtils()->setResourceDirectory("role");
-		const char *str=getColor(m_pushBall->m_color);
-        
+		const char *str=getColor(color);
+
 		Ball*insertBall=Ball::create();
 		insertBall->m_sprite=CCSprite::create(str);
 		insertBall->m_wayPoint=m_wayPoint;
 		insertBall->m_curPosIndex=hitCurPosIndex;
-		insertBall->m_color=m_pushBall->m_color;
-        
+		insertBall->m_color=color;
+	
 		if(hitBall->m_isPause)
 		{
 			insertBall->m_isPause=true;
@@ -309,35 +305,49 @@ void SceneFight::insertBall()
 			insertBall->m_isPause=false;
 			insertBall->m_isStop=true;
 		}
-		m_balls->insertObject(insertBall,hitBallArrayIndex);
+		m_balls->insertObject(insertBall,hitIndex);
 		//插入位置
 		insertBall->m_sprite->setOpacity(0);
 		insertBall->m_sprite->setPosition(hitPos);
 		//insertBall->m_sprite->setPosition(m_pushBall->m_sprite->getPosition());
 		//撞击点前面的球向前移动
-		for(int i=0;i<hitBallArrayIndex;i++){
-			Ball *moveBall=(Ball*)m_balls->objectAtIndex(i);
-			moveBall->m_moveToPosIndex=moveBall->m_curPosIndex+_indexDistanceOfBall;
-			moveBall->move();
+		int i=0;
+		for(i=hitIndex;i>0;i--)
+		{
+			Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
+			Ball *nextBall=(Ball*)m_balls->objectAtIndex(i-1);
+			int indexDistance=nextBall->m_curPosIndex-currBall->m_curPosIndex;
+			//CCLOG("i===%d===i-1===%d===indexDistance===%d",i,i-1,indexDistance);
+			if(indexDistance>2*_indexDistanceOfBall)
+			{
+				break;
+			}
 		}
-		
+		for(int j=i;j<hitIndex;j++)
+		{
+			Ball *ball=(Ball*)m_balls->objectAtIndex(j);
+			ball->m_moveToPosIndex=ball->m_curPosIndex+_indexDistanceOfBall;
+			ball->move();
+		}
 		//新增球移动到轨道上
 		/*
-         inserting=true;
-         CCMoveTo*  moveTo = CCMoveTo::create(0.3f, hitPos);
-         CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
-         CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
-         insertBall->m_sprite->runAction(sequenceAction);
-         */
-        
-		
+		inserting=true;
+		CCMoveTo*  moveTo = CCMoveTo::create(0.3f, hitPos);
+		CCCallFunc *call=CCCallFunc::actionWithTarget(this,callfunc_selector(SceneFight::insertBallFinish));
+		CCAction *sequenceAction = CCSequence::actions(moveTo,call,NULL);
+		insertBall->m_sprite->runAction(sequenceAction);
+		*/
+		//新增球渐显
 		CCActionInterval*  insertAction = CCFadeIn::create(0.5f);
 		insertBall->m_sprite->runAction(insertAction);
-        
-        
+		
 		addChild(insertBall->m_sprite);
 		//清除发送球
 		this->pushBallFinish();
+
+		//保存到全局变量
+		if(isPlayer)
+			gHitBallArrayIndex=hitIndex;
 	}
 }
 void SceneFight::insertBallFinish()
@@ -350,6 +360,8 @@ void SceneFight::insertBallFinish()
 /************************************************************************/
 void SceneFight::removeBallTask(float dt)
 {
+	//移除运行到终点的球
+	removeBallFromGoFinish();
 	//正在插入，则直接退出
 	if(inserting){return;}
 	//检测是否有球正在移动,true则返回
@@ -369,9 +381,9 @@ void SceneFight::removeBallTask(float dt)
 			{
 				if(nextBall->m_isPause)
 				{
-					nextBall->go();
+					nextBall->go(); 
 					nextBall->m_isPause=false;
-				}
+				}	
 			}
 		}
 	}
@@ -381,7 +393,7 @@ void SceneFight::removeBallTask(float dt)
 		Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
 		Ball *nextBall=(Ball*)m_balls->objectAtIndex(i-1);
 		int indexDistance=nextBall->m_curPosIndex-currBall->m_curPosIndex;
-		if(indexDistance>2*_indexDistanceOfBall && currBall->m_color!=nextBall->m_color)
+		if(indexDistance>_indexDistanceOfBall+1 && currBall->m_color!=nextBall->m_color)
 		{
 			for(int j=i-1;j>=0;j--)
 			{
@@ -390,21 +402,21 @@ void SceneFight::removeBallTask(float dt)
 				{
 					ball->stop();
 					ball->m_isPause=true;
-				}
+				}	
 			}
 			break;
 		}
 	}
 	//没有撞击,则直接退出
-	if(hitBallArrayIndex==-1){return;}
+	if(gHitBallArrayIndex==-1){return;}
 	//回退
-	bool isBack=backBall(hitBallArrayIndex);
+	bool isBack=backBall(gHitBallArrayIndex);
 	if(isBack){return;}
     
-	Ball *hitBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex);
+	Ball *hitBall=(Ball*)m_balls->objectAtIndex(gHitBallArrayIndex);
 	int removeBegin=-1,removeEnd=-1;
 	//起点
-	for(int i=hitBallArrayIndex;i>=0;i--)
+	for(int i=gHitBallArrayIndex;i>=0;i--)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
 		if(ball->m_color!=hitBall->m_color)
@@ -412,45 +424,29 @@ void SceneFight::removeBallTask(float dt)
 		removeBegin=i;
 	}
 	//终点
-	for(int i=hitBallArrayIndex;i<m_balls->count();i++)
+	for(int i=gHitBallArrayIndex;i<m_balls->count();i++)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		//CCLOG("i===%d===color===%d",i,ball->m_color);
 		if(ball->m_color!=hitBall->m_color)
 			break;
 		removeEnd=i;
 	}
+	//CCLOG("hitBallArrayIndex===%d===removeBegin===%d===removeEnd===%d",hitBallArrayIndex,removeBegin,removeEnd);
 	//开始消除
 	if((removeEnd-removeBegin)>=2)
 	{
 		//界面消除
-		removeBallFromUI(removeBegin,removeEnd);
+		removeBallFromUI(removeBegin,removeEnd,true);
 		//记录消除后新的撞击球
 		Ball* newHitBall=(Ball*)m_balls->objectAtIndex(removeEnd+1);
 		//从数组删除
 		removeBallFromArray(removeBegin,removeEnd);
 		//获取撞击点在新数组的位置索引
-		hitBallArrayIndex=m_balls->indexOfObject(newHitBall);
-		//消除后回退
-		//isBack=backBall(hitBallArrayIndex);
-		//if(isBack){return;}
-		//消除后停止球
-		/*
-         if(hitBallArrayIndex==0){return;}
-         Ball *startBall=(Ball*)m_balls->objectAtIndex(hitBallArrayIndex-1);
-         int indexDistance=startBall->m_curPosIndex-newHitBall->m_curPosIndex;
-         if(indexDistance>_indexDistanceOfBall && startBall->m_color!=newHitBall->m_color)
-         {
-         
-         for(int i=hitBallArrayIndex-1;i>=0;i--)
-         {
-         Ball *ball=(Ball*)m_balls->objectAtIndex(i);
-         ball->stop();
-         ball->m_isPause=true;
-         }
-         }*/
+		gHitBallArrayIndex=m_balls->indexOfObject(newHitBall);
 		return ;
 	}
-	hitBallArrayIndex=-1;
+	gHitBallArrayIndex=-1;
 }
 
 
@@ -485,20 +481,16 @@ bool SceneFight::backBallMove(int start,int end)
 	Ball *startBall=(Ball*)m_balls->objectAtIndex(start);
 	Ball *endBall=(Ball*)m_balls->objectAtIndex(end);
 	int indexDistance=startBall->m_curPosIndex-endBall->m_curPosIndex;
-    
 	if(indexDistance>_indexDistanceOfBall&& startBall->m_color==endBall->m_color)//&& startBall->m_color==endBall->m_color
-	{
-		CCLOG("indexDistance===%d",indexDistance);
-        
+	{	
+		//CCLOG("indexDistance===%d",indexDistance);
+
 		isBack=true;
 		//回退之前停止球移动
 		stopAll();
 		for(int i=start;i>=0;i--)
 		{
 			Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
-			int indexDistance111=currBall->m_curPosIndex-endBall->m_curPosIndex;
-			CCLOG("i===%d===indexDistance===%d",i,indexDistance111);
-			//currBall->m_moveToPosIndex=endBall->m_curPosIndex+INDEX_DISTANCE*(start-i+1);
 			currBall->m_moveToPosIndex=currBall->m_curPosIndex-indexDistance+_indexDistanceOfBall;
 			currBall->move();
 			//break;
@@ -510,12 +502,13 @@ bool SceneFight::backBallMove(int start,int end)
 /************************************************************************/
 /* 从UI删除球                                                                     */
 /************************************************************************/
-void SceneFight::removeBallFromUI(int removeStart,int removeEnd)
+void SceneFight::removeBallFromUI(int removeStart,int removeEnd,bool isExplosion)
 {
 	for(int i=removeStart;i<=removeEnd;i++)
 	{
 		Ball *removeBall=(Ball*)m_balls->objectAtIndex(i);
-		explosionBall(removeBall->m_sprite->getPosition());
+		if(isExplosion)
+			explosionBall(removeBall->m_sprite->getPosition());
 		removeBall->m_sprite->removeFromParentAndCleanup(true);
 	}
     
@@ -544,6 +537,96 @@ void SceneFight::removeBallFromArray(int removeStart,int removeEnd)
 		}
 	}
 }
+bool isGoFinish=false;
+//int ballNnumByGoFinish=0;
+void SceneFight::removeBallFromGoFinish()
+{
+	if(isGoFinish)
+	{
+		for(int i=0;i<m_balls->count();i++)
+		{
+			Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+			if(ball->m_isRemove)
+			{
+				//ballNnumByGoFinish++;
+				//ball->stop();
+				CCLOG("remove===i===%d",i);
+				ball->m_sprite->removeFromParentAndCleanup(true);
+				m_balls->removeObject(ball,true);
+			}
+		}
+		//CCLOG("ballNnumByGoFinish===%d",ballNnumByGoFinish);
+		return;
+	}
+	if(m_balls->count()==0)
+		return ;
+	Ball *firstBall=(Ball*)m_balls->objectAtIndex(0);
+	//CCLOG("firstBall->m_curPosIndex===%d===posCount===%d",firstBall->m_curPosIndex,m_wayPoint->count());
+	if(firstBall->m_curPosIndex<m_wayPoint->count())
+		return;
+	isGoFinish=true;
+	//CCLOG("ballNum===%d",ballNum);
+	ballNum=1000;
+	for(int i=0;i<m_balls->count();i++)
+	{
+		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
+		ball->m_moveToPosIndex=m_wayPoint->count()-1;
+		ball->move();
+	}
+}
+
+int debuffArray[2]={1,2};
+int debuffIndex=0;
+void SceneFight::NPCDebuff()
+{
+	int debuff=debuffArray[debuffIndex];
+	CCLOG("debuff===%d",debuff);
+	//在轨道上两个相同颜色的球中，搬走一个。
+	if(debuff==1)
+	{
+		int i=0;
+		for(;i<m_balls->count()-1;i++)
+		{
+			Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
+			Ball *nextBall=(Ball*)m_balls->objectAtIndex(i+1);
+			if(currBall->m_color==nextBall->m_color)
+				break;
+		}
+		if(i<m_balls->count()-1)
+		{
+			//界面消除
+			removeBallFromUI(i,i,false);
+			//从数组删除
+			removeBallFromArray(i,i);
+		}	
+	}
+	//在轨道上两个相同颜色的球中间添加一个不同颜色的球。
+	else if(debuff==2)
+	{
+		int color=_color;
+		int i=0;
+		for(;i<m_balls->count()-1;i++)
+		{
+			Ball *currBall=(Ball*)m_balls->objectAtIndex(i);
+			Ball *nextBall=(Ball*)m_balls->objectAtIndex(i+1);
+			if(currBall->m_color==nextBall->m_color && currBall->m_color!=color)
+				break;
+		}
+		if(i<m_balls->count()-1)
+		{
+			insertBall(i+1,'R',color,false);
+		}	
+	}
+	//CCLOG("ArrayLength===%d",sizeof(debuffArray)/sizeof(debuffArray[0]));
+	debuffIndex++;
+	if(debuffIndex>=sizeof(debuffArray)/sizeof(debuffArray[0]))
+		debuffIndex=0;
+	
+}
+
+
 /************************************************************************/
 /* 计算是否有球在移动                                                                     */
 /************************************************************************/
@@ -566,6 +649,8 @@ void SceneFight::goAll()
 	for(int i=0;i<m_balls->count();i++)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
 		if(ball->m_isPause)
 			continue;
 		//CCLOG("i===%d===isStop===%d",i,ball->m_isStop);
@@ -581,6 +666,8 @@ void SceneFight::stopAll()
 	for(int i=0;i<m_balls->count();i++)
 	{
 		Ball *ball=(Ball*)m_balls->objectAtIndex(i);
+		if(ball->m_isRemove)
+			continue;
 		if(ball->m_isPause)
 			continue;
 		if(!ball->m_isStop)
@@ -595,7 +682,8 @@ void SceneFight::stopAll()
 /************************************************************************/
 /* 初始化地图轨迹节点                                                                     */
 /************************************************************************/
-void SceneFight::initWayPoint(){
+void SceneFight::initWayPoint()
+{
 	std::string pts="701.313354,126.706619|658.646118,126.706619|568.820190,126.706619|485.731232,122.215607|342.009949,119.970100|220.745148,119.970100|88.252098,119.970100|52.318680,191.827194|52.315369,268.176941|52.312344,337.791412|54.554272,425.372803|54.551472,490.498840|54.550018,524.185181|133.151978,526.430908|234.211792,526.430908|317.305389,521.939453|398.153198,519.693726|474.509369,521.939453|553.111450,524.185181|622.730530,526.430908|674.383240,526.430908|690.103760,528.676697";
 	char pattern = '|';
 	char nextPattern = ',';
@@ -633,7 +721,8 @@ void SceneFight::initWayPoint(){
 /************************************************************************/
 /* 显示爆炸效果                                                                     */
 /************************************************************************/
-void SceneFight::explosionBall(CCPoint pt){
+void SceneFight::explosionBall(CCPoint pt)
+{
 	CCFileUtils::sharedFileUtils()->setResourceDirectory("ui");
 	//粒子发射器
 	CCParticleSystem * emitter=CCParticleExplosion::create();
@@ -647,61 +736,61 @@ void SceneFight::explosionBall(CCPoint pt){
 	this->addChild(emitter);
 }
 
-/*
- 判断两条线段是否相交(有交点)
- */
-bool SceneFight::IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2)
-{
-	//每个线段的两点都在另一个线段的左右不同侧，则能断定线段相交
-	//公式对于向量(x1,y1)->(x2,y2),判断点(x3,y3)在向量的左边,右边,还是线上.
-	//p=x1(y3-y2)+x2(y1-y3)+x3(y2-y1).p<0 左侧,    p=0 线上, p>0 右侧
-	long Linep1,Linep2;
-	//判断pSecond1和pSecond2是否在pFirst1->pFirst2两侧
-	Linep1 = pFirst1.x * (pSecond1.y - pFirst2.y) +
-    pFirst2.x * (pFirst1.y - pSecond1.y) +
-    pSecond1.x * (pFirst2.y - pFirst1.y);
-	Linep2 = pFirst1.x * (pSecond2.y - pFirst2.y) +
-    pFirst2.x * (pFirst1.y - pSecond2.y) +
-    pSecond2.x * (pFirst2.y - pFirst1.y);
-	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//符号位异或为0:pSecond1和pSecond2在pFirst1->pFirst2同侧
-	{
-		return false;
-	}
-	//判断pFirst1和pFirst2是否在pSecond1->pSecond2两侧
-	Linep1 = pSecond1.x * (pFirst1.y - pSecond2.y) +
-    pSecond2.x * (pSecond1.y - pFirst1.y) +
-    pFirst1.x * (pSecond2.y - pSecond1.y);
-	Linep2 = pSecond1.x * (pFirst2.y - pSecond2.y) +
-    pSecond2.x * (pSecond1.y - pFirst2.y) +
-    pFirst2.x * (pSecond2.y - pSecond1.y);
-	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//符号位异或为0:pFirst1和pFirst2在pSecond1->pSecond2同侧
-	{
-		return false;
-	}
-	//否则判为相交
-	return true;
-}
-/*
- 求两直线交点，前提是两条直线必须有交点
- 在相交的情况下，可以应付各种情况(垂直、系数等)
- */
-CCPoint SceneFight::GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2)
-{
-	//必须相交求出的才是线段的交点，但是下面的程序段是通用的
-	assert(IsLineSegmentCross(p1,p2,q1,q2));
-	/*根据两点式化为标准式，进而求线性方程组*/
-	CCPoint crossPoint;
-	long tempLeft,tempRight;
-	//求x坐标
-	tempLeft = (q2.x - q1.x) * (p1.y - p2.y) - (p2.x - p1.x) * (q1.y - q2.y);
-	tempRight = (p1.y - q1.y) * (p2.x - p1.x) * (q2.x - q1.x) + q1.x * (q2.y - q1.y) * (p2.x - p1.x) - p1.x * (p2.y - p1.y) * (q2.x - q1.x);
-	crossPoint.x =(int)( (double)tempRight / (double)tempLeft );
-	//求y坐标
-	tempLeft = (p1.x - p2.x) * (q2.y - q1.y) - (p2.y - p1.y) * (q1.x - q2.x);
-	tempRight = p2.y * (p1.x - p2.x) * (q2.y - q1.y) + (q2.x- p2.x) * (q2.y - q1.y) * (p1.y - p2.y) - q2.y * (q1.x - q2.x) * (p2.y - p1.y);
-	crossPoint.y =(int)( (double)tempRight / (double)tempLeft );
-	return crossPoint;
-}
+/* 
+判断两条线段是否相交(有交点) 
+*/  
+bool SceneFight::IsLineSegmentCross(CCPoint pFirst1, CCPoint pFirst2, CCPoint pSecond1, CCPoint pSecond2)  
+{  
+	//每个线段的两点都在另一个线段的左右不同侧，则能断定线段相交  
+	//公式对于向量(x1,y1)->(x2,y2),判断点(x3,y3)在向量的左边,右边,还是线上.  
+	//p=x1(y3-y2)+x2(y1-y3)+x3(y2-y1).p<0 左侧,    p=0 线上, p>0 右侧  
+	long Linep1,Linep2;  
+	//判断pSecond1和pSecond2是否在pFirst1->pFirst2两侧  
+	Linep1 = pFirst1.x * (pSecond1.y - pFirst2.y) +  
+		pFirst2.x * (pFirst1.y - pSecond1.y) +  
+		pSecond1.x * (pFirst2.y - pFirst1.y);  
+	Linep2 = pFirst1.x * (pSecond2.y - pFirst2.y) +  
+		pFirst2.x * (pFirst1.y - pSecond2.y) +  
+		pSecond2.x * (pFirst2.y - pFirst1.y);  
+	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//符号位异或为0:pSecond1和pSecond2在pFirst1->pFirst2同侧  
+	{  
+		return false;  
+	}  
+	//判断pFirst1和pFirst2是否在pSecond1->pSecond2两侧  
+	Linep1 = pSecond1.x * (pFirst1.y - pSecond2.y) +  
+		pSecond2.x * (pSecond1.y - pFirst1.y) +  
+		pFirst1.x * (pSecond2.y - pSecond1.y);  
+	Linep2 = pSecond1.x * (pFirst2.y - pSecond2.y) +  
+		pSecond2.x * (pSecond1.y - pFirst2.y) +  
+		pFirst2.x * (pSecond2.y - pSecond1.y);  
+	if ( ((Linep1 ^ Linep2) >= 0 ) && !(Linep1==0 && Linep2==0))//符号位异或为0:pFirst1和pFirst2在pSecond1->pSecond2同侧  
+	{  
+		return false;  
+	}  
+	//否则判为相交  
+	return true;  
+} 
+/* 
+求两直线交点，前提是两条直线必须有交点 
+在相交的情况下，可以应付各种情况(垂直、系数等) 
+*/  
+CCPoint SceneFight::GetCrossPoint(CCPoint p1, CCPoint p2, CCPoint q1, CCPoint q2)  
+{  
+	//必须相交求出的才是线段的交点，但是下面的程序段是通用的  
+	assert(IsLineSegmentCross(p1,p2,q1,q2));  
+	/*根据两点式化为标准式，进而求线性方程组*/  
+	CCPoint crossPoint;  
+	long tempLeft,tempRight;  
+	//求x坐标  
+	tempLeft = (q2.x - q1.x) * (p1.y - p2.y) - (p2.x - p1.x) * (q1.y - q2.y);  
+	tempRight = (p1.y - q1.y) * (p2.x - p1.x) * (q2.x - q1.x) + q1.x * (q2.y - q1.y) * (p2.x - p1.x) - p1.x * (p2.y - p1.y) * (q2.x - q1.x);  
+	crossPoint.x =(int)( (double)tempRight / (double)tempLeft );  
+	//求y坐标    
+	tempLeft = (p1.x - p2.x) * (q2.y - q1.y) - (p2.y - p1.y) * (q1.x - q2.x);  
+	tempRight = p2.y * (p1.x - p2.x) * (q2.y - q1.y) + (q2.x- p2.x) * (q2.y - q1.y) * (p1.y - p2.y) - q2.y * (q1.x - q2.x) * (p2.y - p1.y);  
+	crossPoint.y =(int)( (double)tempRight / (double)tempLeft );  
+	return crossPoint;  
+} 
 const char* SceneFight::getColor(int colorType){
 	//CCLog("colorType===%d",colorType);
 	CCFileUtils::sharedFileUtils()->setResourceDirectory("role");

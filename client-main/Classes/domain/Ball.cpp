@@ -7,6 +7,7 @@ Ball::Ball(void)
 	m_goSequneceAction=NULL;
 	m_isPause=false;
 	m_isStop=false;
+	m_isRemove=false;
 }
 
 
@@ -35,8 +36,10 @@ void Ball::go()
 	}
 	else
 	{
+		m_isRemove=true;
 		//³¬³ö·¶Î§É¾³ý
-		this->m_sprite->removeFromParentAndCleanup(true);
+		//this->m_sprite->removeFromParentAndCleanup(true);
+		//this->m_balls->removeObject(this);
 	}
 }
 
@@ -75,6 +78,12 @@ void Ball::runMoveAction()
 		m_moving=false;
 		//if(m_goSequneceAction!=NULL)
 			//go();
+	}
+	if(m_curPosIndex>=m_wayPoint->count())
+	{
+		m_isRemove=true;
+		//this->m_sprite->removeFromParentAndCleanup(true);
+		//this->m_balls->removeObject(this);
 	}
 	
 }
